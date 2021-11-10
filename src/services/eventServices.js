@@ -17,7 +17,7 @@ async function getEvent (eventName){
 
 async function updateEvent (data){
     try{
-        let updateEvent = await oculusAPI.post('/updateEvent',data);
+        let updateEvent = await oculusAPI.patch('/updateEvent',data);
         console.log('The updated Event is: ',updateEvent.data);
         return updateEvent.data;
     } catch(e){
@@ -117,7 +117,7 @@ async function answerQuestion(questionId,answer,eventName,showToAll){
 
 async function deleteQuestion(questionId, eventName){
     try{
-        let  answerQuestionData = await oculusAPI.delete('/answerQuestion',{questionId:questionId,answer:answer,eventName:eventName, showToAll:showToAll});
+        let  answerQuestionData = await oculusAPI.delete('/answerQuestion',{questionId:questionId, eventName:eventName });
         console.log('The deleteQuestion  is: ',answerQuestionData.data);
         return answerQuestionData.data;
     } catch(e){

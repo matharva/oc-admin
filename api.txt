@@ -1,11 +1,11 @@
-POST /updateEvent 
+PATCH /updateEvent 
 {
     - all event details 
     (anything that is stored in firebase, format udhar se dekh lena)
 }
 return nothing, humlog alag se get kar lenge
 
-POST, DELETE /addOfflineTeam
+POST /addOfflineTeam
 {
     - email (for the one who pays offline, baaki log join team kar denge)
     - eventName
@@ -13,7 +13,7 @@ POST, DELETE /addOfflineTeam
 return registered team code
 
 DELETE /removeTeam {
-    - TeamCode
+    - teamCode
 }
  (yaha yaad se team delete bhi karna aur uske saath TeamUsers mai se bhi saare users ko delete karna)
 return success or error
@@ -32,11 +32,7 @@ PATCH /updateTeamsDetails
 }
 return updated team
 
-DELETE /removeteam
-{
-    - teamCode
-    (Internally user me changes kar deta)
-} 
+
 return updated list of all teams
 
 POST /addVoting
