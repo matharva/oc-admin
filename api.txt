@@ -1,0 +1,88 @@
+POST /updateEvent 
+{
+    - all event details 
+    (anything that is stored in firebase, format udhar se dekh lena)
+}
+return nothing, humlog alag se get kar lenge
+
+POST, DELETE /addOfflineTeam
+{
+    - email (for the one who pays offline, baaki log join team kar denge)
+    - eventName
+}
+return registered team code
+
+POST, DELETE /addMemberToTeam
+{
+    - emailId
+    - teamCode
+    - eventName
+}
+return updatedTeam
+
+PATCH /updateTeamsDetails
+{
+    - all team details 
+}
+return updated team
+
+DELETE /removeteam
+{
+    - teamCode
+    (Internally user me changes kar deta)
+} 
+return updated list of all teams
+
+POST /addVoting
+{
+    - teamCode
+    - eventName
+}
+-> Add currentVotingTeam in event Collection in Firestore, while creating event, and then isko ye request pe update karna hia
+
+return number of votes
+
+POST /addNotification
+{
+    - imageURL
+    - notificationText
+    - timeStamp (kabh notif send karna hai)
+}
+
+
+-> Iske liye event ke andar chat Collection daalna hai
+PS: event ke andar ek field rahega current team vote, 
+har registered team ke andar ek vote Collection rahega
+
+GET /eventQuestion 
+return all the chats added in the event me chat  Collection
+
+POST /answerQuestion
+{
+    - questionId
+    - answer
+    - eventName
+}
+return all questions
+
+PATCH /answerQuestion
+{
+    - questionId
+    - answer 
+    - showToAll=True
+    - eventName
+}
+return updatedQuestion
+
+
+
+
+
+
+
+GET /event/:eventId (ya name)
+returns:  
+- all teams count
+- all players that have joined the team count 
+- total money 
+- all team details of registerd teams
