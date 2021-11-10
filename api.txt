@@ -12,7 +12,13 @@ POST, DELETE /addOfflineTeam
 }
 return registered team code
 
-POST, DELETE /addMemberToTeam
+DELETE /removeTeam {
+    - TeamCode
+}
+ (yaha yaad se team delete bhi karna aur uske saath TeamUsers mai se bhi saare users ko delete karna)
+return success or error
+
+POST, DELETE /memberToTeam
 {
     - emailId
     - teamCode
@@ -47,6 +53,7 @@ POST /addNotification
     - imageURL
     - notificationText
     - timeStamp (kabh notif send karna hai)
+    -eventName
 }
 
 
@@ -57,26 +64,21 @@ har registered team ke andar ek vote Collection rahega
 GET /eventQuestion 
 return all the chats added in the event me chat  Collection
 
-POST /answerQuestion
-{
-    - questionId
-    - answer
-    - eventName
-}
-return all questions
 
 PATCH /answerQuestion
 {
     - questionId
     - answer 
-    - showToAll=True
+    - showToAll
     - eventName
 }
-return updatedQuestion
 
-
-
-
+DELETE /answerQuestion
+{
+    - questionId
+    - eventName
+}
+return succes/failure
 
 
 
