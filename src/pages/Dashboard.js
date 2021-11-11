@@ -170,7 +170,7 @@ const ModalComponent = ({ isOpen, setIsOpen, component }) => {
   );
 };
 
-const Index = (props) => {
+const Dashboard = (props) => {
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
   const [isOpen, setIsOpen] = useState(false);
@@ -240,4 +240,4 @@ const Index = (props) => {
   );
 };
 
-export default Index;
+export default Dashboard;

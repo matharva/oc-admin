@@ -49,13 +49,7 @@ const Login = () => {
                 onClick={(e) => e.preventDefault()}
               >
                 <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/github.svg")
-                        .default
-                    }
-                  />
+                  <img alt="..." src={""} />
                 </span>
                 <span className="btn-inner--text">Github</span>
               </Button>
@@ -66,13 +60,7 @@ const Login = () => {
                 onClick={(e) => e.preventDefault()}
               >
                 <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/google.svg")
-                        .default
-                    }
-                  />
+                  <img alt="..." src={""} />
                 </span>
                 <span className="btn-inner--text">Google</span>
               </Button>
