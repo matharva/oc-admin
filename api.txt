@@ -77,7 +77,6 @@ DELETE /answerQuestion
 return succes/failure
 
 
-
 GET /event/:eventId (ya name)
 returns:  
 - all teams count
