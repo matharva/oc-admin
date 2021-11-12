@@ -31,15 +31,79 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import firebase from "firebase";
+import { StyledFirebaseAuth } from "react-firebaseui";
+import { useHistory } from "react-router";
+import { useAuth } from "context/AuthContext";
+import { useState } from "react";
+import { handleBreakpoints } from "@mui/system";
 
 const Login = () => {
+  const history = useHistory();
+  const uiConfig = {
+    signInFlow: "popup",
+    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+    callbacks: {
+      signInSuccessWithAuthResult: async (data) => {
+        history.push("/admin/index");
+      },
+    },
+  };
+  const { signup, login } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const userRef = firebase.firestore().collection("Users");
+
+  async function handleRegisterUser() {
+    const userData = await signup("athar@spit.ac.in", "password@1234");
+    const { uid, email } = userData.user;
+    console.log(uid);
+
+    let newUserRef = userRef.doc(uid);
+
+    let data = {
+      college: "",
+      email: email,
+      name: "",
+      phoneNumber: "",
+      uid: newUserRef.id,
+    };
+
+    await newUserRef.set(data);
+    console.log("The new user creat createer: ", newUserRef.get());
+    let currUser = await (await newUserRef.get()).data();
+    console.log("Dard: ", currUser);
+    // return currUser;
+  }
+
+  async function handleLogin() {
+    if (email !== "" && password !== "") {
+      const currentUser = await login(email, password);
+      console.log("User: ", currentUser);
+
+      let item = [];
+      // return new Promise(resolve=>{
+
+      // Fetch event from uif
+      let querySnapShot = await userRef.where("email", "==", email).get();
+      // const EventRef = firebase.firestore().collection("Events");
+      // let querySnapShot = await EventRef.where("uid", "==", uid).get();
+
+      querySnapShot.forEach((doc) => {
+        item.push(doc.data());
+      });
+
+      console.log("EventD3: ", item[0]);
+
+      history.push("/admin/index");
+    }
+  }
+
   return (
     <>
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
-          {/* <h2
-            
-          > */}
           <h1
             className="text-overflow m-0"
             style={{
@@ -52,7 +116,6 @@ const Login = () => {
             Login
           </h1>
 
-          {/* </h2> */}
           <CardBody className="px-lg-5 py-lg-5">
             <Form role="form">
               <FormGroup className="mb-3">
@@ -66,6 +129,8 @@ const Login = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -80,6 +145,8 @@ const Login = () => {
                     placeholder="Password"
                     type="password"
                     autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -89,18 +156,31 @@ const Login = () => {
                   id=" customCheckLogin"
                   type="checkbox"
                 />
-                {/* <label
-                  className="custom-control-label"
-                  htmlFor=" customCheckLogin"
-                >
-                  <span className="text-muted">Remember me</span>
-                </label> */}
               </div>
+              <StyledFirebaseAuth
+                uiConfig={uiConfig}
+                firebaseAuth={firebase.auth()}
+              />
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button
+                  className="my-4"
+                  color="primary"
+                  type="button"
+                  onClick={handleLogin}
+                >
                   Sign in
                 </Button>
               </div>
+              {/* <div className="text-center">
+                <Button
+                  className="my-4"
+                  color="primary"
+                  type="button"
+                  onClick={handleRegisterUser}
+                >
+                  Secret Sign up
+                </Button>
+              </div> */}
             </Form>
           </CardBody>
         </Card>

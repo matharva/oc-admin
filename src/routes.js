@@ -23,6 +23,7 @@ import Login from "pages/Login.js";
 import Tables from "pages/Tables.js";
 import Icons from "pages/Icons.js";
 import Chat from "pages/Chat";
+import Notification from "pages/Notification";
 
 var routes = [
   {
@@ -30,13 +31,6 @@ var routes = [
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: Dashboard,
-    layout: "/admin",
-  },
-  {
-    path: "/notifs",
-    name: "Notification",
-    icon: "ni ni-pin-3 text-orange",
-    component: Maps,
     layout: "/admin",
   },
   {
@@ -51,6 +45,13 @@ var routes = [
     name: "Chats",
     icon: "ni ni-bullet-list-67 text-red",
     component: Chat,
+    layout: "/admin",
+  },
+  {
+    path: "/notification",
+    name: "Notification",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Notification,
     layout: "/admin",
   },
   {
