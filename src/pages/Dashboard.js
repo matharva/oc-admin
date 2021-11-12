@@ -23,28 +23,7 @@ import Chart from "chart.js";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  NavItem,
-  NavLink,
-  Nav,
-  Progress,
-  Table,
-  Container,
-  Row,
-  Col,
-  Badge,
-  FormGroup,
-  Input,
-  Form,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
-} from "reactstrap";
+import { Card, Container, Row, Col } from "reactstrap";
 
 // core components
 import {
@@ -56,9 +35,9 @@ import {
 
 import Header from "components/Headers/Header.js";
 
-import DeleteIcon from "@mui/icons-material/Delete";
 import ModalComponent from "components/Modal/ModalComponent";
 import SmallTable from "components/Tables/SmallTable";
+import BigTable from "components/Tables/BigTable";
 
 const Dashboard = (props) => {
   const [activeNav, setActiveNav] = useState(1);
@@ -87,7 +66,12 @@ const Dashboard = (props) => {
       <Container className="mt--7" fluid>
         <Row className="mt-5">
           <Col className="mb-5 mb-xl-0" xl="7">
-            <Card className="shadow"></Card>
+            <Card className="shadow">
+              <BigTable
+                setIsOpen={setIsOpen}
+                setModalComponent={setModalComponent}
+              />
+            </Card>
           </Col>
           <Col xl="5">
             <Card className="shadow">

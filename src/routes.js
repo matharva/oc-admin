@@ -22,6 +22,7 @@ import Register from "pages/Register.js";
 import Login from "pages/Login.js";
 import Tables from "pages/Tables.js";
 import Icons from "pages/Icons.js";
+import Chat from "pages/Chat";
 
 var routes = [
   {
@@ -32,24 +33,24 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
-    layout: "/admin",
-  },
-  {
-    path: "/maps",
-    name: "Maps",
+    path: "/notifs",
+    name: "Notification",
     icon: "ni ni-pin-3 text-orange",
     component: Maps,
     layout: "/admin",
   },
   {
-    path: "/user-profile",
-    name: "User Profile",
+    path: "/event-details",
+    name: "Event Details",
     icon: "ni ni-single-02 text-yellow",
     component: Profile,
+    layout: "/admin",
+  },
+  {
+    path: "/chats",
+    name: "Chats",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Chat,
     layout: "/admin",
   },
   {
@@ -57,6 +58,13 @@ var routes = [
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
     component: Tables,
+    layout: "/admin",
+  },
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "ni ni-planet text-blue",
+    component: Icons,
     layout: "/admin",
   },
   {

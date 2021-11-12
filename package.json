@@ -66,7 +66,8 @@
     "react-modal": "^3.14.4",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
-    "reactstrap": "8.9.0"
+    "reactstrap": "8.9.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "gulp": "4.0.2",
