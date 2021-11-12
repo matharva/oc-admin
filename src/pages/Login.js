@@ -96,6 +96,8 @@ const Login = () => {
 
       console.log("EventD3: ", item[0]);
 
+      const eventName = "IPL";
+
       history.push("/admin/index");
     }
   }
