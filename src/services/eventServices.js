@@ -165,7 +165,7 @@ async function deleteQuestion(questionId, eventName) {
   }
 }
 
-export const eventServies = {
+export const eventServices = {
   getEvent,
   getChats,
   updateEvent,

@@ -31,9 +31,10 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { v4 as uuid } from "uuid";
+import { eventServices } from "services/eventServices";
 
 const ExtraDetails = () => {
   return (
@@ -125,15 +126,52 @@ const ExtraDetails = () => {
   );
 };
 
-const FAQQuestion = ({ question = "", answer = "", id }) => {
+const FAQQuestion = ({ item, setFaq }) => {
+  const { question = "", answer = "", id } = item;
+  function updateQuestion(e) {
+    setFaq((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, question: e.target.value } : element
+      );
+    });
+  }
+
+  function updateAnswer(e) {
+    setFaq((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, answer: e.target.value } : element
+      );
+    });
+  }
+
+  function deleteQuestion() {
+    setFaq((prev) => {
+      return prev
+        .map((element) => (element.id === id ? null : element))
+        .filter((x) => x !== null);
+    });
+  }
+
   return (
     <>
       <Row id={id}>
         <Col md="12">
           <FormGroup>
-            <label className="form-control-label" htmlFor="input-address">
-              Question
-            </label>
+            <div
+              className="flex-grow-1 align-content-center justify-content-between"
+              style={{
+                // border: "2px solid yellowgreen",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                cursor: "pointer",
+              }}
+            >
+              <label className="form-control-label" htmlFor="input-address">
+                Question
+              </label>
+              <DeleteIcon onClick={deleteQuestion} />
+            </div>
             <Input
               className="form-control-alternative"
               defaultValue=""
@@ -141,6 +179,7 @@ const FAQQuestion = ({ question = "", answer = "", id }) => {
               id="input-address"
               placeholder="Add a question..."
               type="text"
+              onChange={updateQuestion}
             />
           </FormGroup>
           <FormGroup>
@@ -152,6 +191,7 @@ const FAQQuestion = ({ question = "", answer = "", id }) => {
               defaultValue=""
               value={answer}
               type="textarea"
+              onChange={updateAnswer}
             />
           </FormGroup>
         </Col>
@@ -160,21 +200,32 @@ const FAQQuestion = ({ question = "", answer = "", id }) => {
   );
 };
 
-const RulesItem = ({ id, text = "" }) => {
+const RulesItem = ({ item, setRules }) => {
+  const { id, text = "" } = item;
+  function handleDelete() {
+    setRules((prev) => {
+      return prev
+        .map((element) => (element.id === id ? null : element))
+        .filter((x) => x !== null);
+    });
+  }
   return (
     <>
       <Row id={id}>
-        <Col md="12">
+        <Col md="11">
           <FormGroup>
             <Input
               className="form-control-alternative"
               defaultValue=""
               value={text}
               id="input-address"
-              placeholder="Add a question..."
+              placeholder="Add a rule..."
               type="text"
             />
           </FormGroup>
+        </Col>
+        <Col md="1" className="pt-2">
+          <DeleteIcon onClick={handleDelete} />
         </Col>
       </Row>
     </>
@@ -201,6 +252,14 @@ const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
       );
     });
   }
+
+  function handleRemove(e) {
+    setRegistrationCost((prev) => {
+      return prev
+        .map((element) => (element.id === id ? null : element))
+        .filter((x) => x !== null);
+    });
+  }
   return (
     <Row id={id}>
       <Col xl={6}>
@@ -218,7 +277,7 @@ const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
           />
         </FormGroup>
       </Col>
-      <Col xl={6}>
+      <Col xl={5}>
         <FormGroup>
           <label className="form-control-label" htmlFor="input-first-name">
             Cost
@@ -229,18 +288,167 @@ const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
             rows="4"
             value={cost}
             onChange={updateCost}
-            type="text"
+            type="number"
           />
         </FormGroup>
+      </Col>
+      <Col xl={1}>
+        <DeleteIcon
+          onClick={handleRemove}
+          style={{
+            cursor: "pointer",
+          }}
+        />
       </Col>
     </Row>
   );
 };
 
-const Details = () => {
-  const [faq, setFaq] = useState([{ question: "", answer: "" }]);
+const EventInformation = (props) => {
+  const {
+    title,
+    prize,
+    category,
+    startDate,
+    endDate,
+    setTitle,
+    setPrize,
+    setCategory,
+    setStartDate,
+    setEndDate,
+    description,
+    setDescription,
+  } = props;
+  return (
+    <>
+      <h6 className="heading-small text-muted mb-4">Event information</h6>
+      <div className="pl-lg-4">
+        <Row>
+          <Col lg="6">
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-username">
+                Title
+              </label>
+              <Input
+                className="form-control-alternative"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                id="input-username"
+                placeholder="Event name"
+                type="text"
+              />
+            </FormGroup>
+          </Col>
+          {/* <Col lg="6">
+                  <FormGroup>
+                    <label className="form-control-label" htmlFor="input-email">
+                      Date
+                    </label>
+                    <Input
+                      className="form-control-alternative"
+                      id="input-email"
+                      placeholder="jesse@example.com"
+                      type="date"
+                    />
+                  </FormGroup>
+                </Col> */}
+        </Row>
+        <Row>
+          <Col lg="6">
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-first-name">
+                Prizes
+              </label>
+              <Input
+                className="form-control-alternative"
+                value={prize}
+                onChange={(e) => setPrize(e.target.value)}
+                id="input-first-name"
+                placeholder="Prizes"
+                type="text"
+              />
+            </FormGroup>
+          </Col>
+          <Col lg="6">
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-last-name">
+                Category
+              </label>
+              <Input
+                className="form-control-alternative"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                id="input-last-name"
+                placeholder="Fun/Tech/..."
+                type="text"
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg="6">
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-first-name">
+                Start Date
+              </label>
+              <Input
+                className="form-control-alternative"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                id="input-first-name"
+                placeholder="Prizes"
+                type="date"
+              />
+            </FormGroup>
+          </Col>
+          <Col lg="6">
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-last-name">
+                End Date
+              </label>
+              <Input
+                className="form-control-alternative"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                id="input-last-name"
+                placeholder="Fun/Tech/..."
+                type="date"
+              />
+            </FormGroup>
+          </Col>
+          <Col lg="12">
+            <FormGroup>
+              <label className="heading-small text-muted mb-1">
+                Description
+              </label>
+              <Input
+                className="form-control-alternative"
+                placeholder="Enter Event Description..."
+                rows="4"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                type="textarea"
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+      </div>
+    </>
+  );
+};
+
+const Details = ({ eventData }) => {
+  const [faq, setFaq] = useState([{ question: "", answer: "", id: uuid() }]);
   const [rules, setRules] = useState([{ text: "" }]);
-  const [registrationCost, setRegistrationCost] = useState([]);
+  const [registrationCost, setRegistrationCost] = useState([
+    { type: "", cost: "", id: uuid() },
+  ]);
+  const [title, setTitle] = useState("");
+  const [prize, setPrize] = useState("");
+  const [category, setCategory] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [description, setDescription] = useState("");
 
   function addFaqQuestion() {
     const defaultData = { question: "", answer: "", id: uuid() };
@@ -263,7 +471,23 @@ const Details = () => {
     });
   }
 
-  // console.log("registrationCost: ", registrationCost);
+  async function updateEventData(e) {
+    e.preventDefault();
+    const data = {
+      faq,
+      rules,
+      registrationCost,
+      title,
+      prize,
+      category,
+      startDate,
+      endDate,
+      description,
+    };
+    // await eventServices.updateEvent(data)
+  }
+
+  // console.log("registrationCost: ", faq);
 
   return (
     <Col className="order-xl-1" xl="8">
@@ -274,127 +498,28 @@ const Details = () => {
               <h3 className="mb-0">My account</h3>
             </Col>
             <Col className="text-right" xs="4">
-              {/* <Button
-                color="primary"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-                size="sm"
-              >
-                Settings
-              </Button> */}
+              <Button color="primary" onClick={updateEventData} size="sm">
+                Update
+              </Button>
             </Col>
           </Row>
         </CardHeader>
         <CardBody>
           <Form>
-            <h6 className="heading-small text-muted mb-4">Event information</h6>
-            <div className="pl-lg-4">
-              <Row>
-                <Col lg="6">
-                  <FormGroup>
-                    <label
-                      className="form-control-label"
-                      htmlFor="input-username"
-                    >
-                      Title
-                    </label>
-                    <Input
-                      className="form-control-alternative"
-                      defaultValue="lucky.jesse"
-                      id="input-username"
-                      placeholder=""
-                      type="text"
-                    />
-                  </FormGroup>
-                </Col>
-                {/* <Col lg="6">
-                  <FormGroup>
-                    <label className="form-control-label" htmlFor="input-email">
-                      Date
-                    </label>
-                    <Input
-                      className="form-control-alternative"
-                      id="input-email"
-                      placeholder="jesse@example.com"
-                      type="date"
-                    />
-                  </FormGroup>
-                </Col> */}
-              </Row>
-              <Row>
-                <Col lg="6">
-                  <FormGroup>
-                    <label
-                      className="form-control-label"
-                      htmlFor="input-first-name"
-                    >
-                      Prizes
-                    </label>
-                    <Input
-                      className="form-control-alternative"
-                      defaultValue="Prizes"
-                      id="input-first-name"
-                      placeholder="Prizes"
-                      type="text"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col lg="6">
-                  <FormGroup>
-                    <label
-                      className="form-control-label"
-                      htmlFor="input-last-name"
-                    >
-                      Category
-                    </label>
-                    <Input
-                      className="form-control-alternative"
-                      defaultValue="Fun/Tech/..."
-                      id="input-last-name"
-                      placeholder="Fun/Tech/..."
-                      type="text"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Row>
-                <Col lg="6">
-                  <FormGroup>
-                    <label
-                      className="form-control-label"
-                      htmlFor="input-first-name"
-                    >
-                      Start Date
-                    </label>
-                    <Input
-                      className="form-control-alternative"
-                      defaultValue="Prizes"
-                      id="input-first-name"
-                      placeholder="Prizes"
-                      type="date"
-                    />
-                  </FormGroup>
-                </Col>
-                <Col lg="6">
-                  <FormGroup>
-                    <label
-                      className="form-control-label"
-                      htmlFor="input-last-name"
-                    >
-                      End Date
-                    </label>
-                    <Input
-                      className="form-control-alternative"
-                      defaultValue="Fun/Tech/..."
-                      id="input-last-name"
-                      placeholder="Fun/Tech/..."
-                      type="date"
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-            </div>
-
+            <EventInformation
+              title={title}
+              prize={prize}
+              category={category}
+              startDate={startDate}
+              endDate={endDate}
+              setTitle={setTitle}
+              setPrize={setPrize}
+              setCategory={setCategory}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+              description={description}
+              setDescription={setDescription}
+            />
             {/* Registration Cost Starts */}
             <hr className="my-4" />
             <div className="pl-lg-4">
@@ -406,47 +531,25 @@ const Details = () => {
                     </label>
                   </Col>
                   <Col className="text-right" xs="4">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={addRegistration}
-                      size="sm"
-                    >
+                    <Button color="primary" onClick={addRegistration} size="sm">
                       Add Cost
                     </Button>
                   </Col>
                 </Row>
               </FormGroup>
             </div>
-            {registrationCost.map((item) => {
-              return (
-                <RegistrationItem
-                  item={item}
-                  setRegistrationCost={setRegistrationCost}
-                  registrationCost={registrationCost}
-                />
-              );
-            })}
-            {/* Registration Cost Ends */}
-
-            {/* Description Starts*/}
-            <hr className="my-4" />
             <div className="pl-lg-4">
-              <FormGroup>
-                <label className="heading-small text-muted mb-1">
-                  Description
-                </label>
-                <Input
-                  className="form-control-alternative"
-                  placeholder="Enter Event Description..."
-                  rows="4"
-                  // defaultValue="Enter Event Description..."
-                  value=""
-                  type="text"
-                />
-              </FormGroup>
+              {registrationCost.map((item) => {
+                return (
+                  <RegistrationItem
+                    item={item}
+                    setRegistrationCost={setRegistrationCost}
+                    registrationCost={registrationCost}
+                  />
+                );
+              })}
             </div>
-            {/* Description Ends */}
+            {/* Registration Cost Ends */}
 
             <hr className="my-4" />
             {/* Address */}
@@ -463,7 +566,7 @@ const Details = () => {
             </Row>
             <div className="pl-lg-4">
               {faq.map((item) => (
-                <FAQQuestion item={item} />
+                <FAQQuestion item={item} setFaq={setFaq} />
               ))}
             </div>
 
@@ -482,7 +585,7 @@ const Details = () => {
             </Row>
             <div className="pl-lg-4">
               {rules.map((item) => (
-                <RulesItem item={item} />
+                <RulesItem item={item} setRules={setRules} />
               ))}
             </div>
           </Form>
@@ -492,14 +595,23 @@ const Details = () => {
   );
 };
 
-const Profile = () => {
+const EventDetails = () => {
+  const [eventData, setEventData] = useState([]);
+  async function getData() {
+    // const data = await eventServices.whateverfunctiongetalleventdata;
+    // setEventData(data);
+  }
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
   return (
     <>
-      <UserHeader name="Event " />
-      {/* Page content */}
+      <UserHeader name="Event" />
+
       <Container className="mt--7" fluid>
         <Row>
-          <Details />
+          <Details eventData={eventData} />
           {/* <ExtraDetails /> */}
         </Row>
       </Container>
@@ -507,4 +619,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default EventDetails;

@@ -16,7 +16,7 @@
 
 */
 import Dashboard from "pages/Dashboard.js";
-import Profile from "pages/Profile.js";
+import EventDetails from "pages/EventDetails.js";
 import Maps from "pages/Maps.js";
 import Register from "pages/Register.js";
 import Login from "pages/Login.js";
@@ -37,7 +37,7 @@ var routes = [
     path: "/event-details",
     name: "Event Details",
     icon: "ni ni-single-02 text-yellow",
-    component: Profile,
+    component: EventDetails,
     layout: "/admin",
   },
   {
