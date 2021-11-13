@@ -96,10 +96,10 @@ const ChatContainer = () => {
       <Card className="bg-secondary shadow">
         <CardHeader className="bg-white border-0">
           <Row className="align-items-center">
-            <Col xs="8">
+            <Col xs="8" md={3}>
               <h3 className="mb-0">Chats</h3>
             </Col>
-            <Col className="text-right" xs="4">
+            <Col className="text-right" xs="4" md={9}>
               <Button
                 color={active === 0 ? "primary" : "secondary"}
                 onClick={filterByUnanswered}

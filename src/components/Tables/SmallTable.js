@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Card,
@@ -13,7 +13,21 @@ import {
 } from "reactstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { eventServices } from "services/eventServices";
+
 const AddTeamMember = () => {
+  // const [email, setEmail] = useState("");
+  // const [contact, setContact] = useState("");
+
+  // function handleSubmit() {
+  //   const data = {
+  //     email,
+  //     contact,
+  //   };
+
+  //   // await eventServices.kuchTOhFunction();
+  // }
+
   return (
     <>
       <Card className="bg-secondary shadow " style={{ width: "500px" }}>
@@ -23,12 +37,7 @@ const AddTeamMember = () => {
               <h3 className="mb-0">Add team member</h3>
             </Col>
             <Col className="text-right" xs="4">
-              <Button
-                color="primary"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-                size="sm"
-              >
+              <Button color="primary" size="sm">
                 Save
               </Button>
             </Col>
@@ -49,6 +58,8 @@ const AddTeamMember = () => {
                     id="input-email"
                     placeholder="user@gmail.com"
                     type="email"
+                    // value={email}
+                    // onChange={(e) => setEmail(e.target.value)}
                   />
                 </FormGroup>
               </Col>
@@ -64,16 +75,15 @@ const AddTeamMember = () => {
                   </label>
                   <Input
                     className="form-control-alternative"
-                    defaultValue=""
                     id="input-username"
                     placeholder="Contact Number"
-                    type="text"
+                    type="number"
+                    // value={contact}
+                    // onChange={(e) => setContact(e.target.value)}
                   />
                 </FormGroup>
               </Col>
             </Row>
-            {/* </div> */}
-            <hr className="my-4" />
           </Form>
         </CardBody>
       </Card>
@@ -86,31 +96,33 @@ const SmallTableHeader = ({ setModalComponent, setIsOpen }) => {
     <>
       <CardHeader className="border-0">
         <Row className="align-items-center">
-          <div className="col">
+          <Col lg={3}>
             <h3 className="mb-0">Team</h3>
-          </div>
-          <div className="col text-right">
-            <Button
-              color="primary"
-              href="#pablo"
-              onClick={(e) => {
-                e.preventDefault();
-                setModalComponent(AddTeamMember);
-                setIsOpen(true);
-              }}
-              size="sm"
-            >
-              Add Member
-            </Button>
-            <Button
-              color="secondary"
-              href="#pablo"
-              onClick={(e) => e.preventDefault()}
-              size="sm"
-            >
-              Start Voting
-            </Button>
-          </div>
+          </Col>
+          <Col lg={9}>
+            <div className="col d-flex justify-content-end">
+              <Button
+                color="primary"
+                href="#pablo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setModalComponent(AddTeamMember);
+                  setIsOpen(true);
+                }}
+                size="sm"
+              >
+                Add Member
+              </Button>
+              <Button
+                color="secondary"
+                href="#pablo"
+                onClick={(e) => e.preventDefault()}
+                size="sm"
+              >
+                Start Voting
+              </Button>
+            </div>
+          </Col>
         </Row>
       </CardHeader>
     </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Badge,
   Button,
@@ -18,28 +18,58 @@ import {
 } from "reactstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const BigTableHeader = ({ setIsOpen, setModalComponent }) => {
+const BigTableHeader = ({
+  setIsOpen,
+  setModalComponent,
+  teamData,
+  setTeam,
+}) => {
+  const [searchText, setSearchText] = useState("");
+
+  function filterBySearchText(e) {
+    const text = e.target.value;
+    setSearchText(text);
+
+    const filteredText = teamData.filter(
+      (x) => x.teamCode.includes(text) === true
+    );
+    console.log(text, filteredText);
+    setTeam(filteredText);
+  }
+
   return (
     <>
       <CardHeader className="border-0">
         <Row className="align-items-center">
-          <div className="col">
-            <h3 className="mb-0">Teams</h3>
-          </div>
-          <div className="col text-right">
-            <Button
-              color="primary"
-              href="#pablo"
-              onClick={(e) => {
-                e.preventDefault();
-                setModalComponent(AddTeamModal);
-                setIsOpen(true);
-              }}
-              size="sm"
-            >
-              Add Teams
-            </Button>
-          </div>
+          <Col xl={3}>
+            <div className="col">
+              <h3 className="mb-0">Teams</h3>
+            </div>
+          </Col>
+          <Col xl={5}>
+            <Input
+              placeholder="Search by team code"
+              type="text"
+              value={searchText}
+              onChange={(e) => filterBySearchText(e)}
+            />
+          </Col>
+          <Col xl={4}>
+            <div className="col text-right">
+              <Button
+                color="primary"
+                href="#pablo"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setModalComponent(AddTeamModal);
+                  setIsOpen(true);
+                }}
+                size="sm"
+              >
+                Add Teams
+              </Button>
+            </div>
+          </Col>
         </Row>
       </CardHeader>
     </>
@@ -144,89 +174,34 @@ const BigTableRow = ({ teamData }) => {
   );
 };
 
-const TEAMDATA = [
-  {
-    teamCode: "od;ahgfodpsgfhadsgf;h",
-    isComplete: false,
-    amount: "800",
-    memberCount: "4",
-    members: [
-      {
-        name: "Atarva Mohtie",
-        email: "atharvamohtie20@gmail.com",
-        number: "894579055423",
-      },
-      {
-        name: "Shubham Joshi",
-        email: "shubhamjoshi@gmail.com",
-        number: "894579055423",
-      },
-    ],
-  },
-  {
-    teamCode: "od;ahgfodpsgfhadsgf;h",
-    isComplete: false,
-    amount: "800",
-    memberCount: "4",
-    members: [
-      {
-        name: "Atarva Mohtie",
-        email: "atharvamohtie20@gmail.com",
-        number: "894579055423",
-      },
-      {
-        name: "Shubham Joshi",
-        email: "shubhamjoshi@gmail.com",
-        number: "894579055423",
-      },
-    ],
-  },
-  {
-    teamCode: "od;ahgfodpsgfhadsgf;h",
-    isComplete: false,
-    amount: "800",
-    memberCount: "4",
-    members: [
-      {
-        name: "Atarva Mohtie",
-        email: "atharvamohtie20@gmail.com",
-        number: "894579055423",
-      },
-      {
-        name: "Shubham Joshi",
-        email: "shubhamjoshi@gmail.com",
-        number: "894579055423",
-      },
-    ],
-  },
-  {
-    teamCode: "od;ahgfodpsgfhadsgf;h",
-    isComplete: false,
-    amount: "800",
-    memberCount: "4",
-    members: [
-      {
-        name: "Atarva Mohtie",
-        email: "atharvamohtie20@gmail.com",
-        number: "894579055423",
-      },
-      {
-        name: "Shubham Joshi",
-        email: "shubhamjoshi@gmail.com",
-        number: "894579055423",
-      },
-    ],
-  },
-];
+const BigTable = ({ setModalComponent, setIsOpen, teamData, setTeamData }) => {
+  const [team, setTeam] = useState(teamData);
 
-const BigTable = ({ setModalComponent, setIsOpen }) => {
+  function filterByPending() {
+    console.log(team);
+    const pending = teamData.filter((x) => x.isComplete === false);
+    console.log(pending);
+    setTeam(pending);
+  }
+
+  function filterByCompleted() {
+    const complete = teamData.filter((x) => x.isComplete === true);
+    setTeam(complete);
+  }
+
   return (
     <div>
       <BigTableHeader
         setIsOpen={setIsOpen}
         setModalComponent={setModalComponent}
+        setTeam={setTeam}
+        teamData={teamData}
       />
-      <Table className="align-items-center table-flush" responsive>
+      <Table
+        className="align-items-center table-flush"
+        responsive
+        style={{ minHeight: "10rem" }}
+      >
         <thead className="thead-light">
           <tr>
             <th scope="col">Team Code</th>
@@ -237,41 +212,28 @@ const BigTable = ({ setModalComponent, setIsOpen }) => {
               <UncontrolledDropdown>
                 <DropdownToggle
                   className="btn-icon-only text-light"
-                  href="#pablo"
                   role="button"
                   size="sm"
                   color=""
-                  onClick={(e) => e.preventDefault()}
                 >
                   <i className="fas fa-ellipsis-v" />
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
+                  <DropdownItem href="#pablo" onClick={() => setTeam(teamData)}>
                     View All
                   </DropdownItem>
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    Pending
-                  </DropdownItem>
-                  <DropdownItem
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
+                  <DropdownItem onClick={filterByPending}>Pending</DropdownItem>
+                  <DropdownItem onClick={filterByCompleted}>
                     Completed
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
             </th>
-            <th scope="col" />
+            <th scope="col">Count: {team.length}</th>
           </tr>
         </thead>
         <tbody>
-          {TEAMDATA.map((item) => (
+          {team.map((item) => (
             <BigTableRow teamData={item} />
           ))}
         </tbody>

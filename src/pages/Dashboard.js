@@ -39,21 +39,88 @@ import ModalComponent from "components/Modal/ModalComponent";
 import SmallTable from "components/Tables/SmallTable";
 import BigTable from "components/Tables/BigTable";
 
+const TEAMDATA = [
+  {
+    teamCode: "asdf",
+    isComplete: false,
+    amount: "800",
+    memberCount: "4",
+    members: [
+      {
+        name: "Atarva Mohtie",
+        email: "atharvamohtie20@gmail.com",
+        number: "894579055423",
+      },
+      {
+        name: "Shubham Joshi",
+        email: "shubhamjoshi@gmail.com",
+        number: "894579055423",
+      },
+    ],
+  },
+  {
+    teamCode: "etry",
+    isComplete: false,
+    amount: "800",
+    memberCount: "4",
+    members: [
+      {
+        name: "Atarva Mohtie",
+        email: "atharvamohtie20@gmail.com",
+        number: "894579055423",
+      },
+      {
+        name: "Shubham Joshi",
+        email: "shubhamjoshi@gmail.com",
+        number: "894579055423",
+      },
+    ],
+  },
+  {
+    teamCode: "bvcn",
+    isComplete: false,
+    amount: "800",
+    memberCount: "4",
+    members: [
+      {
+        name: "Atarva Mohtie",
+        email: "atharvamohtie20@gmail.com",
+        number: "894579055423",
+      },
+      {
+        name: "Shubham Joshi",
+        email: "shubhamjoshi@gmail.com",
+        number: "894579055423",
+      },
+    ],
+  },
+  {
+    teamCode: "jhfgj",
+    isComplete: false,
+    amount: "800",
+    memberCount: "4",
+    members: [
+      {
+        name: "Atarva Mohtie",
+        email: "atharvamohtie20@gmail.com",
+        number: "894579055423",
+      },
+      {
+        name: "Shubham Joshi",
+        email: "shubhamjoshi@gmail.com",
+        number: "894579055423",
+      },
+    ],
+  },
+];
+
 const Dashboard = (props) => {
   const [activeNav, setActiveNav] = useState(1);
   const [chartExample1Data, setChartExample1Data] = useState("data1");
   const [isOpen, setIsOpen] = useState(false);
   const [modalComponent, setModalComponent] = useState(null);
+  const [teamData, setTeamData] = useState(TEAMDATA);
 
-  if (window.Chart) {
-    parseOptions(Chart, chartOptions());
-  }
-
-  const toggleNavs = (e, index) => {
-    e.preventDefault();
-    setActiveNav(index);
-    setChartExample1Data("data" + index);
-  };
   return (
     <>
       <Header />
@@ -70,6 +137,8 @@ const Dashboard = (props) => {
               <BigTable
                 setIsOpen={setIsOpen}
                 setModalComponent={setModalComponent}
+                teamData={teamData}
+                setTeamData={setTeamData}
               />
             </Card>
           </Col>

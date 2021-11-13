@@ -19,9 +19,11 @@
 // reactstrap components
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
-const HeaderItem = ({ title = "Data", count = 1000 }) => {
+const HeaderItem = ({ item }) => {
+  const { title, count, color } = item;
+
   return (
-    <Col lg="6" xl="3">
+    <Col lg="6" xl="4">
       <Card className="card-stats mb-4 mb-xl-0">
         <CardBody>
           <Row>
@@ -32,7 +34,9 @@ const HeaderItem = ({ title = "Data", count = 1000 }) => {
               <span className="h2 font-weight-bold mb-0">{count}</span>
             </div>
             <Col className="col-auto">
-              <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
+              <div
+                className={`icon icon-shape ${color} text-white rounded-circle shadow`}
+              >
                 <i className="fas fa-chart-bar" />
               </div>
             </Col>
@@ -45,16 +49,19 @@ const HeaderItem = ({ title = "Data", count = 1000 }) => {
 
 const dummyHeaderdata = [
   {
-    title: "data",
+    title: "Teams Registered",
     count: 1000,
+    color: "bg-red",
   },
   {
-    title: "data",
+    title: "Registrations",
     count: 1000,
+    color: "bg-cyan",
   },
   {
-    title: "data",
+    title: "Amount Collected",
     count: 1000,
+    color: "bg-green",
   },
 ];
 
