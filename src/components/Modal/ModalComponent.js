@@ -1,4 +1,17 @@
+import { useState } from "react";
 import Modal from "react-modal";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Row,
+} from "reactstrap";
+import { eventServices } from "services/eventServices";
 
 const customStyles = {
   content: {
@@ -12,15 +25,260 @@ const customStyles = {
     // width: "70vw",
   },
 };
+
+const AddTeamModal = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleSubmit() {
+    const data = {
+      email,
+      password,
+    };
+
+    // await eventServices.kuchTOhFunction();
+  }
+
+  return (
+    <>
+      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+        <CardHeader className="bg-white border-0">
+          <Row className="align-items-center">
+            <Col xs="8">
+              <h3 className="mb-0">Add team</h3>
+            </Col>
+            <Col className="text-right" xs="4">
+              <Button color="primary" onClick={handleSubmit} size="sm">
+                Save
+              </Button>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Form>
+            <h6 className="heading-small text-muted mb-4">User information</h6>
+            {/* <div className="pl-lg-4"> */}
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="input-email">
+                    Email address
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-email"
+                    placeholder="user@gmail.com"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Phone Number
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    defaultValue=""
+                    id="input-username"
+                    placeholder="Contact Number"
+                    type="text"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            {/* </div> */}
+            <hr className="my-4" />
+          </Form>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
+const UserInfo = () => {
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  function handleSubmit() {
+    const data = {
+      email,
+      phoneNumber,
+    };
+
+    // await eventServices.kuchTOhFunction();
+  }
+
+  return (
+    <>
+      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+        <CardHeader className="bg-white border-0">
+          <Row className="align-items-center">
+            <Col xs="8">
+              <h3 className="mb-0">Add team member</h3>
+            </Col>
+            <Col className="text-right" xs="4">
+              <Button color="primary" onClick={handleSubmit} size="sm">
+                Save
+              </Button>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Form>
+            <h6 className="heading-small text-muted mb-4">User information</h6>
+            {/* <div className="pl-lg-4"> */}
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="input-email">
+                    Email address
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-email"
+                    placeholder="user@gmail.com"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Phone Number
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-username"
+                    placeholder="Contact Number"
+                    type="text"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </Form>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
+const AddTeamMember = () => {
+  const [email, setEmail] = useState("");
+  const [contact, setContact] = useState("");
+
+  function handleSubmit() {
+    const data = {
+      email,
+      contact,
+    };
+
+    // await eventServices.kuchTOhFunction();
+  }
+
+  return (
+    <>
+      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+        <CardHeader className="bg-white border-0">
+          <Row className="align-items-center">
+            <Col xs="8">
+              <h3 className="mb-0">Add team member</h3>
+            </Col>
+            <Col className="text-right" xs="4">
+              <Button color="primary" size="sm" onClick={handleSubmit}>
+                Save
+              </Button>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Form>
+            <h6 className="heading-small text-muted mb-4">User information</h6>
+            {/* <div className="pl-lg-4"> */}
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label className="form-control-label" htmlFor="input-email">
+                    Email address
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-email"
+                    placeholder="user@gmail.com"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Phone Number
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-username"
+                    placeholder="Contact Number"
+                    type="number"
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </Form>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
 const ModalComponent = ({ isOpen, setIsOpen, modalComponent }) => {
   console.log(modalComponent);
+
+  function returnComponent(item) {
+    if (item === "AddTeamModal") {
+      return <AddTeamModal />;
+    }
+    if (item === "UserInfo") {
+      return <UserInfo />;
+    }
+    if (item === "AddTeamMember") {
+      return <AddTeamMember />;
+    }
+  }
+
   return (
     <Modal
       style={customStyles}
       isOpen={isOpen}
       onRequestClose={() => setIsOpen(false)}
     >
-      {modalComponent}
+      {returnComponent(modalComponent)}
     </Modal>
   );
 };

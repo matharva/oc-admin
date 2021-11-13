@@ -15,15 +15,37 @@ import {
 } from "reactstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { v4 as uuid } from "uuid";
+
 import eventServices from "../services/eventServices";
 
-const ChatItem = ({ question = "Some random question", id }) => {
-  function deleteChatItem() {
-    // await
-    // await eventServices.getChats();
+const ChatItem = ({ item, setChats, chats }) => {
+  const { question = "Some random question", answer, id } = item;
+
+  function updateChatItem(e) {
+    setChats((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, answer: e.target.value } : element
+      );
+    });
   }
 
-  function updateChatItem() {}
+  function deleteChatItem() {
+    // setChats((prev) => {
+    //   return prev
+    //     .map((element) => (element.id === id ? null : element))
+    //     .filter((x) => x !== null);
+    // });
+    // await eventServices.kuchTOhFunction(id);
+  }
+
+  function handleSubmit() {
+    // const data = {
+    //   answer,
+    //   question,
+    // };
+    // await eventServices.kuchTOhFunction(id);
+  }
 
   return (
     <Row className="align-items-center" id={id}>
@@ -36,12 +58,7 @@ const ChatItem = ({ question = "Some random question", id }) => {
               </label>
             </Col>
             <Col className="text-right" lg="4">
-              <Button
-                color="primary"
-                href="#pablo"
-                onClick={updateChatItem}
-                size="sm"
-              >
+              <Button color="primary" onClick={handleSubmit} size="sm">
                 Save
               </Button>
 
@@ -52,7 +69,8 @@ const ChatItem = ({ question = "Some random question", id }) => {
             className="form-control-alternative"
             placeholder="Enter Event Description..."
             rows="4"
-            defaultValue=""
+            value={answer}
+            onChange={updateChatItem}
             type="textarea"
           />
         </FormGroup>
@@ -65,19 +83,24 @@ const ChatContainer = () => {
   const [active, setActive] = useState(0);
   const [chats, setChats] = useState([
     {
-      question: "",
+      question: "Question?",
+      answer: "",
+      id: uuid(),
     },
     {
-      question: "",
+      question: "Question?",
+      answer: "",
+      id: uuid(),
     },
     {
-      question: "",
+      question: "Question?",
+      answer: "",
+      id: uuid(),
     },
     {
-      question: "",
-    },
-    {
-      question: "",
+      question: "Question?",
+      answer: "",
+      id: uuid(),
     },
   ]);
 
@@ -127,7 +150,7 @@ const ChatContainer = () => {
         <CardBody>
           <Form>
             {chats.map((item) => (
-              <ChatItem item={item} setChats={setChats} />
+              <ChatItem item={item} setChats={setChats} chats={chats} />
             ))}
           </Form>
         </CardBody>
@@ -139,6 +162,15 @@ const ChatContainer = () => {
 const AddChats = () => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+
+  function handleSubmit() {
+    const data = {
+      answer,
+      question,
+    };
+
+    // await eventServices.kuchTOhFunction();
+  }
   return (
     <>
       <Col className="order-xl-2" xl="4">
@@ -149,11 +181,7 @@ const AddChats = () => {
                 <h3 className="mb-0">Add Chat</h3>
               </Col>
               <Col className="text-right" xs="4">
-                <Button
-                  color="primary"
-                  onClick={(e) => e.preventDefault()}
-                  size="sm"
-                >
+                <Button color="primary" onClick={handleSubmit} size="sm">
                   Add
                 </Button>
               </Col>

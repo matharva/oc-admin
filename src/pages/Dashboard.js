@@ -24,15 +24,6 @@ import Chart from "chart.js";
 import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
 import { Card, Container, Row, Col } from "reactstrap";
-import { v4 as uuid } from "uuid";
-
-// core components
-import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2,
-} from "variables/charts.js";
 
 import Header from "components/Headers/Header.js";
 

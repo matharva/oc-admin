@@ -61,7 +61,7 @@ const BigTableHeader = ({
                 href="#pablo"
                 onClick={(e) => {
                   e.preventDefault();
-                  setModalComponent(AddTeamModal);
+                  setModalComponent("AddTeamModal");
                   setIsOpen(true);
                 }}
                 size="sm"
@@ -72,74 +72,6 @@ const BigTableHeader = ({
           </Col>
         </Row>
       </CardHeader>
-    </>
-  );
-};
-
-const AddTeamModal = () => {
-  return (
-    <>
-      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
-        <CardHeader className="bg-white border-0">
-          <Row className="align-items-center">
-            <Col xs="8">
-              <h3 className="mb-0">Add team</h3>
-            </Col>
-            <Col className="text-right" xs="4">
-              <Button
-                color="primary"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-                size="sm"
-              >
-                Save
-              </Button>
-            </Col>
-          </Row>
-        </CardHeader>
-        <CardBody>
-          <Form>
-            <h6 className="heading-small text-muted mb-4">User information</h6>
-            {/* <div className="pl-lg-4"> */}
-            <Row>
-              <Col lg="12">
-                <FormGroup>
-                  <label className="form-control-label" htmlFor="input-email">
-                    Email address
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    id="input-email"
-                    placeholder="user@gmail.com"
-                    type="email"
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="12">
-                <FormGroup>
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Phone Number
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    defaultValue=""
-                    id="input-username"
-                    placeholder="Contact Number"
-                    type="text"
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            {/* </div> */}
-            <hr className="my-4" />
-          </Form>
-        </CardBody>
-      </Card>
     </>
   );
 };
