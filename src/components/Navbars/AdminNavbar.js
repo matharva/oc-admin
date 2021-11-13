@@ -59,23 +59,21 @@ const AdminNavbar = (props) => {
           </Form> */}
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
-              <DropdownToggle className="pr-0" nav>
-                <Media className="align-items-center">
-                  <span className="avatar avatar-sm rounded-circle">
-                    <img
-                      alt="..."
-                      src={
-                        " https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z3JhZGllbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"
-                      }
-                    />
+              {/* <DropdownToggle className="pr-0" nav> */}
+              <Media
+                className="align-items-center"
+                style={{ cursor: "pointer" }}
+              >
+                <span className="avatar avatar-sm rounded-circle bg-red">
+                  <i className="ni ni-user-run " />
+                </span>
+                <Media className="ml-2 d-none d-lg-block">
+                  <span className="mb-0 text-sm font-weight-bold text-white">
+                    Logout
                   </span>
-                  <Media className="ml-2 d-none d-lg-block">
-                    <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
-                    </span>
-                  </Media>
                 </Media>
-              </DropdownToggle>
+              </Media>
+              {/* </DropdownToggle> */}
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome!</h6>

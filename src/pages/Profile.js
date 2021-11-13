@@ -181,9 +181,66 @@ const RulesItem = ({ id, text = "" }) => {
   );
 };
 
+const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
+  // console.log("props", setRegistrationCost);
+  const { type, cost, id } = item;
+  // console.log("setRegistrationCost", setRegistrationCost);
+
+  function updateType(e) {
+    setRegistrationCost((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, type: e.target.value } : element
+      );
+    });
+  }
+
+  function updateCost(e) {
+    setRegistrationCost((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, cost: e.target.value } : element
+      );
+    });
+  }
+  return (
+    <Row id={id}>
+      <Col xl={6}>
+        <FormGroup>
+          <label className="form-control-label" htmlFor="input-first-name">
+            Type
+          </label>
+          <Input
+            className="form-control-alternative"
+            placeholder="Enter type of cost..."
+            rows="4"
+            value={type}
+            onChange={updateType}
+            type="text"
+          />
+        </FormGroup>
+      </Col>
+      <Col xl={6}>
+        <FormGroup>
+          <label className="form-control-label" htmlFor="input-first-name">
+            Cost
+          </label>
+          <Input
+            className="form-control-alternative"
+            placeholder="Enter Registration Cost..."
+            rows="4"
+            value={cost}
+            onChange={updateCost}
+            type="text"
+          />
+        </FormGroup>
+      </Col>
+    </Row>
+  );
+};
+
 const Details = () => {
   const [faq, setFaq] = useState([{ question: "", answer: "" }]);
   const [rules, setRules] = useState([{ text: "" }]);
+  const [registrationCost, setRegistrationCost] = useState([]);
 
   function addFaqQuestion() {
     const defaultData = { question: "", answer: "", id: uuid() };
@@ -193,14 +250,20 @@ const Details = () => {
   }
 
   function addRules() {
-    const defaultData = { question: "", answer: "", id: uuid() };
-    setFaq((faq) => {
-      return [...faq, defaultData];
+    const defaultData = { text: "", id: uuid() };
+    setRules((rule) => {
+      return [...rule, defaultData];
     });
   }
 
-  console.log("faq: ", faq);
-  // console.log(uuid());
+  function addRegistration() {
+    const defaultData = { type: "", cost: "", id: uuid() };
+    setRegistrationCost((prev) => {
+      return [...prev, defaultData];
+    });
+  }
+
+  // console.log("registrationCost: ", registrationCost);
 
   return (
     <Col className="order-xl-1" xl="8">
@@ -332,8 +395,42 @@ const Details = () => {
               </Row>
             </div>
 
+            {/* Registration Cost Starts */}
             <hr className="my-4" />
-            {/* Description */}
+            <div className="pl-lg-4">
+              <FormGroup>
+                <Row className="align-items-center pb-3">
+                  <Col xs="8">
+                    <label className="heading-small text-muted mb-1">
+                      Registration Cost
+                    </label>
+                  </Col>
+                  <Col className="text-right" xs="4">
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={addRegistration}
+                      size="sm"
+                    >
+                      Add Cost
+                    </Button>
+                  </Col>
+                </Row>
+              </FormGroup>
+            </div>
+            {registrationCost.map((item) => {
+              return (
+                <RegistrationItem
+                  item={item}
+                  setRegistrationCost={setRegistrationCost}
+                  registrationCost={registrationCost}
+                />
+              );
+            })}
+            {/* Registration Cost Ends */}
+
+            {/* Description Starts*/}
+            <hr className="my-4" />
             <div className="pl-lg-4">
               <FormGroup>
                 <label className="heading-small text-muted mb-1">
@@ -345,10 +442,12 @@ const Details = () => {
                   rows="4"
                   // defaultValue="Enter Event Description..."
                   value=""
-                  type="textarea"
+                  type="text"
                 />
               </FormGroup>
             </div>
+            {/* Description Ends */}
+
             <hr className="my-4" />
             {/* Address */}
             <Row className="align-items-center">
@@ -376,7 +475,7 @@ const Details = () => {
                 <h6 className="heading-small text-muted mb-4">Rules</h6>
               </Col>
               <Col className="text-right" xs="4">
-                <Button color="primary" onClick={addFaqQuestion} size="sm">
+                <Button color="primary" onClick={addRules} size="sm">
                   Add Rules
                 </Button>
               </Col>
