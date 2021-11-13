@@ -24,6 +24,7 @@ import Chart from "chart.js";
 import { Line, Bar } from "react-chartjs-2";
 // reactstrap components
 import { Card, Container, Row, Col } from "reactstrap";
+import { v4 as uuid } from "uuid";
 
 // core components
 import {
@@ -47,7 +48,7 @@ const TEAMDATA = [
     memberCount: "4",
     members: [
       {
-        name: "Atarva Mohtie",
+        name: "1Atarva Mohtie",
         email: "atharvamohtie20@gmail.com",
         number: "894579055423",
       },
@@ -65,7 +66,7 @@ const TEAMDATA = [
     memberCount: "4",
     members: [
       {
-        name: "Atarva Mohtie",
+        name: "2Atarva Mohtie",
         email: "atharvamohtie20@gmail.com",
         number: "894579055423",
       },
@@ -80,8 +81,18 @@ const TEAMDATA = [
     teamCode: "bvcn",
     isComplete: false,
     amount: "800",
-    memberCount: "4",
+    memberCount: 4,
     members: [
+      {
+        name: "3Atarva Mohtie",
+        email: "atharvamohtie20@gmail.com",
+        number: "894579055423",
+      },
+      {
+        name: "Shubham Joshi",
+        email: "shubhamjoshi@gmail.com",
+        number: "894579055423",
+      },
       {
         name: "Atarva Mohtie",
         email: "atharvamohtie20@gmail.com",
@@ -96,12 +107,12 @@ const TEAMDATA = [
   },
   {
     teamCode: "jhfgj",
-    isComplete: false,
+    isComplete: true,
     amount: "800",
     memberCount: "4",
     members: [
       {
-        name: "Atarva Mohtie",
+        name: "4Atarva Mohtie",
         email: "atharvamohtie20@gmail.com",
         number: "894579055423",
       },
@@ -120,6 +131,7 @@ const Dashboard = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalComponent, setModalComponent] = useState(null);
   const [teamData, setTeamData] = useState(TEAMDATA);
+  const [currentTeam, setCurrentTeam] = useState(teamData[0]);
 
   return (
     <>
@@ -139,6 +151,8 @@ const Dashboard = (props) => {
                 setModalComponent={setModalComponent}
                 teamData={teamData}
                 setTeamData={setTeamData}
+                currentTeam={currentTeam}
+                setCurrentTeam={setCurrentTeam}
               />
             </Card>
           </Col>
@@ -147,6 +161,7 @@ const Dashboard = (props) => {
               <SmallTable
                 setIsOpen={setIsOpen}
                 setModalComponent={setModalComponent}
+                currentTeam={currentTeam}
               />
             </Card>
           </Col>

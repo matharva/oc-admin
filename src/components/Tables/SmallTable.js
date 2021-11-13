@@ -298,7 +298,12 @@ const SmallTableRow = ({ userData, setModalComponent, setIsOpen }) => {
   );
 };
 
-const SmallTable = ({ setModalComponent, setIsOpen }) => {
+const SmallTable = ({
+  setModalComponent,
+  setIsOpen,
+  currentTeam,
+  setCurrentTeam,
+}) => {
   return (
     <div>
       <SmallTableHeader
@@ -315,7 +320,7 @@ const SmallTable = ({ setModalComponent, setIsOpen }) => {
           </tr>
         </thead>
         <tbody>
-          {TEAMDATA[0].members.map((item) => (
+          {currentTeam.members.map((item) => (
             <SmallTableRow
               setIsOpen={setIsOpen}
               setModalComponent={setModalComponent}

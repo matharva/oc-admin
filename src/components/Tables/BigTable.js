@@ -144,12 +144,18 @@ const AddTeamModal = () => {
   );
 };
 
-const BigTableRow = ({ teamData }) => {
+const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
   const { teamCode, memberCount, amount, members } = teamData;
+
+  function handleCurrentTeam() {
+    const currTeam = allTeamData.filter((x) => x.teamCode === teamCode);
+    console.log(currTeam);
+    setCurrentTeam(currTeam[0]);
+  }
 
   return (
     <>
-      <tr>
+      <tr onClick={handleCurrentTeam}>
         <th scope="row">{teamCode}</th>
         <td>{memberCount}</td>
         <td>{amount}</td>
@@ -174,7 +180,13 @@ const BigTableRow = ({ teamData }) => {
   );
 };
 
-const BigTable = ({ setModalComponent, setIsOpen, teamData, setTeamData }) => {
+const BigTable = ({
+  setModalComponent,
+  setIsOpen,
+  teamData,
+  setTeamData,
+  setCurrentTeam,
+}) => {
   const [team, setTeam] = useState(teamData);
 
   function filterByPending() {
@@ -234,7 +246,11 @@ const BigTable = ({ setModalComponent, setIsOpen, teamData, setTeamData }) => {
         </thead>
         <tbody>
           {team.map((item) => (
-            <BigTableRow teamData={item} />
+            <BigTableRow
+              teamData={item}
+              setCurrentTeam={setCurrentTeam}
+              allTeamData={teamData}
+            />
           ))}
         </tbody>
       </Table>
