@@ -31,7 +31,7 @@ const BigTableHeader = ({
     setSearchText(text);
 
     const filteredText = teamData.filter(
-      (x) => x.teamCode.includes(text) === true
+      (x) => x.TeamCode.toLowerCase().includes(text) === true
     );
     console.log(text, filteredText);
     setTeam(filteredText);
