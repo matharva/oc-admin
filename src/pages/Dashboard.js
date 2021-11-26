@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
@@ -30,6 +30,7 @@ import Header from "components/Headers/Header.js";
 import ModalComponent from "components/Modal/ModalComponent";
 import SmallTable from "components/Tables/SmallTable";
 import BigTable from "components/Tables/BigTable";
+import { eventServices } from "services/eventServices";
 
 const TEAMDATA = [
   {
@@ -117,16 +118,26 @@ const TEAMDATA = [
 ];
 
 const Dashboard = (props) => {
-  const [activeNav, setActiveNav] = useState(1);
-  const [chartExample1Data, setChartExample1Data] = useState("data1");
   const [isOpen, setIsOpen] = useState(false);
   const [modalComponent, setModalComponent] = useState(null);
-  const [teamData, setTeamData] = useState(TEAMDATA);
-  const [currentTeam, setCurrentTeam] = useState(teamData[0]);
+  const [teamData, setTeamData] = useState([]);
+  const [currentTeam, setCurrentTeam] = useState(null);
+
+  const [eventData, setEventData] = useState([]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const eventName = "IPL Auction";
+    const data = await eventServices.getEvent(eventName);
+    console.log(data);
+    setEventData(data);
+    setTeamData(data.allTeamDetails);
+    setCurrentTeam(data.allTeamDetails[0]);
+  }, []);
 
   return (
     <>
-      <Header />
+      <Header eventData={eventData} />
       <ModalComponent
         isOpen={isOpen}
         setIsOpen={setIsOpen}

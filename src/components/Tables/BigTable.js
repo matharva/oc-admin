@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -36,6 +36,8 @@ const BigTableHeader = ({
     console.log(text, filteredText);
     setTeam(filteredText);
   }
+
+  console.log("Team Data in big table: ", teamData);
 
   return (
     <>
@@ -77,11 +79,17 @@ const BigTableHeader = ({
 };
 
 const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
-  const { teamCode, memberCount, amount, members } = teamData;
+  const {
+    TeamCode: teamCode,
+    maxMembers: memberCount,
+    amount,
+    member: members,
+    isComplete,
+  } = teamData;
 
   function handleCurrentTeam() {
-    const currTeam = allTeamData.filter((x) => x.teamCode === teamCode);
-    console.log(currTeam);
+    const currTeam = allTeamData.filter((x) => x.TeamCode === teamCode);
+    console.log("Current Team in big table", currTeam, allTeamData);
     setCurrentTeam(currTeam[0]);
   }
 
@@ -92,7 +100,7 @@ const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
         <td>{memberCount}</td>
         <td>{amount}</td>
         <td>
-          {members.length === memberCount ? (
+          {isComplete ? (
             <Badge color="" className="badge-dot">
               <i className="bg-success" />
               completed
@@ -120,6 +128,7 @@ const BigTable = ({
   setCurrentTeam,
 }) => {
   const [team, setTeam] = useState(teamData);
+  console.log("team from big table: ", teamData);
 
   function filterByPending() {
     console.log(team);
@@ -132,6 +141,10 @@ const BigTable = ({
     const complete = teamData.filter((x) => x.isComplete === true);
     setTeam(complete);
   }
+
+  useEffect(() => {
+    setTeam(teamData);
+  }, [teamData]);
 
   return (
     <div>

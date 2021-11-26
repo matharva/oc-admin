@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -83,6 +83,12 @@ const SmallTable = ({
   currentTeam,
   setCurrentTeam,
 }) => {
+  const [currTeam, setCurrTeam] = useState(null);
+  console.log("current team in small table: ", currTeam);
+
+  useEffect(() => {
+    setCurrTeam(currentTeam);
+  }, [currentTeam]);
   return (
     <div>
       <SmallTableHeader
@@ -99,13 +105,15 @@ const SmallTable = ({
           </tr>
         </thead>
         <tbody>
-          {currentTeam.members.map((item) => (
-            <SmallTableRow
-              setIsOpen={setIsOpen}
-              setModalComponent={setModalComponent}
-              userData={item}
-            />
-          ))}
+          {currTeam
+            ? currTeam.member.map((item) => (
+                <SmallTableRow
+                  setIsOpen={setIsOpen}
+                  setModalComponent={setModalComponent}
+                  userData={item}
+                />
+              ))
+            : null}
         </tbody>
       </Table>
     </div>

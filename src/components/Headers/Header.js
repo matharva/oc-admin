@@ -47,25 +47,26 @@ const HeaderItem = ({ item }) => {
   );
 };
 
-const dummyHeaderdata = [
-  {
-    title: "Teams Registered",
-    count: 1000,
-    color: "bg-red",
-  },
-  {
-    title: "Registrations",
-    count: 1000,
-    color: "bg-cyan",
-  },
-  {
-    title: "Amount Collected",
-    count: 1000,
-    color: "bg-green",
-  },
-];
+const Header = ({ eventData }) => {
+  console.log(eventData);
 
-const Header = () => {
+  const dummyHeaderdata = [
+    {
+      title: "Teams Registered",
+      count: eventData.teamCount || 1000,
+      color: "bg-red",
+    },
+    {
+      title: "Registrations",
+      count: eventData.playerCount || 1000,
+      color: "bg-cyan",
+    },
+    {
+      title: "Amount Collected",
+      count: eventData.totalAmount || 1000,
+      color: "bg-green",
+    },
+  ];
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">

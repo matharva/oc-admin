@@ -31,11 +31,6 @@ const ChatItem = ({ item, setChats, chats }) => {
   }
 
   function deleteChatItem() {
-    // setChats((prev) => {
-    //   return prev
-    //     .map((element) => (element.id === id ? null : element))
-    //     .filter((x) => x !== null);
-    // });
     // await eventServices.kuchTOhFunction(id);
   }
 
