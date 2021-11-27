@@ -12,6 +12,7 @@ import {
   Table,
 } from "reactstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { eventServices } from "services/eventServices";
 
 const SmallTableHeader = ({ setModalComponent, setIsOpen }) => {
   return (
@@ -51,29 +52,47 @@ const SmallTableHeader = ({ setModalComponent, setIsOpen }) => {
   );
 };
 
-const SmallTableRow = ({ userData, setModalComponent, setIsOpen }) => {
+const SmallTableRow = ({
+  userData,
+  setModalComponent,
+  setIsOpen,
+  setSelected,
+  teamCode,
+}) => {
   const {
     name = "User",
     email = "user@usergmail.com",
     number = "1234567890",
+    uid,
   } = userData;
+
+  async function handleDelete() {
+    const data = {
+      email,
+      teamCode,
+      eventName: "IPL Auction",
+    };
+    console.log("Delete data: ", data);
+    // await eventServices.removeMemberFromTeam(data);
+  }
+
   return (
-    <>
-      <tr
-        onClick={(e) => {
-          e.preventDefault();
-          setModalComponent("UserInfo");
-          setIsOpen(true);
-        }}
-      >
-        <th scope="row">{name}</th>
-        <td>{email}</td>
-        <td>{number}</td>
-        <td>
-          <DeleteIcon />
-        </td>
-      </tr>
-    </>
+    <tr
+      key={uid}
+      onClick={(e) => {
+        e.preventDefault();
+        setModalComponent("UserInfo");
+        setSelected(uid);
+        setIsOpen(true);
+      }}
+    >
+      <th scope="row">{name}</th>
+      <td>{email}</td>
+      <td>{number}</td>
+      <td>
+        <DeleteIcon onClick={handleDelete} />
+      </td>
+    </tr>
   );
 };
 
@@ -81,14 +100,15 @@ const SmallTable = ({
   setModalComponent,
   setIsOpen,
   currentTeam,
-  setCurrentTeam,
+  setSelected,
 }) => {
   const [currTeam, setCurrTeam] = useState(null);
-  console.log("current team in small table: ", currTeam);
 
   useEffect(() => {
     setCurrTeam(currentTeam);
   }, [currentTeam]);
+
+  // console.log("Current team from small table: ", currentTeam, currTeam);
   return (
     <div>
       <SmallTableHeader
@@ -105,12 +125,14 @@ const SmallTable = ({
           </tr>
         </thead>
         <tbody>
-          {currTeam
+          {currTeam !== null
             ? currTeam.member.map((item) => (
                 <SmallTableRow
                   setIsOpen={setIsOpen}
                   setModalComponent={setModalComponent}
                   userData={item}
+                  setSelected={setSelected}
+                  teamCode={currTeam.TeamCode}
                 />
               ))
             : null}

@@ -17,6 +17,7 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { eventServices } from "services/eventServices";
 
 const BigTableHeader = ({
   setIsOpen,
@@ -37,7 +38,7 @@ const BigTableHeader = ({
     setTeam(filteredText);
   }
 
-  console.log("Team Data in big table: ", teamData);
+  // console.log("Team Data in big table: ", teamData);
 
   return (
     <>
@@ -89,8 +90,16 @@ const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
 
   function handleCurrentTeam() {
     const currTeam = allTeamData.filter((x) => x.TeamCode === teamCode);
-    console.log("Current Team in big table", currTeam, allTeamData);
+    // console.log("Current Team in big table", currTeam, allTeamData);
     setCurrentTeam(currTeam[0]);
+  }
+
+  async function handleDelete() {
+    const data = {
+      teamCode,
+    };
+    console.log("Data for delete team: ", data);
+    await eventServices.removeTeam(data);
   }
 
   return (
@@ -113,7 +122,7 @@ const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
           )}
         </td>
         <td>
-          <DeleteIcon />
+          <DeleteIcon onClick={handleDelete} />
         </td>
       </tr>
     </>
@@ -128,7 +137,7 @@ const BigTable = ({
   setCurrentTeam,
 }) => {
   const [team, setTeam] = useState(teamData);
-  console.log("team from big table: ", teamData);
+  // console.log("team from big table: ", teamData);
 
   function filterByPending() {
     console.log(team);

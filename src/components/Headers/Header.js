@@ -53,17 +53,17 @@ const Header = ({ eventData }) => {
   const dummyHeaderdata = [
     {
       title: "Teams Registered",
-      count: eventData.teamCount || 1000,
+      count: eventData?.teamCount || 1000,
       color: "bg-red",
     },
     {
       title: "Registrations",
-      count: eventData.playerCount || 1000,
+      count: eventData?.playerCount || 1000,
       color: "bg-cyan",
     },
     {
       title: "Amount Collected",
-      count: eventData.totalAmount || 1000,
+      count: eventData?.totalAmount || 1000,
       color: "bg-green",
     },
   ];

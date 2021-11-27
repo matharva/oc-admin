@@ -122,6 +122,7 @@ const Dashboard = (props) => {
   const [modalComponent, setModalComponent] = useState(null);
   const [teamData, setTeamData] = useState([]);
   const [currentTeam, setCurrentTeam] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   const [eventData, setEventData] = useState([]);
 
@@ -142,6 +143,8 @@ const Dashboard = (props) => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         modalComponent={modalComponent}
+        currentTeam={currentTeam}
+        selected={selected}
       />
       {/* Page content */}
       <Container className="mt--7" fluid>
@@ -164,6 +167,7 @@ const Dashboard = (props) => {
                 setIsOpen={setIsOpen}
                 setModalComponent={setModalComponent}
                 currentTeam={currentTeam}
+                setSelected={setSelected}
               />
             </Card>
           </Col>

@@ -37,12 +37,9 @@ async function updateEvent(data) {
 }
 
 //** Team APIs */
-async function addTeam(email, eventName) {
+async function addTeam(data) {
   try {
-    let addTeam = await oculusAPI.post("/addOfflineTeam", {
-      email: email,
-      eventName: eventName,
-    });
+    let addTeam = await oculusAPI.post("/addOfflineTeam/", data);
     console.log("The addTeam  is: ", addTeam.data);
     return addTeam.data;
   } catch (e) {
@@ -50,11 +47,9 @@ async function addTeam(email, eventName) {
   }
 }
 
-async function removeTeam(teamCode) {
+async function removeTeam(data) {
   try {
-    let removeTeam = await oculusAPI.delete("/removeTeam", {
-      teamCode: teamCode,
-    });
+    let removeTeam = await oculusAPI.delete("/deleteTeam/", data);
     console.log("The removeTeam  is: ", removeTeam.data);
     return removeTeam.data;
   } catch (e) {
@@ -72,12 +67,22 @@ async function updateTeamDetails(data) {
   }
 }
 
-// .. Member team APIs./
-async function addMemberToTeam(emailId, teamCode, eventName) {
+async function updateUserInfo(data) {
   try {
-    let addedMemberData = await oculusAPI.post("/memberToTeam", {
+    let updatedTeamDetail = await oculusAPI.patch("/updateUserInfo/", data);
+    console.log("The updatedUserInfo  is: ", updatedTeamDetail.data);
+    return updatedTeamDetail.data;
+  } catch (e) {
+    console.log("Error in updateUserInfo: ", e);
+  }
+}
+
+// .. Member team APIs./
+async function addMemberToTeam({ email, teamCode, eventName }) {
+  try {
+    let addedMemberData = await oculusAPI.post("/adminUpdateTeamMembers", {
       eventName: eventName,
-      emailId: emailId,
+      email: email,
       teamCode: teamCode,
     });
     console.log("The addedMemberData  is: ", addedMemberData.data);
@@ -87,11 +92,11 @@ async function addMemberToTeam(emailId, teamCode, eventName) {
   }
 }
 
-async function removeMemberFromTeam(emailId, teamCode, eventName) {
+async function removeMemberFromTeam({ email, teamCode, eventName }) {
   try {
-    let removedMemberData = await oculusAPI.delete("/memberToTeam", {
+    let removedMemberData = await oculusAPI.delete("/adminUpdateTeamMembers", {
       eventName: eventName,
-      emailId: emailId,
+      email: email,
       teamCode: teamCode,
     });
     console.log("The removedMemberData  is: ", removedMemberData.data);
@@ -179,4 +184,5 @@ export const eventServices = {
   addNotification,
   answerQuestion,
   deleteQuestion,
+  updateUserInfo,
 };
