@@ -9,3 +9,7 @@ export function validateEmail(email) {
 export function validatePhoneNumber(num) {
   return num.length === 10;
 }
+
+export const EVENT_MAP = {
+  "athar@spit.ac.in": "IPL Auction",
+};

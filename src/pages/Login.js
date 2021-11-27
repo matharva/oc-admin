@@ -37,6 +37,8 @@ import { useHistory } from "react-router";
 import { useAuth } from "context/AuthContext";
 import { useState } from "react";
 import { handleBreakpoints } from "@mui/system";
+import { localService } from "services/localService";
+import { EVENT_MAP } from "services/helpers";
 
 const Login = () => {
   const history = useHistory();
@@ -49,7 +51,7 @@ const Login = () => {
       },
     },
   };
-  const { signup, login } = useAuth();
+  const { signup, login, setGlobalEventName } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -97,6 +99,11 @@ const Login = () => {
       console.log("EventD3: ", item[0]);
 
       const eventName = "IPL";
+      // setToken()
+      // localService.setToken("user", { email, password });
+      const event = EVENT_MAP[item[0].email];
+      console.log("Event from hashmap is: ", event);
+      setGlobalEventName(event);
 
       history.push("/admin/index");
     }

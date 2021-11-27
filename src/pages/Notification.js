@@ -15,10 +15,12 @@ import {
   Input,
   Row,
 } from "reactstrap";
+import { eventServices } from "services/eventServices";
 
 const NotifForm = ({ question = "", answer = "", id }) => {
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState("");
+  const [notificationText, setNotificationText] = useState("");
   // const types = ["image/png", "image/jpeg"];
 
   function changeHandler(e) {
@@ -32,7 +34,7 @@ const NotifForm = ({ question = "", answer = "", id }) => {
     }
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     // references
     const storageRef = projectStorage.ref(file.name);
     console.log(projectStorage, file.name);
@@ -49,6 +51,17 @@ const NotifForm = ({ question = "", answer = "", id }) => {
       console.log("URL for notif: ", URL);
       setUrl(URL);
     });
+    const data = {
+      url:
+        url ||
+        `https://firebasestorage.googleapis.com/v0/b/oculus2022-75997.appspot.com/o/${file.name}?alt=media`,
+      text: notificationText,
+    };
+
+    console.log("Data to be sent: ", data);
+    // await eventServices.kuchTohFunction()
+    setFile(null);
+    setNotificationText("");
   }
   return (
     <>
@@ -80,7 +93,8 @@ const NotifForm = ({ question = "", answer = "", id }) => {
                     <Input
                       className="form-control-alternative"
                       defaultValue=""
-                      value={question}
+                      value={notificationText}
+                      onChange={(e) => setNotificationText(e.target.value)}
                       id="input-address"
                       placeholder="Add Notification Text..."
                       type="text"

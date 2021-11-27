@@ -281,7 +281,7 @@ const AddTeamMember = ({ currentTeam }) => {
       teamCode: currentTeam.TeamCode,
     };
 
-    console.log("Current Team in modal: ", data);
+    // console.log("Current Team in modal: ", data);
     await eventServices.addMemberToTeam(data);
   }
 
@@ -366,9 +366,9 @@ const ModalComponent = ({
   currentTeam,
   selected,
 }) => {
-  console.log(modalComponent);
+  // console.log(modalComponent);
 
-  console.log("Current Team in modal component: ", currentTeam);
+  // console.log("Current Team in modal component: ", currentTeam);
 
   function returnComponent(item) {
     if (item === "AddTeamModal") {

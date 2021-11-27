@@ -209,6 +209,14 @@ const RulesItem = ({ item, setRules }) => {
         .filter((x) => x !== null);
     });
   }
+
+  function updateRules(e) {
+    setRules((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, text: e.target.value } : element
+      );
+    });
+  }
   return (
     <>
       <Row id={id}>
@@ -218,6 +226,7 @@ const RulesItem = ({ item, setRules }) => {
               className="form-control-alternative"
               defaultValue=""
               value={text}
+              onChange={updateRules}
               id="input-address"
               placeholder="Add a rule..."
               type="text"
@@ -234,13 +243,13 @@ const RulesItem = ({ item, setRules }) => {
 
 const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
   // console.log("props", setRegistrationCost);
-  const { type, cost, id } = item;
+  const { Type, Fee, id } = item;
   // console.log("setRegistrationCost", setRegistrationCost);
 
   function updateType(e) {
     setRegistrationCost((prev) => {
       return prev.map((element) =>
-        element.id === id ? { ...element, type: e.target.value } : element
+        element.id === id ? { ...element, Type: e.target.value } : element
       );
     });
   }
@@ -248,7 +257,7 @@ const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
   function updateCost(e) {
     setRegistrationCost((prev) => {
       return prev.map((element) =>
-        element.id === id ? { ...element, cost: e.target.value } : element
+        element.id === id ? { ...element, Fee: e.target.value } : element
       );
     });
   }
@@ -271,7 +280,7 @@ const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
             className="form-control-alternative"
             placeholder="Enter type of cost..."
             rows="4"
-            value={type}
+            value={Type}
             onChange={updateType}
             type="text"
           />
@@ -280,13 +289,13 @@ const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
       <Col xl={5}>
         <FormGroup>
           <label className="form-control-label" htmlFor="input-first-name">
-            Cost
+            Fee
           </label>
           <Input
             className="form-control-alternative"
             placeholder="Enter Registration Cost..."
             rows="4"
-            value={cost}
+            value={Fee}
             onChange={updateCost}
             type="number"
           />
@@ -389,6 +398,21 @@ const EventInformation = (props) => {
           <Col lg="6">
             <FormGroup>
               <label className="form-control-label" htmlFor="input-first-name">
+                Date
+              </label>
+              <Input
+                className="form-control-alternative"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                id="input-first-name"
+                placeholder="Prizes"
+                type="text"
+              />
+            </FormGroup>
+          </Col>
+          {/* <Col lg="6">
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-first-name">
                 Start Date
               </label>
               <Input
@@ -400,8 +424,8 @@ const EventInformation = (props) => {
                 type="date"
               />
             </FormGroup>
-          </Col>
-          <Col lg="6">
+          </Col> */}
+          {/* <Col lg="6">
             <FormGroup>
               <label className="form-control-label" htmlFor="input-last-name">
                 End Date
@@ -415,7 +439,7 @@ const EventInformation = (props) => {
                 type="date"
               />
             </FormGroup>
-          </Col>
+          </Col> */}
           <Col lg="12">
             <FormGroup>
               <label className="heading-small text-muted mb-1">
@@ -437,7 +461,7 @@ const EventInformation = (props) => {
   );
 };
 
-const Details = ({ eventData }) => {
+const Details = () => {
   const [faq, setFaq] = useState([{ question: "", answer: "", id: uuid() }]);
   const [rules, setRules] = useState([{ text: "" }]);
   const [registrationCost, setRegistrationCost] = useState([
@@ -465,7 +489,7 @@ const Details = ({ eventData }) => {
   }
 
   function addRegistration() {
-    const defaultData = { type: "", cost: "", id: uuid() };
+    const defaultData = { Type: "", Fee: "", id: uuid() };
     setRegistrationCost((prev) => {
       return [...prev, defaultData];
     });
@@ -476,16 +500,63 @@ const Details = ({ eventData }) => {
     const data = {
       faq,
       rules,
-      registrationCost,
-      title,
-      prize,
-      category,
-      startDate,
-      endDate,
-      description,
+      Fee: registrationCost,
+      Title: title,
+      Prizes: prize,
+      Category: category,
+      Date: startDate,
+      // endDate,
+      Description: description,
     };
-    // await eventServices.updateEvent(data)
+    console.log("Data to be updated: ", data);
+    await eventServices.updateEvent(data);
   }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const eventName = "IPL Auction";
+    const data = await eventServices.getEventDetails(eventName);
+    // console.log("Event Details: ", data);
+    setCategory(data.Category);
+    setDescription(data.Description);
+    setStartDate(data.Date);
+    // setFaq(data.faq);
+    setPrize(data.Prizes);
+    setTitle(data.Title);
+    // setRules(data.rules);
+
+    // Fees
+    const feeData = data.Fee;
+    const fees = feeData.map((item) => {
+      if (item.id) return item;
+      return { ...item, id: uuid() };
+    });
+    setRegistrationCost(fees);
+
+    // Rules
+    const rulesData = data.rules;
+    const rulesUpdated = rulesData.map((item) => {
+      const data = {};
+      data.text = item;
+
+      if (item.id) {
+        data.id = item.id;
+        return data;
+      }
+      data.id = uuid();
+      return data;
+    });
+    setRules(rulesUpdated);
+
+    // Faq
+    const faqData = data.faq;
+    const faqUpdated = faqData.map((item) => {
+      if (item.id) return item;
+      item.id = uuid();
+      return item;
+    });
+    setFaq(faqUpdated);
+  }, []);
 
   // console.log("registrationCost: ", faq);
 
@@ -596,22 +667,13 @@ const Details = ({ eventData }) => {
 };
 
 const EventDetails = () => {
-  const [eventData, setEventData] = useState([]);
-  async function getData() {
-    // const data = await eventServices.whateverfunctiongetalleventdata;
-    // setEventData(data);
-  }
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
   return (
     <>
       <UserHeader name="Event" />
 
       <Container className="mt--7" fluid>
         <Row>
-          <Details eventData={eventData} />
+          <Details />
           {/* <ExtraDetails /> */}
         </Row>
       </Container>

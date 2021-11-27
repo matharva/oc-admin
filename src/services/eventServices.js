@@ -26,9 +26,19 @@ async function getChats(eventName) {
   }
 }
 
+async function getEventDetails(eventName) {
+  try {
+    let eventData = await oculusAPI.get(`/getEventDetails/${eventName}`);
+    console.log("The eventData  is: ", eventData.data);
+    return eventData.data;
+  } catch (e) {
+    console.log("Error in eventData: ", e);
+  }
+}
+
 async function updateEvent(data) {
   try {
-    let updateEvent = await oculusAPI.patch("/updateEvent", data);
+    let updateEvent = await oculusAPI.patch("/updateEvent/", data);
     console.log("The updated Event is: ", updateEvent.data);
     return updateEvent.data;
   } catch (e) {
@@ -185,4 +195,5 @@ export const eventServices = {
   answerQuestion,
   deleteQuestion,
   updateUserInfo,
+  getEventDetails,
 };

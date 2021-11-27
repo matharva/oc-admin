@@ -31,6 +31,7 @@ import ModalComponent from "components/Modal/ModalComponent";
 import SmallTable from "components/Tables/SmallTable";
 import BigTable from "components/Tables/BigTable";
 import { eventServices } from "services/eventServices";
+import { useAuth } from "context/AuthContext";
 
 const TEAMDATA = [
   {
@@ -126,9 +127,12 @@ const Dashboard = (props) => {
 
   const [eventData, setEventData] = useState([]);
 
+  const { globalEventName } = useAuth();
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const eventName = "IPL Auction";
+    console.log("global: ", globalEventName);
     const data = await eventServices.getEvent(eventName);
     console.log(data);
     setEventData(data);

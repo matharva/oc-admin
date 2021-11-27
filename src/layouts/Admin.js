@@ -25,6 +25,7 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
+import { useAuth } from "context/AuthContext";
 
 const Admin = (props) => {
   const mainContent = React.useRef(null);
@@ -35,6 +36,11 @@ const Admin = (props) => {
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
   }, [location]);
+
+  const { currentUser } = useAuth();
+  React.useEffect(() => {
+    console.log("Current User: ", currentUser);
+  }, []);
 
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
