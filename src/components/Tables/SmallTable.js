@@ -62,9 +62,10 @@ const SmallTableRow = ({
   const {
     name = "User",
     email = "user@usergmail.com",
-    number = "1234567890",
+    phoneNumber = "1234567890",
     uid,
   } = userData;
+  console.log("userdata in small table: ", userData);
 
   async function handleDelete() {
     const data = {
@@ -88,7 +89,7 @@ const SmallTableRow = ({
     >
       <th scope="row">{name}</th>
       <td>{email}</td>
-      <td>{number}</td>
+      <td>{phoneNumber}</td>
       <td>
         <DeleteIcon onClick={handleDelete} />
       </td>

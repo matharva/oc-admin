@@ -36,7 +36,7 @@ const AddTeamModal = () => {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const data = {
       email,
       phone: contact,
@@ -44,7 +44,7 @@ const AddTeamModal = () => {
       eventName: "IPL Auction",
     };
     console.log("data to create team: ", data);
-    // await eventServices.addTeam();
+    await eventServices.addTeam(data);
   }
 
   return (

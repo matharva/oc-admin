@@ -49,7 +49,7 @@ async function updateEvent(data) {
 //** Team APIs */
 async function addTeam(data) {
   try {
-    let addTeam = await oculusAPI.post("/addOfflineTeam/", data);
+    let addTeam = await oculusAPI.post("/adminAddOfflineTeam/", data);
     console.log("The addTeam  is: ", addTeam.data);
     return addTeam.data;
   } catch (e) {
@@ -59,7 +59,7 @@ async function addTeam(data) {
 
 async function removeTeam(data) {
   try {
-    let removeTeam = await oculusAPI.delete("/deleteTeam/", data);
+    let removeTeam = await oculusAPI.delete("/deleteTeam/", { data: data });
     console.log("The removeTeam  is: ", removeTeam.data);
     return removeTeam.data;
   } catch (e) {
@@ -90,7 +90,7 @@ async function updateUserInfo(data) {
 // .. Member team APIs./
 async function addMemberToTeam({ email, teamCode, eventName }) {
   try {
-    let addedMemberData = await oculusAPI.post("/adminUpdateTeamMembers", {
+    let addedMemberData = await oculusAPI.post("/adminUpdateTeamMembers/", {
       eventName: eventName,
       email: email,
       teamCode: teamCode,
@@ -102,12 +102,11 @@ async function addMemberToTeam({ email, teamCode, eventName }) {
   }
 }
 
-async function removeMemberFromTeam({ email, teamCode, eventName }) {
+async function removeMemberFromTeam(data) {
   try {
+    console.log("Delete data: ", data);
     let removedMemberData = await oculusAPI.delete("/adminUpdateTeamMembers", {
-      eventName: eventName,
-      email: email,
-      teamCode: teamCode,
+      data: data,
     });
     console.log("The removedMemberData  is: ", removedMemberData.data);
     return removedMemberData.data;

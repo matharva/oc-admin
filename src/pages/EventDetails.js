@@ -536,6 +536,7 @@ const Details = () => {
     // Rules
     const rulesData = data.rules;
     const rulesUpdated = rulesData.map((item) => {
+      if (item.id && item.text) return item;
       const data = {};
       data.text = item;
 
@@ -546,6 +547,7 @@ const Details = () => {
       data.id = uuid();
       return data;
     });
+    console.log("rulesUpdated: ", rules);
     setRules(rulesUpdated);
 
     // Faq
