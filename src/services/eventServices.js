@@ -130,23 +130,23 @@ async function addVoting(teamCode, eventName) {
 }
 
 //** Notification APIs */
-async function addNotification(
-  imageURL,
-  notificationText,
-  timeStamp,
-  eventName
-) {
+async function addNotification(data) {
   try {
-    let notificationData = await oculusAPI.post("/addNotification", {
-      imageURL: imageURL,
-      notificationText: notificationText,
-      timeStamp: timeStamp,
-      eventName: eventName,
-    });
+    let notificationData = await oculusAPI.post("/addNotification/", data);
     console.log("The notificationData  is: ", notificationData.data);
     return notificationData.data;
   } catch (e) {
     console.log("Error in notificationData: ", e);
+  }
+}
+
+async function getNotifications(eventName) {
+  try {
+    let eventData = await oculusAPI.get(`/getNofications/${eventName}`);
+    console.log("The eventData  is: ", eventData.data);
+    return eventData.data;
+  } catch (e) {
+    console.log("Error in eventData: ", e);
   }
 }
 
@@ -201,4 +201,5 @@ export const eventServices = {
   updateUserInfo,
   getEventDetails,
   addChat,
+  getNotifications,
 };

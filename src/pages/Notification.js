@@ -1,13 +1,12 @@
 import UserHeader from "components/Headers/UserHeader";
-import { projectFirestore, projectStorage } from "../firebase";
+import { projectStorage } from "../firebase";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  CardTitle,
   Col,
   Container,
   Form,
@@ -16,10 +15,14 @@ import {
   Row,
 } from "reactstrap";
 import { eventServices } from "services/eventServices";
+import { getDate } from "services/helpers";
+import { getEventName } from "services/helpers";
+import { v4 as uuid } from "uuid";
 
 const NotifForm = ({ question = "", answer = "", id }) => {
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState("");
+  const fileRef = useRef(null);
   const [notificationText, setNotificationText] = useState("");
   // const types = ["image/png", "image/jpeg"];
 
@@ -35,33 +38,30 @@ const NotifForm = ({ question = "", answer = "", id }) => {
   }
 
   async function handleSubmit() {
-    // references
     const storageRef = projectStorage.ref(file.name);
     console.log(projectStorage, file.name);
-    // const collectionRef = projectFirestore.collection("images");
 
     storageRef.put(file).on("state_changed", async () => {
       const URL = await storageRef.getDownloadURL();
-      // const createdAt = timestamp();
-      // collectionRef.add({
-      //   URL,
-      //   createdAt,
-      //   // user: ,
-      // });
+
       console.log("URL for notif: ", URL);
       setUrl(URL);
     });
     const data = {
-      url:
+      imgUrl:
         url ||
         `https://firebasestorage.googleapis.com/v0/b/oculus2022-75997.appspot.com/o/${file.name}?alt=media`,
       text: notificationText,
+      date: getDate(),
+      event: getEventName(),
+      id: uuid(),
     };
 
     console.log("Data to be sent: ", data);
-    // await eventServices.kuchTohFunction()
+    await eventServices.addNotification(data);
     setFile(null);
     setNotificationText("");
+    fileRef.current.value = "";
   }
   return (
     <>
@@ -92,7 +92,6 @@ const NotifForm = ({ question = "", answer = "", id }) => {
                     </label>
                     <Input
                       className="form-control-alternative"
-                      defaultValue=""
                       value={notificationText}
                       onChange={(e) => setNotificationText(e.target.value)}
                       id="input-address"
@@ -106,10 +105,8 @@ const NotifForm = ({ question = "", answer = "", id }) => {
                     </label>
                     <Input
                       className="form-control-alternative"
-                      placeholder="Enter Event Description..."
-                      rows="4"
-                      defaultValue=""
                       type="file"
+                      innerRef={fileRef}
                       onChange={changeHandler}
                     />
                   </FormGroup>
@@ -130,6 +127,14 @@ const NotifList = () => {
       url: "",
     },
   ]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const eventName = getEventName();
+    const data = await eventServices.getNotifications(eventName);
+    console.log("Notifications: ", data);
+    setNotifications(data);
+  }, []);
   return (
     <>
       <Col className="order-xl-1" xl="8">
@@ -156,17 +161,17 @@ const NotifList = () => {
                 <CardBody>
                   {notifications.map((item) => {
                     return (
-                      <Row>
+                      <Row style={{ marginTop: "1rem" }}>
                         <Col className="col-auto">
                           <div
                             className="icon icon-shape text-white rounded-circle shadow"
-                            style={{ width: "120px" }}
+                            style={{ width: "100px" }}
                           >
                             <img
                               style={{ width: "100%" }}
                               src={
-                                item.src
-                                  ? item.src
+                                item.imgUrl
+                                  ? item.imgUrl
                                   : "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Z3JhZGllbnR8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"
                               }
                               alt="notif"
@@ -175,9 +180,7 @@ const NotifList = () => {
                         </Col>
                         <Col>
                           <div className="col">
-                            <span className="h2 font-weight-bold mb-0">
-                              {item.text}
-                            </span>
+                            <span className="h4 mb-0">{item.text}</span>
                           </div>
                         </Col>
                       </Row>
