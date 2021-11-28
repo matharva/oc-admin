@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { EVENT_MAP } from "services/helpers";
 import { auth } from "../firebase";
 const AuthContext = React.createContext();
 
@@ -39,6 +40,14 @@ export const AuthProvider = ({ children }) => {
     });
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      const event = EVENT_MAP[currentUser.email];
+      console.log(event);
+      // setGlobalEventName();
+    }
+  }, [currentUser]);
 
   const value = {
     currentUser,

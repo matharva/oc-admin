@@ -17,7 +17,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { v4 as uuid } from "uuid";
 
-import eventServices from "../services/eventServices";
+import { eventServices } from "services/eventServices";
+import { useAuth } from "context/AuthContext";
 
 const ChatItem = ({ item, setChats, chats }) => {
   const { question = "Some random question", answer, id } = item;
@@ -82,22 +83,16 @@ const ChatContainer = () => {
       answer: "",
       id: uuid(),
     },
-    {
-      question: "Question?",
-      answer: "",
-      id: uuid(),
-    },
-    {
-      question: "Question?",
-      answer: "",
-      id: uuid(),
-    },
-    {
-      question: "Question?",
-      answer: "",
-      id: uuid(),
-    },
   ]);
+  const { globalEventName } = useAuth();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    const eventName = globalEventName;
+    const data = await eventServices.getChats(eventName);
+    console.log("Chats: ", data);
+    setChats(data);
+  }, []);
 
   function filterByUnanswered() {
     setActive(0);

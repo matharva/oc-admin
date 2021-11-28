@@ -87,6 +87,7 @@ const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
     member: members,
     isComplete,
   } = teamData;
+  // console.log("team data in big table: ", teamData);
 
   function handleCurrentTeam() {
     const currTeam = allTeamData.filter((x) => x.TeamCode === teamCode);
@@ -104,7 +105,7 @@ const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
 
   return (
     <>
-      <tr onClick={handleCurrentTeam}>
+      <tr onClick={handleCurrentTeam} key={teamCode}>
         <th scope="row">{teamCode}</th>
         <td>{memberCount}</td>
         <td>{amount}</td>
@@ -201,6 +202,7 @@ const BigTable = ({
         <tbody>
           {team.map((item) => (
             <BigTableRow
+              key={item.TeamCode}
               teamData={item}
               setCurrentTeam={setCurrentTeam}
               allTeamData={teamData}

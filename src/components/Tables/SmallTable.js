@@ -65,7 +65,7 @@ const SmallTableRow = ({
     phoneNumber = "1234567890",
     uid,
   } = userData;
-  console.log("userdata in small table: ", userData);
+  // console.log("userdata in small table: ", userData);
 
   async function handleDelete() {
     const data = {
@@ -129,6 +129,7 @@ const SmallTable = ({
           {currTeam !== null
             ? currTeam.member.map((item) => (
                 <SmallTableRow
+                  key={item.uid}
                   setIsOpen={setIsOpen}
                   setModalComponent={setModalComponent}
                   userData={item}

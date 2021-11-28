@@ -26,6 +26,7 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
 import { useAuth } from "context/AuthContext";
+import PrivateRoute from "pages/PrivateRoute";
 
 const Admin = (props) => {
   const mainContent = React.useRef(null);
@@ -37,7 +38,7 @@ const Admin = (props) => {
     mainContent.current.scrollTop = 0;
   }, [location]);
 
-  const { currentUser } = useAuth();
+  const { currentUser, globalEventName } = useAuth();
   React.useEffect(() => {
     console.log("Current User: ", currentUser);
   }, []);
@@ -46,10 +47,11 @@ const Admin = (props) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
-          <Route
+          <PrivateRoute
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}
+            authed={globalEventName}
           />
         );
       } else {

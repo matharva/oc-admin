@@ -32,6 +32,7 @@ import SmallTable from "components/Tables/SmallTable";
 import BigTable from "components/Tables/BigTable";
 import { eventServices } from "services/eventServices";
 import { useAuth } from "context/AuthContext";
+import { Redirect } from "react-router";
 
 const TEAMDATA = [
   {
@@ -127,7 +128,12 @@ const Dashboard = (props) => {
 
   const [eventData, setEventData] = useState([]);
 
-  const { globalEventName } = useAuth();
+  const { globalEventName, currentUser } = useAuth();
+
+  useEffect(() => {
+    console.log("In useEffect: ", currentUser);
+    // if (!globalEventName) <Redirect to="/auth/login" />;
+  }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {

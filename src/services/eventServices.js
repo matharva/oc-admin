@@ -18,7 +18,7 @@ async function getEvent(eventName) {
 
 async function getChats(eventName) {
   try {
-    let eventData = await oculusAPI.get(`/chats/${eventName}`);
+    let eventData = await oculusAPI.get(`/getChats/${eventName}`);
     console.log("The eventData  is: ", eventData.data);
     return eventData.data;
   } catch (e) {

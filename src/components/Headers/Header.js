@@ -48,8 +48,6 @@ const HeaderItem = ({ item }) => {
 };
 
 const Header = ({ eventData }) => {
-  console.log(eventData);
-
   const dummyHeaderdata = [
     {
       title: "Teams Registered",
@@ -74,8 +72,8 @@ const Header = ({ eventData }) => {
           <div className="header-body">
             {/* Card stats */}
             <Row>
-              {dummyHeaderdata.map((item) => (
-                <HeaderItem item={item} />
+              {dummyHeaderdata.map((item, index) => (
+                <HeaderItem item={item} key={index} />
               ))}
             </Row>
           </div>
