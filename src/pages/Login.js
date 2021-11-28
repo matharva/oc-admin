@@ -93,6 +93,7 @@ const Login = () => {
       });
 
       console.log("EventD3: ", item[0]);
+      localService.setToken("user", item[0]);
 
       const event = EVENT_MAP[item[0].email];
       console.log("Event from hashmap is: ", event);

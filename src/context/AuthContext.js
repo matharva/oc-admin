@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { EVENT_MAP } from "services/helpers";
 import { auth } from "../firebase";
+import { localService } from "../services/localService";
 const AuthContext = React.createContext();
 
 export const useAuth = () => {
@@ -42,6 +43,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    const token = localService.getToken();
+    console.log("Token", token, currentUser);
     if (currentUser) {
       const event = EVENT_MAP[currentUser.email];
       console.log(event);

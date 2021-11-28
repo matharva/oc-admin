@@ -51,7 +51,7 @@ const Admin = (props) => {
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}
-            authed={globalEventName}
+            authed={currentUser}
           />
         );
       } else {

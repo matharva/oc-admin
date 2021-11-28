@@ -185,7 +185,6 @@ const AddChats = () => {
                 </label>
                 <Input
                   className="form-control-alternative"
-                  defaultValue=""
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   id="input-address"
@@ -199,7 +198,6 @@ const AddChats = () => {
                   className="form-control-alternative"
                   placeholder="Enter Event Description..."
                   rows="4"
-                  defaultValue=""
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
                   type="textarea"
