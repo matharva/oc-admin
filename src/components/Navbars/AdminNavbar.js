@@ -15,7 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import { Link } from "react-router-dom";
+import { useAuth } from "context/AuthContext";
+import { Link, useHistory } from "react-router-dom";
 // reactstrap components
 import {
   DropdownMenu,
@@ -35,6 +36,14 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+  const { logout, setGlobalEventName } = useAuth();
+  const history = useHistory();
+  async function handleLogout() {
+    await logout();
+    setGlobalEventName(null);
+    history.push("/auth/login");
+  }
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -48,7 +57,11 @@ const AdminNavbar = (props) => {
 
           <Nav className="align-items-center d-none d-md-flex" navbar>
             {/* <DropdownToggle className="pr-0" nav> */}
-            <Media className="align-items-center" style={{ cursor: "pointer" }}>
+            <Media
+              className="align-items-center"
+              style={{ cursor: "pointer" }}
+              onClick={handleLogout}
+            >
               <span className="avatar avatar-sm rounded-circle bg-red">
                 <i className="ni ni-user-run " />
               </span>

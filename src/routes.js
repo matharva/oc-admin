@@ -50,7 +50,7 @@ var routes = [
   {
     path: "/notification",
     name: "Notification",
-    icon: "ni ni-bullet-list-67 text-red",
+    icon: "ni ni-planet text-blue",
     component: Notification,
     layout: "/admin",
   },
@@ -68,13 +68,13 @@ var routes = [
   //   component: Icons,
   //   layout: "/admin",
   // },
-  {
-    path: "/login",
-    name: "Login",
-    icon: "ni ni-key-25 text-info",
-    component: Login,
-    layout: "/auth",
-  },
+  // {
+  //   path: "/login",
+  //   name: "Login",
+  //   icon: "ni ni-key-25 text-info",
+  //   component: Login,
+  //   layout: "/auth",
+  // },
   // {
   //   path: "/register",
   //   name: "Register",
