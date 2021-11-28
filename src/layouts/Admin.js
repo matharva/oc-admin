@@ -38,7 +38,7 @@ const Admin = (props) => {
     mainContent.current.scrollTop = 0;
   }, [location]);
 
-  const { currentUser, globalEventName } = useAuth();
+  const { currentUser } = useAuth();
   React.useEffect(() => {
     console.log("Current User: ", currentUser);
   }, []);

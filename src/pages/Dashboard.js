@@ -31,6 +31,7 @@ import ModalComponent from "components/Modal/ModalComponent";
 import SmallTable from "components/Tables/SmallTable";
 import BigTable from "components/Tables/BigTable";
 import { eventServices } from "services/eventServices";
+import { getEventName } from "services/helpers";
 import { useAuth } from "context/AuthContext";
 import { Redirect } from "react-router";
 
@@ -128,17 +129,10 @@ const Dashboard = (props) => {
 
   const [eventData, setEventData] = useState([]);
 
-  const { globalEventName, currentUser } = useAuth();
-
-  useEffect(() => {
-    console.log("In useEffect: ", currentUser);
-    // if (!globalEventName) <Redirect to="/auth/login" />;
-  }, []);
-
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const eventName = "IPL Auction";
-    console.log("global: ", globalEventName);
+    const eventName = getEventName();
+
     const data = await eventServices.getEvent(eventName);
     console.log(data);
     setEventData(data);

@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { EVENT_MAP } from "services/helpers";
 import { auth } from "../firebase";
-import { localService } from "../services/localService";
 const AuthContext = React.createContext();
 
 export const useAuth = () => {
@@ -11,7 +10,6 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(false);
-  const [globalEventName, setGlobalEventName] = useState(null);
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -42,16 +40,6 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  useEffect(() => {
-    const token = localService.getToken();
-    console.log("Token", token, currentUser);
-    if (currentUser) {
-      const event = EVENT_MAP[currentUser.email];
-      console.log(event);
-      // setGlobalEventName();
-    }
-  }, [currentUser]);
-
   const value = {
     currentUser,
     signup,
@@ -60,8 +48,6 @@ export const AuthProvider = ({ children }) => {
     resetPassword,
     updateEmail,
     updatePassword,
-    globalEventName,
-    setGlobalEventName,
   };
   return (
     <AuthContext.Provider value={value}>

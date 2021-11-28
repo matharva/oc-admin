@@ -19,6 +19,7 @@ import { v4 as uuid } from "uuid";
 
 import { eventServices } from "services/eventServices";
 import { useAuth } from "context/AuthContext";
+import { getEventName } from "services/helpers";
 
 const ChatItem = ({ item, setChats, chats }) => {
   const { question = "Some random question", answer, id } = item;
@@ -35,11 +36,13 @@ const ChatItem = ({ item, setChats, chats }) => {
     // await eventServices.kuchTOhFunction(id);
   }
 
-  function handleSubmit() {
-    // const data = {
-    //   answer,
-    //   question,
-    // };
+  async function handleSubmit() {
+    const data = {
+      answer,
+      question,
+      id,
+    };
+    console.log("Data to answer chat: ", data);
     // await eventServices.kuchTOhFunction(id);
   }
 
@@ -84,13 +87,19 @@ const ChatContainer = () => {
       id: uuid(),
     },
   ]);
-  const { globalEventName } = useAuth();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const eventName = globalEventName;
+    const eventName = getEventName();
     const data = await eventServices.getChats(eventName);
     console.log("Chats: ", data);
+
+    const chatsUpdated = data.map((item) => {
+      if (item.id) return item;
+      item.id = uuid();
+      return item;
+    });
+    console.log("updated chats: ", chatsUpdated);
     setChats(data);
   }, []);
 
@@ -140,7 +149,12 @@ const ChatContainer = () => {
         <CardBody>
           <Form>
             {chats.map((item) => (
-              <ChatItem item={item} setChats={setChats} chats={chats} />
+              <ChatItem
+                key={item.id}
+                item={item}
+                setChats={setChats}
+                chats={chats}
+              />
             ))}
           </Form>
         </CardBody>

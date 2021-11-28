@@ -34,15 +34,15 @@ import {
   Container,
   Media,
 } from "reactstrap";
-import { localService } from "services/localService";
+import { setToken } from "services/helpers";
 
 const AdminNavbar = (props) => {
-  const { logout, setGlobalEventName } = useAuth();
+  const { logout } = useAuth();
   const history = useHistory();
   async function handleLogout() {
     await logout();
-    localService.setToken("user", null);
-    setGlobalEventName(null);
+    setToken("user", null);
+
     history.push("/auth/login");
   }
 
