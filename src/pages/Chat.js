@@ -39,11 +39,11 @@ const ChatItem = ({ item, setChats, chats }) => {
   async function handleSubmit() {
     const data = {
       answer,
-      question,
       id,
+      eventName: getEventName(),
     };
     console.log("Data to answer chat: ", data);
-    // await eventServices.kuchTOhFunction(id);
+    // await eventServices.answerQuestion(data);
   }
 
   return (

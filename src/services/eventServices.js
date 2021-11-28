@@ -152,14 +152,9 @@ async function addNotification(
 
 //** Question APIs */
 
-async function answerQuestion(questionId, answer, eventName, showToAll) {
+async function answerQuestion(data) {
   try {
-    let answerQuestionData = await oculusAPI.patch("/answerQuestion", {
-      questionId: questionId,
-      answer: answer,
-      eventName: eventName,
-      showToAll: showToAll,
-    });
+    let answerQuestionData = await oculusAPI.patch("/answerQuestion", data);
     console.log("The answerQuestionData  is: ", answerQuestionData.data);
     return answerQuestionData.data;
   } catch (e) {
