@@ -152,6 +152,16 @@ async function addNotification(
 
 //** Question APIs */
 
+async function addChat(data) {
+  try {
+    let addChat = await oculusAPI.post("/addChat/", data);
+    console.log("The addChat  is: ", addChat.data);
+    return addChat.data;
+  } catch (e) {
+    console.log("Error in addTeam: ", e);
+  }
+}
+
 async function answerQuestion(data) {
   try {
     let answerQuestionData = await oculusAPI.patch("/answerQuestion", data);
@@ -190,4 +200,5 @@ export const eventServices = {
   deleteQuestion,
   updateUserInfo,
   getEventDetails,
+  addChat,
 };

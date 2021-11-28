@@ -20,6 +20,7 @@ import { v4 as uuid } from "uuid";
 import { eventServices } from "services/eventServices";
 import { useAuth } from "context/AuthContext";
 import { getEventName } from "services/helpers";
+import { getDate } from "services/helpers";
 
 const ChatItem = ({ item, setChats, chats }) => {
   const { question = "Some random question", answer, id } = item;
@@ -167,13 +168,17 @@ const AddChats = () => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const data = {
       answer,
       question,
+      id: uuid(),
+      date: getDate(),
+      event: getEventName(),
     };
+    console.log("Data submitted for addChat: ", data);
 
-    // await eventServices.kuchTOhFunction();
+    await eventServices.addChat(data);
   }
   return (
     <>
