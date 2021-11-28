@@ -85,12 +85,8 @@ const Login = () => {
       console.log("User: ", currentUser);
 
       let item = [];
-      // return new Promise(resolve=>{
 
-      // Fetch event from uif
       let querySnapShot = await userRef.where("email", "==", email).get();
-      // const EventRef = firebase.firestore().collection("Events");
-      // let querySnapShot = await EventRef.where("uid", "==", uid).get();
 
       querySnapShot.forEach((doc) => {
         item.push(doc.data());
@@ -98,9 +94,6 @@ const Login = () => {
 
       console.log("EventD3: ", item[0]);
 
-      const eventName = "IPL";
-      // setToken()
-      // localService.setToken("user", { email, password });
       const event = EVENT_MAP[item[0].email];
       console.log("Event from hashmap is: ", event);
       setGlobalEventName(event);
