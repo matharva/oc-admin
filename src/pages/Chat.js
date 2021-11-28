@@ -44,7 +44,7 @@ const ChatItem = ({ item, setChats, chats }) => {
       eventName: getEventName(),
     };
     console.log("Data to answer chat: ", data);
-    // await eventServices.answerQuestion(data);
+    await eventServices.answerQuestion(data);
   }
 
   return (

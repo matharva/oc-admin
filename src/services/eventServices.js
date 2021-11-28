@@ -164,7 +164,7 @@ async function addChat(data) {
 
 async function answerQuestion(data) {
   try {
-    let answerQuestionData = await oculusAPI.patch("/answerQuestion", data);
+    let answerQuestionData = await oculusAPI.patch("/updateChat/", data);
     console.log("The answerQuestionData  is: ", answerQuestionData.data);
     return answerQuestionData.data;
   } catch (e) {
