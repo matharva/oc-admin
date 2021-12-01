@@ -12,6 +12,46 @@ export function validatePhoneNumber(num) {
 
 export const EVENT_MAP = {
   "athar@spit.ac.in": "IPL Auction",
+
+  //   CULTURAL
+  // Aelan-e-Jung
+  "aej_oc@gmail.com": "Aelan-e-Jung", // pass: aej_oc@1234
+  // Sargam
+  "sargam_oc@gmail.com": "Sargam", // pass: sargam_oc@1234
+
+  // Yeh events thodi hai
+  // WOB (hardcode)
+
+  // Open Mic
+  // Carnival
+  // Abhinaya
+
+  // TECHNICAL
+  // Oculus Coding League
+
+  // Short Circuit / Hardware
+  "shortcircuit_oc@gmail.com": "Short Circuit", // pass: shortcircuit_oc@1234
+  // VSM
+  "vsm_oc@gmail.com": "Virtual Stock Market", // pass: vsm_oc@1234
+
+  // FUN
+  // IPL
+  "ipl_oc@gmail.com": "IPL Auction", // pass: ipl_oc@1234
+  // E-sports
+  "esports_oc@gmail.com": "E-sports", // pass: esports_oc@1234
+  // Paintball
+  "paintball_oc@gmail.com": "Paint Ball", // pass: paintball_oc@1234
+  // Footpool
+  "footpool_oc@gmail.com": "Foot Pool", // pass: footpool_oc@1234
+  // Human Foosball
+  "foosball_oc@gmail.com": "Human Foosball", // pass: foosball_oc@1234
+
+  // PRE-EVENTS
+  // SPIT Hackathon (hardcode)
+  // Advert Einstein
+  "advertEinstein_oc@gmail.com": "Advert Einstein", // pass: advertEinstein_oc@1234
+  // Tech Race
+  "techrace_oc@gmail.com": "Tech Race", // pass: techrace_oc@1234
 };
 
 export function getToken(id) {

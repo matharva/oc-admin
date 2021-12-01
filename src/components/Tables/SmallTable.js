@@ -126,7 +126,7 @@ const SmallTable = ({
           </tr>
         </thead>
         <tbody>
-          {currTeam !== null
+          {currTeam?.member?.length > 0
             ? currTeam.member.map((item) => (
                 <SmallTableRow
                   key={item.uid}

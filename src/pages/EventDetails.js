@@ -35,6 +35,7 @@ import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { v4 as uuid } from "uuid";
 import { eventServices } from "services/eventServices";
+import { getEventName } from "services/helpers";
 
 const ExtraDetails = () => {
   return (
@@ -514,7 +515,9 @@ const Details = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const eventName = "IPL Auction";
+    // const eventName = "IPL Auction";
+    const eventName = getEventName();
+
     const data = await eventServices.getEventDetails(eventName);
     // console.log("Event Details: ", data);
     setCategory(data.Category);
