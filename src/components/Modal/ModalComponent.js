@@ -10,11 +10,13 @@ import {
   FormGroup,
   Input,
   Row,
+  Label,
 } from "reactstrap";
 import { eventServices } from "services/eventServices";
 import { validatePhoneNumber } from "services/helpers";
 import { validateEmail } from "services/helpers";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { getEventName } from "services/helpers";
 
 const customStyles = {
   content: {
@@ -24,28 +26,60 @@ const customStyles = {
     bottom: "auto",
     padding: 0,
     transform: "translate(-50%, -50%)",
-    // height: "60vh",
+    height: "90vh",
     // width: "70vw",
   },
 };
 
-const AddTeamModal = () => {
+const AddTeamModal = ({ eventData }) => {
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState(false);
+  const [eventFee, setEventFee] = useState(null);
+
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
+  const [message, setMessage] = useState("");
 
+  // console.log("The event data is: ", eventData);
+
+  useEffect(async () => {
+    const eventName = getEventName();
+    const data = await eventServices.getEventDetails(eventName);
+    setEventFee(data?.Fee);
+  }, []);
+
+  console.log("The eventDetails are: ", eventFee);
   async function handleSubmit() {
+    const eventName = getEventName();
     const data = {
-      email,
+      email: email,
       phone: contact,
-      name,
-      eventName: "IPL Auction",
+      teamName: name,
+      eventName: eventName,
+      paymentStatus: paymentStatus,
+      amount: parseInt(eventFee.filter((x) => x.Type == type)[0].Fee),
     };
     console.log("data to create team: ", data);
-    await eventServices.addTeam(data);
+    // let newTeam = await eventServices.addTeam(data);
+    // console.log("The new Team is: ", newTeam);
+    if (true) {
+      setMessage("New team has been added");
+      setEmail("");
+      setContact("");
+      setName("");
+      setPaymentStatus(false);
+      setType(eventFee[0]?.Type);
+    } else {
+      // setMessage(newTeam.Message);
+    }
   }
+
+  useEffect(() => {
+    console.log("The new update payment status: ", paymentStatus);
+  }, [paymentStatus]);
 
   return (
     <>
@@ -137,6 +171,135 @@ const AddTeamModal = () => {
                 </FormGroup>
               </Col>
             </Row>
+            <Row>
+              <Col lg="12">
+                {/* <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Type
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    defaultValue=""
+                    id="input-username"
+                    placeholder="Team Name"
+                    type="number"
+                    value={type}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </FormGroup> */}
+                <FormGroup isRequired marginBottom={"1.5rem"}>
+                  {/* <FormLabel color={"white"}>Payment Type: </FormLabel> */}
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Payment Type:
+                  </label>
+                  <Input
+                    id="paymentType"
+                    value={type}
+                    type="select"
+                    onChange={(e) => {
+                      setType(e.target.value);
+                    }}
+                    color={"white"}
+                    // bg={OC_BG_DARK}
+                  >
+                    {eventFee &&
+                      eventFee.map((item) => {
+                        return (
+                          <>
+                            <option
+                              value={`${item.Type}`}
+                              // color={"black"}
+                              style={{ color: "black" }}
+                            >{`${item.Type}: ${item.Fee}`}</option>
+                          </>
+                        );
+                      })}
+
+                    {/* <option>Select Team Options</option> */}
+                    {/* {details.map((item) => {
+                      return (
+                        <>
+                          <option
+                            value={`${item.Type}`}
+                            // color={"black"}
+                            style={{ color: "black" }}
+                          >{`${item.Type}: ${item.Fee}`}</option>
+                        </>
+                      );
+                    })} */}
+                    {/* <option
+                      value={`Solo`}
+                      // color={"black"}
+                      style={{ color: "black" }}
+                    >{`Solo: ${10}`}</option>
+                    <option
+                      value={`Solo`}
+                      // color={"black"}
+                      style={{ color: "black" }}
+                    >{`Solo: ${10}`}</option>{" "}
+                    <option
+                      value={`Solo`}
+                      // color={"black"}
+                      style={{ color: "black" }}
+                    >{`Solo: ${10}`}</option>{" "}
+                    <option
+                      value={`Solo`}
+                      // color={"black"}
+                      style={{ color: "black" }}
+                    >{`Solo: ${10}`}</option> */}
+                    {/* <option>United Arab Emirates</option>
+              <option>Nigeria</option> */}
+                  </Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <Row>
+                    <Col lg="4">
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-username"
+                      >
+                        Payment Status:
+                      </label>
+                    </Col>
+                    <Col>
+                      <Input
+                        // type="checkbox"
+                        // onChange={(e) => console.log(e.target.value)}
+                        className="form-control-alternative"
+                        defaultValue=""
+                        id="input-username"
+                        placeholder="Team Name"
+                        type="checkbox"
+                        value={paymentStatus}
+                        onChange={(e) => setPaymentStatus(e.target.checked)}
+                      />
+                    </Col>
+                  </Row>
+
+                  {/* <Input
+                    className="form-control-alternative"
+                    defaultValue=""
+                    id="input-username"
+                    placeholder="Team Name"
+                    type="checkbox"
+                    value={paymentStatus}
+                    onChange={(e) => setPaymentStatus(!paymentStatus)}
+                  /> */}
+                </FormGroup>
+              </Col>
+            </Row>
+            {/* gdgdgdgdgdq */}
+            {message}
             {/* </div> */}
             <hr className="my-4" />
           </Form>
@@ -272,17 +435,31 @@ const AddTeamMember = ({ currentTeam }) => {
   const [contact, setContact] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
+  const [message, setMessage] = useState("");
 
   async function handleSubmit() {
+    const eventName = getEventName();
+    if (!isValidEmail || !isValidPhoneNumber) {
+      return;
+    }
+
     const data = {
-      email,
-      contact,
-      eventName: "IPL Auction",
+      email: email,
+      phone: contact,
+      eventName: eventName,
       teamCode: currentTeam.TeamCode,
     };
 
-    // console.log("Current Team in modal: ", data);
-    await eventServices.addMemberToTeam(data);
+    console.log("Current Team in modal: ", data);
+    let addedMember = await eventServices.addMemberToTeam(data);
+
+    if (addedMember && addedMember.registrationDetails) {
+      setMessage("New Player has been added");
+      setEmail("");
+      setContact("");
+    } else {
+      setMessage(addedMember.Message);
+    }
   }
 
   return (
@@ -352,6 +529,14 @@ const AddTeamMember = ({ currentTeam }) => {
                 </FormGroup>
               </Col>
             </Row>
+            <div
+              style={{
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              {message}
+            </div>
           </Form>
         </CardBody>
       </Card>
@@ -365,6 +550,7 @@ const ModalComponent = ({
   modalComponent,
   currentTeam,
   selected,
+  eventData,
 }) => {
   // console.log(modalComponent);
 
@@ -372,7 +558,7 @@ const ModalComponent = ({
 
   function returnComponent(item) {
     if (item === "AddTeamModal") {
-      return <AddTeamModal />;
+      return <AddTeamModal eventData={eventData} />;
     }
     if (item === "UserInfo") {
       return <UserInfo currentTeam={currentTeam} selected={selected} />;

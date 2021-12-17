@@ -149,6 +149,7 @@ const Dashboard = (props) => {
         modalComponent={modalComponent}
         currentTeam={currentTeam}
         selected={selected}
+        eventData={eventData}
       />
       {/* Page content */}
       <Container className="mt--7" fluid>
