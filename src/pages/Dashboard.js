@@ -128,17 +128,41 @@ const Dashboard = (props) => {
   const [selected, setSelected] = useState(null);
 
   const [eventData, setEventData] = useState([]);
+  const [paymentUpdate, setPaymentUpdate] = useState(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const eventName = getEventName();
 
     const data = await eventServices.getEvent(eventName);
-    console.log(data);
+    console.log("lollll", data);
     setEventData(data);
     setTeamData(data.allTeamDetails);
     setCurrentTeam(data.allTeamDetails[0]);
   }, []);
+
+  useEffect(() => {
+    // Here update perform the API action
+  }, [paymentUpdate]);
+
+  const updatePayment = async (teamCode, paymentStatus) => {
+    let update = await eventServices.updatePayment(teamCode, !paymentStatus);
+    if (update.Message == "Updated Sucessfully") {
+      setPaymentUpdate(true);
+      console.log("The parent state is updated");
+      const eventName = getEventName();
+
+      const data = await eventServices.getEvent(eventName);
+      console.log("lollll", data);
+      setEventData(data);
+      setTeamData(data.allTeamDetails);
+      setCurrentTeam(
+        data.allTeamDetails.filter((x) => x.TeamCode == currentTeam.TeamCode)[0]
+      );
+    }
+    // SHow Payment Update popup here
+    console.log("The payment is updated: ", update);
+  };
 
   return (
     <>
@@ -173,6 +197,7 @@ const Dashboard = (props) => {
                 setModalComponent={setModalComponent}
                 currentTeam={currentTeam}
                 setSelected={setSelected}
+                setPaymentUpdate={updatePayment}
               />
             </Card>
           </Col>

@@ -61,11 +61,14 @@ const AddTeamModal = ({ eventData }) => {
       eventName: eventName,
       paymentStatus: paymentStatus,
       amount: parseInt(eventFee.filter((x) => x.Type == type)[0].Fee),
+      maxMembers: parseInt(
+        eventFee.filter((x) => x.Type == type)[0].maxMembers
+      ),
     };
     console.log("data to create team: ", data);
-    // let newTeam = await eventServices.addTeam(data);
-    // console.log("The new Team is: ", newTeam);
-    if (true) {
+    let newTeam = await eventServices.addTeam(data);
+    console.log("The new Team is: ", newTeam);
+    if (newTeam && newTeam.registrationDetails) {
       setMessage("New team has been added");
       setEmail("");
       setContact("");
@@ -73,7 +76,7 @@ const AddTeamModal = ({ eventData }) => {
       setPaymentStatus(false);
       setType(eventFee[0]?.Type);
     } else {
-      // setMessage(newTeam.Message);
+      setMessage(newTeam.Message);
     }
   }
 

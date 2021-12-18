@@ -32,7 +32,7 @@ const BigTableHeader = ({
     setSearchText(text);
 
     const filteredText = teamData.filter(
-      (x) => x.TeamCode.toLowerCase().includes(text) === true
+      (x) => x?.TeamName?.toLowerCase().includes(text) === true
     );
     console.log(text, filteredText);
     setTeam(filteredText);
@@ -51,7 +51,7 @@ const BigTableHeader = ({
           </Col>
           <Col xl={5}>
             <Input
-              placeholder="Search by team code"
+              placeholder="Search by team name"
               type="text"
               value={searchText}
               onChange={(e) => filterBySearchText(e)}
@@ -83,11 +83,12 @@ const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
   const {
     TeamCode: teamCode,
     maxMembers: memberCount,
+    TeamName: TeamName,
     amount,
     member: members,
     isComplete,
   } = teamData;
-  // console.log("team data in big table: ", teamData);
+  console.log("team data in big table: ", teamData, isComplete);
 
   function handleCurrentTeam() {
     const currTeam = allTeamData.filter((x) => x.TeamCode === teamCode);
@@ -100,17 +101,29 @@ const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
       teamCode,
     };
     console.log("Data for delete team: ", data);
-    await eventServices.removeTeam(data);
+    // await eventServices.removeTeam(data);
   }
 
   return (
     <>
       <tr onClick={handleCurrentTeam} key={teamCode}>
+        <th>{TeamName}</th>
         <th scope="row">{teamCode}</th>
         <td>{memberCount}</td>
         <td>{amount}</td>
         <td>
-          {isComplete ? (
+          {/* {isComplete ? (
+            <Badge color="" className="badge-dot">
+              <i className="bg-success" />
+              completed
+            </Badge>
+          ) : (
+            <Badge color="" className="badge-dot mr-4">
+              <i className="bg-warning" />
+              pending
+            </Badge>
+          )} */}
+          {teamData?.paymentStatus ? (
             <Badge color="" className="badge-dot">
               <i className="bg-success" />
               completed
@@ -138,17 +151,19 @@ const BigTable = ({
   setCurrentTeam,
 }) => {
   const [team, setTeam] = useState(teamData);
-  // console.log("team from big table: ", teamData);
+  console.log("team from big table: ", teamData);
 
   function filterByPending() {
     console.log(team);
-    const pending = teamData.filter((x) => x.isComplete === false);
+    const pending = teamData.filter(
+      (x) => x.paymentStatus == (false || undefined)
+    );
     console.log(pending);
     setTeam(pending);
   }
 
   function filterByCompleted() {
-    const complete = teamData.filter((x) => x.isComplete === true);
+    const complete = teamData.filter((x) => x?.paymentStatus === true);
     setTeam(complete);
   }
 
@@ -171,6 +186,7 @@ const BigTable = ({
       >
         <thead className="thead-light">
           <tr>
+            <th scope="col">Team Name</th>
             <th scope="col">Team Code</th>
             <th scope="col">Member Count</th>
             <th scope="col">Amount paid</th>
