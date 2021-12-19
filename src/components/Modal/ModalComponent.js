@@ -26,12 +26,12 @@ const customStyles = {
     bottom: "auto",
     padding: 0,
     transform: "translate(-50%, -50%)",
-    height: "90vh",
+    // height: "90vh",
     // width: "70vw",
   },
 };
 
-const AddTeamModal = ({ eventData }) => {
+const AddTeamModal = ({ eventData, addTeamUpdate }) => {
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [name, setName] = useState("");
@@ -53,10 +53,14 @@ const AddTeamModal = ({ eventData }) => {
 
   console.log("The eventDetails are: ", eventFee);
   async function handleSubmit() {
+    if (!isValidEmail || !name.length || !type) {
+      return;
+    }
+
     const eventName = getEventName();
     const data = {
       email: email,
-      phone: contact,
+      // phone: contact,
       teamName: name,
       eventName: eventName,
       paymentStatus: paymentStatus,
@@ -75,6 +79,7 @@ const AddTeamModal = ({ eventData }) => {
       setName("");
       setPaymentStatus(false);
       setType(eventFee[0]?.Type);
+      addTeamUpdate(newTeam.registrationDetails.TeamCode);
     } else {
       setMessage(newTeam.Message);
     }
@@ -124,7 +129,7 @@ const AddTeamModal = ({ eventData }) => {
                 </FormGroup>
               </Col>
             </Row>
-            <Row>
+            {/* <Row>
               <Col lg="12">
                 <FormGroup>
                   <label
@@ -152,7 +157,7 @@ const AddTeamModal = ({ eventData }) => {
                   />
                 </FormGroup>
               </Col>
-            </Row>
+            </Row> */}
             <Row>
               <Col lg="12">
                 <FormGroup>
@@ -433,7 +438,7 @@ const UserInfo = ({ currentTeam, selected }) => {
   );
 };
 
-const AddTeamMember = ({ currentTeam }) => {
+const AddTeamMember = ({ currentTeam, addMemberUpdate }) => {
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
@@ -442,13 +447,13 @@ const AddTeamMember = ({ currentTeam }) => {
 
   async function handleSubmit() {
     const eventName = getEventName();
-    if (!isValidEmail || !isValidPhoneNumber) {
+    if (!isValidEmail) {
       return;
     }
 
     const data = {
       email: email,
-      phone: contact,
+      // phone: contact,
       eventName: eventName,
       teamCode: currentTeam.TeamCode,
     };
@@ -456,10 +461,11 @@ const AddTeamMember = ({ currentTeam }) => {
     console.log("Current Team in modal: ", data);
     let addedMember = await eventServices.addMemberToTeam(data);
 
-    if (addedMember && addedMember.registrationDetails) {
+    if (addedMember && addedMember.registeredTeam) {
       setMessage("New Player has been added");
       setEmail("");
       setContact("");
+      addMemberUpdate(addedMember.registeredTeam.TeamCode);
     } else {
       setMessage(addedMember.Message);
     }
@@ -505,7 +511,7 @@ const AddTeamMember = ({ currentTeam }) => {
                 </FormGroup>
               </Col>
             </Row>
-            <Row>
+            {/* <Row>
               <Col lg="12">
                 <FormGroup>
                   <label
@@ -531,11 +537,172 @@ const AddTeamMember = ({ currentTeam }) => {
                   />
                 </FormGroup>
               </Col>
-            </Row>
+            </Row> */}
             <div
               style={{
                 width: "100%",
                 textAlign: "center",
+              }}
+            >
+              {message}
+            </div>
+          </Form>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
+const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
+  const [email, setEmail] = useState("");
+  const [contact, setContact] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(false);
+  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit() {
+    console.log("Kuchh hooja abhai life mai");
+    const data = {
+      teamCode,
+    };
+
+    //** Please uncomment the below code in production */
+
+    // const deleteData = await eventServices.removeTeam(data);
+    // if (deleteData && deleteData.Message) {
+    //   setMessage("Team has been deleted");
+    //   teamDeleteUpdate();
+    // } else {
+    //   // setMessage(deleteData.Message);
+    // }
+  }
+
+  return (
+    <>
+      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+        <CardHeader className="bg-white border-0">
+          <Row className="align-items-center">
+            <Col xs="12">
+              <h3 className="mb-0">Delete Confirmation</h3>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Form>
+            <h6 className="heading-small text-muted mb-4">
+              Are you sure you want to delete team: {teamCode}
+            </h6>
+            {/* <div className="pl-lg-4"> */}
+            <Row className="align-items-left">
+              <Col
+                lg="6"
+                className="text-center"
+                // style={{ alignItems: "center" }}
+              >
+                <Button color="primary" size="sm" onClick={handleSubmit}>
+                  Yes
+                </Button>
+              </Col>
+
+              <Col lg="6" className="text-left">
+                <Button
+                  color="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                >
+                  Close
+                </Button>
+              </Col>
+            </Row>
+
+            <div
+              style={{
+                width: "80%",
+                textAlign: "center",
+                paddingTop: "20px",
+              }}
+            >
+              {message}
+            </div>
+          </Form>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
+const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
+  // const [email, setEmail] = useState("");
+  const [contact, setContact] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(false);
+  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit() {
+    console.log("Kuchh hooja abhai life mai");
+    console.log("Delete data: ", data);
+
+    //** Please uncomment the below code in production */
+
+    // const deleteMember = await eventServices.removeMemberFromTeam(data);
+    // if (deleteMember && deleteMember.registeredTeam) {
+    //   setMessage("Member has been removed");
+    //   teamDeleteUpdate();
+    // } else if (deleteMember && deleteMember.Message == "Entire team deleted") {
+    //   setMessage(deleteMember.Message);
+    //   teamDeleteUpdate();
+    // } else {
+    //   setMessage(deleteMember.Message);
+    // }
+  }
+
+  return (
+    <>
+      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+        <CardHeader className="bg-white border-0">
+          <Row className="align-items-center">
+            <Col xs="12">
+              <h3 className="mb-0">Delete Confirmation</h3>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Form>
+            <h6 className="heading-small text-muted mb-4">
+              Are you sure you want to remove member: {data.email}
+            </h6>
+            {/* <div className="pl-lg-4"> */}
+            <Row className="align-items-left">
+              <Col
+                lg="6"
+                className="text-center"
+                // style={{ alignItems: "center" }}
+              >
+                <Button color="primary" size="sm" onClick={handleSubmit}>
+                  Yes
+                </Button>
+              </Col>
+
+              <Col lg="6" className="text-left">
+                <Button
+                  color="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setIsOpen(false);
+                  }}
+                >
+                  Close
+                </Button>
+              </Col>
+            </Row>
+
+            <div
+              style={{
+                width: "80%",
+                textAlign: "center",
+                paddingTop: "20px",
               }}
             >
               {message}
@@ -554,20 +721,52 @@ const ModalComponent = ({
   currentTeam,
   selected,
   eventData,
+  addTeamUpdate,
+  addMemberUpdate,
+  modalDeleteCode,
+  teamDeleteUpdate,
+  modalDeleteMember,
 }) => {
-  // console.log(modalComponent);
+  console.log(modalDeleteCode, modalDeleteMember, "check");
 
   // console.log("Current Team in modal component: ", currentTeam);
 
   function returnComponent(item) {
+    console.log("The item is: ", item);
     if (item === "AddTeamModal") {
-      return <AddTeamModal eventData={eventData} />;
+      return (
+        <AddTeamModal eventData={eventData} addTeamUpdate={addTeamUpdate} />
+      );
     }
     if (item === "UserInfo") {
       return <UserInfo currentTeam={currentTeam} selected={selected} />;
     }
     if (item === "AddTeamMember") {
-      return <AddTeamMember currentTeam={currentTeam} />;
+      return (
+        <AddTeamMember
+          currentTeam={currentTeam}
+          addMemberUpdate={addMemberUpdate}
+        />
+      );
+    }
+    if (item === "Deletepopup") {
+      return (
+        <DeleteTeam
+          teamCode={modalDeleteCode}
+          setIsOpen={setIsOpen}
+          teamDeleteUpdate={teamDeleteUpdate}
+        />
+      );
+    }
+
+    if (item === "DeleteMemberpopup") {
+      return (
+        <DeleteMember
+          data={modalDeleteMember}
+          setIsOpen={setIsOpen}
+          teamDeleteUpdate={teamDeleteUpdate}
+        />
+      );
     }
   }
 

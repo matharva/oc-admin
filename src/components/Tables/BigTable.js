@@ -79,7 +79,13 @@ const BigTableHeader = ({
   );
 };
 
-const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
+const BigTableRow = ({
+  teamData,
+  setCurrentTeam,
+  allTeamData,
+  setModalComponent,
+  deleteTeampopup,
+}) => {
   const {
     TeamCode: teamCode,
     maxMembers: memberCount,
@@ -101,6 +107,9 @@ const BigTableRow = ({ teamData, setCurrentTeam, allTeamData }) => {
       teamCode,
     };
     console.log("Data for delete team: ", data);
+
+    // setModalComponent("Deletepopup");
+    deleteTeampopup(data.teamCode);
     // await eventServices.removeTeam(data);
   }
 
@@ -149,6 +158,8 @@ const BigTable = ({
   teamData,
   setTeamData,
   setCurrentTeam,
+  addTeamUpdate,
+  deleteTeampopup,
 }) => {
   const [team, setTeam] = useState(teamData);
   console.log("team from big table: ", teamData);
@@ -222,6 +233,8 @@ const BigTable = ({
               teamData={item}
               setCurrentTeam={setCurrentTeam}
               allTeamData={teamData}
+              setModalComponent={setModalComponent}
+              deleteTeampopup={deleteTeampopup}
             />
           ))}
         </tbody>

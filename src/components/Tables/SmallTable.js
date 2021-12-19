@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { eventServices } from "services/eventServices";
+import { getEventName } from "services/helpers";
 
 const SmallTableHeader = ({
   setModalComponent,
@@ -78,6 +79,7 @@ const SmallTableRow = ({
   setIsOpen,
   setSelected,
   teamCode,
+  deleteMemberpopup,
 }) => {
   const {
     name = "User",
@@ -91,21 +93,22 @@ const SmallTableRow = ({
     const data = {
       email,
       teamCode,
-      eventName: "IPL Auction",
+      eventName: getEventName(),
     };
     console.log("Delete data: ", data);
+    deleteMemberpopup(data);
     // await eventServices.removeMemberFromTeam(data);
   }
 
   return (
     <tr
       key={uid}
-      onClick={(e) => {
-        e.preventDefault();
-        setModalComponent("UserInfo");
-        setSelected(uid);
-        setIsOpen(true);
-      }}
+      // onClick={(e) => {
+      //   e.preventDefault();
+      //   setModalComponent("UserInfo");
+      //   setSelected(uid);
+      //   setIsOpen(true);
+      // }}
     >
       <th scope="row">{name}</th>
       <td>{email}</td>
@@ -123,6 +126,7 @@ const SmallTable = ({
   currentTeam,
   setSelected,
   setPaymentUpdate,
+  deleteMemberpopup,
 }) => {
   const [currTeam, setCurrTeam] = useState(null);
 
@@ -160,6 +164,7 @@ const SmallTable = ({
                   userData={item}
                   setSelected={setSelected}
                   teamCode={currTeam.TeamCode}
+                  deleteMemberpopup={deleteMemberpopup}
                 />
               ))
             : null}

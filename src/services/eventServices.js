@@ -105,7 +105,7 @@ async function addMemberToTeam({ email, teamCode, eventName }) {
 async function removeMemberFromTeam(data) {
   try {
     console.log("Delete data: ", data);
-    let removedMemberData = await oculusAPI.delete("/adminUpdateTeamMembers", {
+    let removedMemberData = await oculusAPI.delete("/adminUpdateTeamMembers/", {
       data: data,
     });
     console.log("The removedMemberData  is: ", removedMemberData.data);

@@ -126,7 +126,8 @@ const Dashboard = (props) => {
   const [teamData, setTeamData] = useState([]);
   const [currentTeam, setCurrentTeam] = useState(null);
   const [selected, setSelected] = useState(null);
-
+  const [modalDeleteCode, setModalDeleteCode] = useState(null);
+  const [modalDeleteMember, setModalDeleteMember] = useState(null);
   const [eventData, setEventData] = useState([]);
   const [paymentUpdate, setPaymentUpdate] = useState(null);
 
@@ -164,6 +165,74 @@ const Dashboard = (props) => {
     console.log("The payment is updated: ", update);
   };
 
+  const addTeamUpdate = async (teamCode) => {
+    // if (update.Message == "Updated Sucessfully") {
+    //   setPaymentUpdate(true);
+    console.log("The parent state is updated");
+    const eventName = getEventName();
+
+    const data = await eventServices.getEvent(eventName);
+    console.log("lollll", data);
+    setEventData(data);
+    setTeamData(data.allTeamDetails);
+    setCurrentTeam(
+      data.allTeamDetails.filter((x) => x.TeamCode == teamCode)[0]
+    );
+    // }
+    // SHow Payment Update popup here
+    // console.log("The payment is updated: ", update);
+  };
+
+  const addMemberUpdate = async (teamCode) => {
+    // let update = await eventServices.updatePayment(teamCode, !paymentStatus);
+    // if (update.Message == "Updated Sucessfully") {
+    setPaymentUpdate(true);
+    console.log("The parent state is updated");
+    const eventName = getEventName();
+
+    const data = await eventServices.getEvent(eventName);
+    console.log("lollll", data);
+    setEventData(data);
+    setTeamData(data.allTeamDetails);
+    setCurrentTeam(
+      data.allTeamDetails.filter((x) => x.TeamCode == currentTeam.TeamCode)[0]
+    );
+    // }
+    // SHow Payment Update popup here
+    // console.log("The payment is updated: ", update);
+  };
+
+  const teamDeleteUpdate = async () => {
+    // let update = await eventServices.updatePayment(teamCode, !paymentStatus);
+    // if (update.Message == "Updated Sucessfully") {
+    setPaymentUpdate(true);
+    console.log("The parent state is updated");
+    const eventName = getEventName();
+
+    const data = await eventServices.getEvent(eventName);
+    console.log("lollll", data);
+    setEventData(data);
+    setTeamData(data.allTeamDetails);
+    setCurrentTeam(data.allTeamDetails[0]);
+    // }
+    // SHow Payment Update popup here
+    // console.log("The payment is updated: ", update);
+  };
+
+  const deleteTeampopup = (teamCode) => {
+    setModalComponent("Deletepopup");
+    setModalDeleteCode(teamCode);
+    console.log("The popup for team is: ", teamCode);
+    setIsOpen(true);
+  };
+
+  const deleteMemberpopup = (data) => {
+    setModalComponent("DeleteMemberpopup");
+    setModalDeleteMember(data);
+    console.log("The popup for team is: ", data);
+    setIsOpen(true);
+  };
+
   return (
     <>
       <Header eventData={eventData} />
@@ -174,6 +243,11 @@ const Dashboard = (props) => {
         currentTeam={currentTeam}
         selected={selected}
         eventData={eventData}
+        addTeamUpdate={addTeamUpdate}
+        addMemberUpdate={addMemberUpdate}
+        modalDeleteCode={modalDeleteCode}
+        teamDeleteUpdate={teamDeleteUpdate}
+        modalDeleteMember={modalDeleteMember}
       />
       {/* Page content */}
       <Container className="mt--7" fluid>
@@ -187,6 +261,8 @@ const Dashboard = (props) => {
                 setTeamData={setTeamData}
                 currentTeam={currentTeam}
                 setCurrentTeam={setCurrentTeam}
+                addTeamUpdate={addTeamUpdate}
+                deleteTeampopup={deleteTeampopup}
               />
             </Card>
           </Col>
@@ -198,6 +274,7 @@ const Dashboard = (props) => {
                 currentTeam={currentTeam}
                 setSelected={setSelected}
                 setPaymentUpdate={updatePayment}
+                deleteMemberpopup={deleteMemberpopup}
               />
             </Card>
           </Col>
