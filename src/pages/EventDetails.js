@@ -545,7 +545,7 @@ const Details = () => {
     const eventName = getEventName();
 
     const data = await eventServices.getEventDetails(eventName);
-    // console.log("Event Details: ", data);
+    console.log("Event Details: ", data);
     setCategory(data.Category);
     setDescription(data.Description);
     setStartDate(data.Date);
@@ -556,6 +556,7 @@ const Details = () => {
 
     // Fees
     const feeData = data.Fee;
+    console.log("Data is: ", data);
     const fees = feeData.map((item) => {
       if (item.id) return item;
       return { ...item, id: uuid() };

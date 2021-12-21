@@ -25,6 +25,7 @@ export const EVENT_MAP = {
   // Open Mic
   // Carnival
   // Abhinaya
+  "abhinaya_oc@gmail.com": "Abhinaya", //pass: abhinaya_oc@1234
 
   // TECHNICAL
   // Oculus Coding League
@@ -38,7 +39,7 @@ export const EVENT_MAP = {
   // IPL
   "ipl_oc@gmail.com": "IPL Auction", // pass: ipl_oc@1234
   // E-sports
-  "esports_oc@gmail.com": "E-sports", // pass: esports_oc@1234
+  "esports_oc@gmail.com": "E-Sports", // pass: esports_oc@1234
   // Paintball
   "paintball_oc@gmail.com": "Paint Ball", // pass: paintball_oc@1234
   // Footpool
@@ -46,7 +47,7 @@ export const EVENT_MAP = {
   // Human Foosball
   "foosball_oc@gmail.com": "Human Foosball", // pass: foosball_oc@1234
 
-  // PRE-EVENTS
+  // PRE-EVENTSadverteinstein_oc@gmail.com
   // SPIT Hackathon (hardcode)
   // Advert Einstein
   "advertEinstein_oc@gmail.com": "Advert Einstein", // pass: advertEinstein_oc@1234

@@ -58,7 +58,8 @@ const Login = () => {
   const userRef = firebase.firestore().collection("Users");
 
   async function handleRegisterUser() {
-    const userData = await signup("techrace_oc@gmail.com", "techrace_oc@1234");
+    return;
+    const userData = await signup("abhinaya_oc@gmail.com", "abhinaya_oc@1234");
     const { uid, email } = userData.user;
     console.log(uid);
 
@@ -94,6 +95,7 @@ const Login = () => {
 
       console.log("EventD3: ", item[0]);
       const event = EVENT_MAP[item[0].email];
+      console.log("The event is: ", EVENT_MAP[item[0].email]);
       const userToken = {
         ...item[0],
         event: event || "Not an event, login kar lavde",
