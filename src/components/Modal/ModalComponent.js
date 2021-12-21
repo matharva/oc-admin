@@ -447,7 +447,7 @@ const AddTeamMember = ({ currentTeam, addMemberUpdate }) => {
 
   async function handleSubmit() {
     const eventName = getEventName();
-    if (!isValidEmail) {
+    if (!isValidEmail || !currentTeam) {
       return;
     }
 
