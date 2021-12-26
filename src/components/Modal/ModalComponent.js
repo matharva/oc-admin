@@ -48,15 +48,20 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
   useEffect(async () => {
     const eventName = getEventName();
     const data = await eventServices.getEventDetails(eventName);
+    console.log("The eventDetails are: ", data);
     setEventFee(data?.Fee);
+    setType(data?.Fee[0].Type);
   }, []);
 
-  console.log("The eventDetails are: ", eventFee);
   async function handleSubmit() {
-    if (!isValidEmail || !name.length || !type) {
-      return;
-    }
-
+    // if (!isValidEmail || !name.length || !type) {
+    //   return;
+    // }
+    console.log(
+      "The tyep is: ",
+      type
+      // eventFee.filter((x) => x.Type == type)[0].Fee
+    );
     const eventName = getEventName();
     const data = {
       email: email,
@@ -568,13 +573,13 @@ const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
 
     //** Please uncomment the below code in production */
 
-    // const deleteData = await eventServices.removeTeam(data);
-    // if (deleteData && deleteData.Message) {
-    //   setMessage("Team has been deleted");
-    //   teamDeleteUpdate();
-    // } else {
-    //   // setMessage(deleteData.Message);
-    // }
+    const deleteData = await eventServices.removeTeam(data);
+    if (deleteData && deleteData.Message) {
+      setMessage("Team has been deleted");
+      teamDeleteUpdate();
+    } else {
+      // setMessage(deleteData.Message);
+    }
   }
 
   return (

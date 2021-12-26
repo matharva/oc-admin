@@ -59,7 +59,11 @@ const Login = () => {
 
   async function handleRegisterUser() {
     return;
-    const userData = await signup("abhinaya_oc@gmail.com", "abhinaya_oc@1234");
+    console.log("hdhdhd");
+    const userData = await signup(
+      "febootcamp_oc@gmail.com",
+      "febootcamp_oc@1234"
+    );
     const { uid, email } = userData.user;
     console.log(uid);
 
@@ -183,7 +187,9 @@ const Login = () => {
                   className="my-4"
                   color="primary"
                   type="button"
-                  onClick={handleRegisterUser}
+                  onClick={() => {
+                    handleRegisterUser();
+                  }}
                 >
                   Secret Sign up
                 </Button>

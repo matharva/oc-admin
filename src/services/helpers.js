@@ -29,6 +29,10 @@ export const EVENT_MAP = {
 
   // TECHNICAL
   // Oculus Coding League
+  "techroyale_oc@gmail.com": "Tech Royale", //pass:techroyale_oc@1234
+  "lockknock_oc@gmail.com": "Lockout and Knockout", //pass:lockknock_oc@1234
+  "stackedsquad_oc@gmail.com": "Stacked Squad", //pass:stackedsquad_oc@1234
+  "febootcamp_oc@gmail.com": "FE Bootcamp", //pass:febootcamp_oc@1234
 
   // Short Circuit / Hardware
   "shortcircuit_oc@gmail.com": "Short Circuit", // pass: shortcircuit_oc@1234
@@ -43,7 +47,7 @@ export const EVENT_MAP = {
   // Paintball
   "paintball_oc@gmail.com": "Paint Ball", // pass: paintball_oc@1234
   // Footpool
-  "footpool_oc@gmail.com": "Foot Pool", // pass: footpool_oc@1234
+  "footpool_oc@gmail.com": "Footpool", // pass: footpool_oc@1234
   // Human Foosball
   "foosball_oc@gmail.com": "Human Foosball", // pass: foosball_oc@1234
 

@@ -364,6 +364,7 @@ const EventInformation = (props) => {
               </label>
               <Input
                 className="form-control-alternative"
+                disabled
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 id="input-username"
