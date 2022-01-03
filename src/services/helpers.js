@@ -18,13 +18,18 @@ export const EVENT_MAP = {
   "aej_oc@gmail.com": "Aelan-e-Jung", // pass: aej_oc@1234
   // Sargam
   "sargam_oc@gmail.com": "Sargam", // pass: sargam_oc@1234
+  // MUN
+  "mun_oc@gmail.com": "Model United Nations", // pass: mun_oc@1234
 
   // Yeh events thodi hai
   // WOB (hardcode)
 
   // Open Mic
+  "openmic_oc@gmail.com": "Open Mic", // pass: openmic_oc@1234
   // Carnival
+  "carnival_oc@gmail.com": "Carnival", // pass: carnival_oc@1234
   // Abhinaya
+  "abhinaya_oc@gmail.com": "Abhinaya", // pass: abhinaya_oc@1234
 
   // TECHNICAL
   // Oculus Coding League

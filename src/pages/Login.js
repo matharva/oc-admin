@@ -58,7 +58,7 @@ const Login = () => {
   const userRef = firebase.firestore().collection("Users");
 
   async function handleRegisterUser() {
-    const userData = await signup("techrace_oc@gmail.com", "techrace_oc@1234");
+    const userData = await signup("mun_oc@gmail.com", "mun_oc@1234");
     const { uid, email } = userData.user;
     console.log(uid);
 
@@ -162,10 +162,10 @@ const Login = () => {
                   type="checkbox"
                 />
               </div>
-              <StyledFirebaseAuth
+              {/* <StyledFirebaseAuth
                 uiConfig={uiConfig}
                 firebaseAuth={firebase.auth()}
-              />
+              /> */}
               <div className="text-center">
                 <Button
                   className="my-4"
@@ -176,7 +176,7 @@ const Login = () => {
                   Sign in
                 </Button>
               </div>
-              <div className="text-center">
+              {/* <div className="text-center">
                 <Button
                   className="my-4"
                   color="primary"
@@ -185,7 +185,7 @@ const Login = () => {
                 >
                   Secret Sign up
                 </Button>
-              </div>
+              </div> */}
             </Form>
           </CardBody>
         </Card>

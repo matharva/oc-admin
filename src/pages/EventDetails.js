@@ -517,9 +517,9 @@ const Details = () => {
   useEffect(async () => {
     // const eventName = "IPL Auction";
     const eventName = getEventName();
-
+    console.log("eventName: ", eventName);
     const data = await eventServices.getEventDetails(eventName);
-    // console.log("Event Details: ", data);
+    console.log("Event Details: ", data);
     setCategory(data.Category);
     setDescription(data.Description);
     setStartDate(data.Date);
