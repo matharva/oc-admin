@@ -10,19 +10,29 @@ import {
   Input,
   Row,
   Table,
+  ButtonToggle,
 } from "reactstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { eventServices } from "services/eventServices";
+import { getEventName } from "services/helpers";
 
-const SmallTableHeader = ({ setModalComponent, setIsOpen }) => {
+const SmallTableHeader = ({
+  setModalComponent,
+  setIsOpen,
+  teamName,
+  teamCode,
+  payment,
+  setPaymentUpdate,
+}) => {
+  console.log("The status is: ", teamName, teamCode, payment);
   return (
     <>
       <CardHeader className="border-0">
         <Row className="align-items-center">
-          <Col lg={3}>
-            <h3 className="mb-0">Team</h3>
+          <Col lg={4}>
+            <h5 className="mb-0">{teamName}</h5>
           </Col>
-          <Col lg={9}>
+          <Col lg={8}>
             <div className="col d-flex justify-content-end">
               <Button
                 color="primary"
@@ -36,13 +46,24 @@ const SmallTableHeader = ({ setModalComponent, setIsOpen }) => {
               >
                 Add Member
               </Button>
+              {/* <span style={{ fontSize: "0.8rem" }}>Payment:</span> */}
               <Button
                 color="secondary"
                 href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  setPaymentUpdate(teamCode, payment);
+                }}
                 size="sm"
+                style={{
+                  backgroundColor: payment ? "lightgreen" : "red",
+                  color: "white",
+                }}
+                // backgroundColor="green"
+                // type="toggle"
+                // width="100px"
               >
-                Start Voting
+                Payment
               </Button>
             </div>
           </Col>
@@ -58,6 +79,7 @@ const SmallTableRow = ({
   setIsOpen,
   setSelected,
   teamCode,
+  deleteMemberpopup,
 }) => {
   const {
     name = "User",
@@ -71,21 +93,22 @@ const SmallTableRow = ({
     const data = {
       email,
       teamCode,
-      eventName: "IPL Auction",
+      eventName: getEventName(),
     };
     console.log("Delete data: ", data);
+    deleteMemberpopup(data);
     // await eventServices.removeMemberFromTeam(data);
   }
 
   return (
     <tr
       key={uid}
-      onClick={(e) => {
-        e.preventDefault();
-        setModalComponent("UserInfo");
-        setSelected(uid);
-        setIsOpen(true);
-      }}
+      // onClick={(e) => {
+      //   e.preventDefault();
+      //   setModalComponent("UserInfo");
+      //   setSelected(uid);
+      //   setIsOpen(true);
+      // }}
     >
       <th scope="row">{name}</th>
       <td>{email}</td>
@@ -102,6 +125,8 @@ const SmallTable = ({
   setIsOpen,
   currentTeam,
   setSelected,
+  setPaymentUpdate,
+  deleteMemberpopup,
 }) => {
   const [currTeam, setCurrTeam] = useState(null);
 
@@ -115,6 +140,10 @@ const SmallTable = ({
       <SmallTableHeader
         setIsOpen={setIsOpen}
         setModalComponent={setModalComponent}
+        teamName={currTeam?.TeamName}
+        teamCode={currTeam?.TeamCode}
+        payment={currTeam?.paymentStatus}
+        setPaymentUpdate={setPaymentUpdate}
       />
       <Table className="align-items-center table-flush" responsive>
         <thead className="thead-light">
@@ -135,6 +164,7 @@ const SmallTable = ({
                   userData={item}
                   setSelected={setSelected}
                   teamCode={currTeam.TeamCode}
+                  deleteMemberpopup={deleteMemberpopup}
                 />
               ))
             : null}

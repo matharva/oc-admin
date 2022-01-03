@@ -105,7 +105,7 @@ async function addMemberToTeam({ email, teamCode, eventName }) {
 async function removeMemberFromTeam(data) {
   try {
     console.log("Delete data: ", data);
-    let removedMemberData = await oculusAPI.delete("/adminUpdateTeamMembers", {
+    let removedMemberData = await oculusAPI.delete("/adminUpdateTeamMembers/", {
       data: data,
     });
     console.log("The removedMemberData  is: ", removedMemberData.data);
@@ -185,6 +185,19 @@ async function deleteQuestion(questionId, eventName) {
   }
 }
 
+async function updatePayment(teamCode, paymentStatus) {
+  try {
+    let updatePayment = await oculusAPI.post("/updatePaymentStatus/", {
+      teamCode: teamCode,
+      paymentStatus: paymentStatus,
+    });
+    console.log("The update payment  is: ", updatePayment.data);
+    return updatePayment.data;
+  } catch (e) {
+    console.log("Error in update Payment: ", e);
+  }
+}
+
 export const eventServices = {
   getEvent,
   getChats,
@@ -202,4 +215,5 @@ export const eventServices = {
   getEventDetails,
   addChat,
   getNotifications,
+  updatePayment,
 };

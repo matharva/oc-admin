@@ -244,13 +244,21 @@ const RulesItem = ({ item, setRules }) => {
 
 const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
   // console.log("props", setRegistrationCost);
-  const { Type, Fee, id } = item;
+  const { Type, Fee, maxMembers, id } = item;
   // console.log("setRegistrationCost", setRegistrationCost);
 
   function updateType(e) {
     setRegistrationCost((prev) => {
       return prev.map((element) =>
         element.id === id ? { ...element, Type: e.target.value } : element
+      );
+    });
+  }
+
+  function updateMembers(e) {
+    setRegistrationCost((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, maxMembers: e.target.value } : element
       );
     });
   }
@@ -272,7 +280,7 @@ const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
   }
   return (
     <Row id={id}>
-      <Col xl={6}>
+      <Col xl={4}>
         <FormGroup>
           <label className="form-control-label" htmlFor="input-first-name">
             Type
@@ -287,7 +295,22 @@ const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
           />
         </FormGroup>
       </Col>
-      <Col xl={5}>
+      <Col xl={3}>
+        <FormGroup>
+          <label className="form-control-label" htmlFor="input-first-name">
+            Max Members
+          </label>
+          <Input
+            className="form-control-alternative"
+            placeholder="Enter type of cost..."
+            rows="4"
+            value={maxMembers}
+            onChange={updateMembers}
+            type="number"
+          />
+        </FormGroup>
+      </Col>
+      <Col xl={3}>
         <FormGroup>
           <label className="form-control-label" htmlFor="input-first-name">
             Fee
@@ -341,6 +364,7 @@ const EventInformation = (props) => {
               </label>
               <Input
                 className="form-control-alternative"
+                disabled
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 id="input-username"
@@ -474,6 +498,7 @@ const Details = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [description, setDescription] = useState("");
+  const [message, setMessage] = useState("");
 
   function addFaqQuestion() {
     const defaultData = { question: "", answer: "", id: uuid() };
@@ -490,7 +515,7 @@ const Details = () => {
   }
 
   function addRegistration() {
-    const defaultData = { Type: "", Fee: "", id: uuid() };
+    const defaultData = { Type: "", Fee: "", maxMembers: 0, id: uuid() };
     setRegistrationCost((prev) => {
       return [...prev, defaultData];
     });
@@ -510,7 +535,9 @@ const Details = () => {
       Description: description,
     };
     console.log("Data to be updated: ", data);
-    await eventServices.updateEvent(data);
+
+    let updateData = await eventServices.updateEvent(data);
+    setMessage(updateData.Message);
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -530,6 +557,7 @@ const Details = () => {
 
     // Fees
     const feeData = data.Fee;
+    console.log("Data is: ", data);
     const fees = feeData.map((item) => {
       if (item.id) return item;
       return { ...item, id: uuid() };
@@ -570,8 +598,20 @@ const Details = () => {
       <Card className="bg-secondary shadow">
         <CardHeader className="bg-white border-0">
           <Row className="align-items-center">
-            <Col xs="8">
+            <Col xs="4">
               <h3 className="mb-0">My account</h3>
+            </Col>
+            <Col xs="4">
+              <h3
+                className="mb-0"
+                style={{
+                  color: message?.toLowerCase().includes("unsuccessfully")
+                    ? "red"
+                    : "green",
+                }}
+              >
+                {message}
+              </h3>
             </Col>
             <Col className="text-right" xs="4">
               <Button color="primary" onClick={updateEventData} size="sm">

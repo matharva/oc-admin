@@ -21,6 +21,9 @@ import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
 
+//Assets
+import Oculus from "../../assets/img/brand/Oculus.png";
+
 // reactstrap components
 import {
   Button,
@@ -119,11 +122,7 @@ const Sidebar = (props) => {
         {/* Brand */}
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
-            <img
-              alt={logo.imgAlt}
-              className="navbar-brand-img"
-              src={logo.imgSrc}
-            />
+            <img alt={"Oculus"} className="navbar-brand-img" src={Oculus} />
           </NavbarBrand>
         ) : null}
         {/* User */}
