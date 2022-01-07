@@ -3,6 +3,8 @@ import axios from "axios";
 import firebase from "firebase";
 // const userRef = firebase.firestore().collection("Users");
 const eventRef = firebase.firestore().collection("Events");
+const userRef = firebase.firestore().collection("Users");
+
 // const sponserRef = firebase.firestore().collection("Sponsers");
 const oculusAPI = axios.create({
   baseURL: "https://oculus-2022.herokuapp.com",
@@ -40,6 +42,43 @@ async function updateVote(eventName, value) {
     });
   } catch (e) {
     console.log("Error in eventData: ", e);
+  }
+}
+
+async function validateUser(email, phoneNumber, eventType) {
+  try {
+    // let eventData = await oculusAPI.get(`/event/${eventName}`);
+
+    // console.log("The eventData  is: ", eventData.data);
+    // return eventData.data;
+
+    let item = [];
+    let querySnapShot = await userRef.where("email", "==", email).get();
+    // console.log("Kaha agay tu bhai: ", eventName, querySnapShot);
+    querySnapShot.forEach(async (doc) => {
+      // console.log("The user data is: ", doc.data());
+      // const updateData = await doc.ref.update({
+      //   phoneNumber: "",
+      // });
+      // console.log("Teh update data is: ", updateData);
+      item.push(doc.data());
+    });
+
+    if (!item[0]) return false;
+
+    if (eventType) {
+      querySnapShot.forEach(async (doc) => {
+        // console.log("The user data is: ", doc.data());
+        const updateData = await doc.ref.update({
+          phoneNumber: phoneNumber,
+        });
+        // console.log("Teh update data is: ", updateData);
+        // item.push(doc.data());
+      });
+    }
+    return true;
+  } catch (e) {
+    console.log("Error in ValidateUser: ", e);
   }
 }
 
@@ -227,6 +266,7 @@ async function updatePayment(teamCode, paymentStatus) {
 
 export const eventServices = {
   getEvent,
+  validateUser,
   updateVote,
   getChats,
   updateEvent,

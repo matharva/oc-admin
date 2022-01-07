@@ -18,6 +18,20 @@ import { validateEmail } from "services/helpers";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { getEventName } from "services/helpers";
 
+const customStylesAdd = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    padding: 0,
+    transform: "translate(-50%, -50%)",
+    height: "90vh",
+    // width: "70vw",
+    // overflowY: "auto",
+  },
+};
+
 const customStyles = {
   content: {
     top: "50%",
@@ -28,6 +42,7 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
     // height: "90vh",
     // width: "70vw",
+    // overflowY: "auto",
   },
 };
 
@@ -36,8 +51,15 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
   const [contact, setContact] = useState("");
   const [name, setName] = useState("");
   const [type, setType] = useState("");
+  const [slotTime, setSlotTime] = useState("");
+  const [link, setLink] = useState("");
+  const [eventDetails, setEventDetails] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState("");
+
   const [paymentStatus, setPaymentStatus] = useState(false);
-  const [eventFee, setEventFee] = useState(null);
+  const [eventFee, setEventFee] = useState([]);
+  const [availSlots, setAvailSlots] = useState([]);
 
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
@@ -49,11 +71,23 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
     const eventName = getEventName();
     const data = await eventServices.getEventDetails(eventName);
     console.log("The eventDetails are: ", data);
+    setEventDetails(data);
     setEventFee(data?.Fee);
     setType(data?.Fee[0].Type);
+    setAvailSlots(["-", ...data?.availableSlots]);
   }, []);
 
   async function handleSubmit() {
+    const checkUser = await eventServices.validateUser(
+      email,
+      phoneNumber,
+      eventDetails.isSingle
+    );
+    if (!checkUser) {
+      setMessage("User does not exist");
+      return;
+    }
+
     // if (!isValidEmail || !name.length || !type) {
     //   return;
     // }
@@ -66,13 +100,15 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
     const data = {
       email: email,
       // phone: contact,
-      teamName: name,
+      teamName: eventDetails.isSingle ? "Single Event" : name,
       eventName: eventName,
       paymentStatus: paymentStatus,
       amount: parseInt(eventFee.filter((x) => x.Type == type)[0].Fee),
       maxMembers: parseInt(
         eventFee.filter((x) => x.Type == type)[0].maxMembers
       ),
+      slotTime: slotTime,
+      link: link,
     };
     console.log("data to create team: ", data);
     let newTeam = await eventServices.addTeam(data);
@@ -82,6 +118,9 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
       setEmail("");
       setContact("");
       setName("");
+      setPhoneNumber("");
+      setSlotTime("-");
+      setLink("");
       setPaymentStatus(false);
       setType(eventFee[0]?.Type);
       addTeamUpdate(newTeam.registrationDetails.TeamCode);
@@ -94,47 +133,90 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
     console.log("The new update payment status: ", paymentStatus);
   }, [paymentStatus]);
 
+  const phoneHandler = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    console.log("hehehehe: ", value);
+    let isValid = true;
+    if (value) {
+      var pattern = new RegExp(/^[0-9\b]+$/);
+
+      if (!pattern.test(value)) {
+        isValid = false;
+
+        setError("Please enter only number.");
+        // errors["phone"] = ;
+      } else if (value.length != 10) {
+        isValid = false;
+        setError("Please enter valid phone number.");
+
+        // errors["phone"] = ;
+      }
+    }
+    if (isValid) {
+      setError("");
+    }
+    // setRegisterForm((prevState) => {
+    //   return {
+    //     ...prevState,
+    //     [name]: {
+    //       ...prevState[name],
+    //       value: value,
+    //       dirty: true,
+    //     },
+    //   };
+    // });
+    setPhoneNumber(value);
+  };
+
   return (
     <>
-      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
-        <CardHeader className="bg-white border-0">
-          <Row className="align-items-center">
-            <Col xs="8">
-              <h3 className="mb-0">Add team</h3>
-            </Col>
-            <Col className="text-right" xs="4">
-              <Button color="primary" onClick={handleSubmit} size="sm">
-                Save
-              </Button>
-            </Col>
-          </Row>
-        </CardHeader>
-        <CardBody>
-          <Form>
-            <h6 className="heading-small text-muted mb-4">User information</h6>
-            {/* <div className="pl-lg-4"> */}
-            <Row>
-              <Col lg="12">
-                <FormGroup>
-                  <label className="form-control-label" htmlFor="input-email">
-                    Email address
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    id="input-email"
-                    placeholder="user@gmail.com"
-                    type="email"
-                    value={email}
-                    style={!isValidEmail ? { border: "red 2px solid" } : {}}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setIsValidEmail(validateEmail(e.target.value));
-                    }}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            {/* <Row>
+      {eventDetails ? (
+        <>
+          <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+            <CardHeader className="bg-white border-0">
+              <Row className="align-items-center">
+                <Col xs="8">
+                  <h3 className="mb-0">Add team</h3>
+                </Col>
+                <Col className="text-right" xs="4">
+                  <Button color="primary" onClick={handleSubmit} size="sm">
+                    Save
+                  </Button>
+                </Col>
+              </Row>
+            </CardHeader>
+            <CardBody>
+              <Form>
+                <h6 className="heading-small text-muted mb-4">
+                  User information
+                </h6>
+                {/* <div className="pl-lg-4"> */}
+                <Row>
+                  <Col lg="12">
+                    <FormGroup>
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-email"
+                      >
+                        Email address
+                      </label>
+                      <Input
+                        className="form-control-alternative"
+                        id="input-email"
+                        placeholder="user@gmail.com"
+                        type="email"
+                        value={email}
+                        style={!isValidEmail ? { border: "red 2px solid" } : {}}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setIsValidEmail(validateEmail(e.target.value));
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                {/* <Row>
               <Col lg="12">
                 <FormGroup>
                   <label
@@ -163,161 +245,186 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
                 </FormGroup>
               </Col>
             </Row> */}
-            <Row>
-              <Col lg="12">
-                <FormGroup>
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Team Name
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    defaultValue=""
-                    id="input-username"
-                    placeholder="Team Name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="12">
-                {/* <FormGroup>
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Type
-                  </label>
-                  <Input
-                    className="form-control-alternative"
-                    defaultValue=""
-                    id="input-username"
-                    placeholder="Team Name"
-                    type="number"
-                    value={type}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </FormGroup> */}
-                <FormGroup isRequired marginBottom={"1.5rem"}>
-                  {/* <FormLabel color={"white"}>Payment Type: </FormLabel> */}
-                  <label
-                    className="form-control-label"
-                    htmlFor="input-username"
-                  >
-                    Payment Type:
-                  </label>
-                  <Input
-                    id="paymentType"
-                    value={type}
-                    type="select"
-                    onChange={(e) => {
-                      setType(e.target.value);
-                    }}
-                    color={"white"}
-                    // bg={OC_BG_DARK}
-                  >
-                    {eventFee &&
-                      eventFee.map((item) => {
-                        return (
-                          <>
-                            <option
-                              value={`${item.Type}`}
-                              // color={"black"}
-                              style={{ color: "black" }}
-                            >{`${item.Type}: ${item.Fee}`}</option>
-                          </>
-                        );
-                      })}
-
-                    {/* <option>Select Team Options</option> */}
-                    {/* {details.map((item) => {
-                      return (
-                        <>
-                          <option
-                            value={`${item.Type}`}
-                            // color={"black"}
-                            style={{ color: "black" }}
-                          >{`${item.Type}: ${item.Fee}`}</option>
-                        </>
-                      );
-                    })} */}
-                    {/* <option
-                      value={`Solo`}
-                      // color={"black"}
-                      style={{ color: "black" }}
-                    >{`Solo: ${10}`}</option>
-                    <option
-                      value={`Solo`}
-                      // color={"black"}
-                      style={{ color: "black" }}
-                    >{`Solo: ${10}`}</option>{" "}
-                    <option
-                      value={`Solo`}
-                      // color={"black"}
-                      style={{ color: "black" }}
-                    >{`Solo: ${10}`}</option>{" "}
-                    <option
-                      value={`Solo`}
-                      // color={"black"}
-                      style={{ color: "black" }}
-                    >{`Solo: ${10}`}</option> */}
-                    {/* <option>United Arab Emirates</option>
-              <option>Nigeria</option> */}
-                  </Input>
-                </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg="12">
-                <FormGroup>
+                {eventDetails.isSingle ? (
+                  <>
+                    <Row>
+                      <Col lg="12">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-username"
+                          >
+                            Phone Number
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            defaultValue=""
+                            id="input-username"
+                            placeholder="Phone Number"
+                            type="number"
+                            value={phoneNumber}
+                            onChange={phoneHandler}
+                          />
+                          <span style={{ color: "red" }}>{error}</span>
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </>
+                ) : (
                   <Row>
-                    <Col lg="4">
+                    <Col lg="12">
+                      <FormGroup>
+                        <label
+                          className="form-control-label"
+                          htmlFor="input-username"
+                        >
+                          Team Name
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          defaultValue=""
+                          id="input-username"
+                          placeholder="Team Name"
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                )}
+
+                <Row>
+                  <Col lg="12">
+                    <FormGroup isRequired marginBottom={"1.5rem"}>
                       <label
                         className="form-control-label"
                         htmlFor="input-username"
                       >
-                        Payment Status:
+                        Payment Type:
                       </label>
-                    </Col>
-                    <Col>
                       <Input
-                        // type="checkbox"
-                        // onChange={(e) => console.log(e.target.value)}
+                        id="paymentType"
+                        value={type}
+                        type="select"
+                        onChange={(e) => {
+                          setType(e.target.value);
+                        }}
+                        color={"white"}
+                        // bg={OC_BG_DARK}
+                      >
+                        {eventFee &&
+                          eventFee.map((item) => {
+                            return (
+                              <>
+                                <option
+                                  value={`${item.Type}`}
+                                  // color={"black"}
+                                  style={{ color: "black" }}
+                                >{`${item.Type}: ${item.Fee}`}</option>
+                              </>
+                            );
+                          })}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col lg="12">
+                    <FormGroup marginBottom={"1.5rem"}>
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-username"
+                      >
+                        Slot Time
+                      </label>
+                      <Input
+                        id="paymentType"
+                        value={slotTime}
+                        type="select"
+                        onChange={(e) => {
+                          setSlotTime(e.target.value);
+                        }}
+                        color={"white"}
+                        // bg={OC_BG_DARK}
+                      >
+                        {availSlots &&
+                          availSlots.map((item) => {
+                            return (
+                              <>
+                                <option
+                                  value={`${item?.text ? item.text : item}`}
+                                  // color={"black"}
+                                  style={{ color: "black" }}
+                                >{`${item?.text ? item.text : item}`}</option>
+                              </>
+                            );
+                          })}
+                      </Input>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg="12">
+                    <FormGroup>
+                      <Row>
+                        <Col lg="4">
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-username"
+                          >
+                            Payment Status:
+                          </label>
+                        </Col>
+                        <Col>
+                          <Input
+                            // type="checkbox"
+                            // onChange={(e) => console.log(e.target.value)}
+                            className="form-control-alternative"
+                            defaultValue=""
+                            id="input-username"
+                            placeholder="Team Name"
+                            type="checkbox"
+                            value={paymentStatus}
+                            onChange={(e) => setPaymentStatus(e.target.checked)}
+                          />
+                        </Col>
+                      </Row>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg="12">
+                    <FormGroup>
+                      <label
+                        className="form-control-label"
+                        htmlFor="input-username"
+                      >
+                        Link
+                      </label>
+                      <Input
                         className="form-control-alternative"
                         defaultValue=""
                         id="input-username"
                         placeholder="Team Name"
-                        type="checkbox"
-                        value={paymentStatus}
-                        onChange={(e) => setPaymentStatus(e.target.checked)}
+                        type="text"
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
                       />
-                    </Col>
-                  </Row>
+                    </FormGroup>
+                  </Col>
+                </Row>
 
-                  {/* <Input
-                    className="form-control-alternative"
-                    defaultValue=""
-                    id="input-username"
-                    placeholder="Team Name"
-                    type="checkbox"
-                    value={paymentStatus}
-                    onChange={(e) => setPaymentStatus(!paymentStatus)}
-                  /> */}
-                </FormGroup>
-              </Col>
-            </Row>
-            {/* gdgdgdgdgdq */}
-            {message}
-            {/* </div> */}
-            <hr className="my-4" />
-          </Form>
-        </CardBody>
-      </Card>
+                {/* gdgdgdgdgdq */}
+                {message}
+                {/* </div> */}
+                <hr className="my-4" />
+              </Form>
+            </CardBody>
+          </Card>
+        </>
+      ) : null}
     </>
   );
 };
@@ -777,7 +884,7 @@ const ModalComponent = ({
 
   return (
     <Modal
-      style={customStyles}
+      style={modalComponent === "AddTeamModal" ? customStylesAdd : customStyles}
       isOpen={isOpen}
       onRequestClose={() => setIsOpen(false)}
     >
