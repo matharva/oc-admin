@@ -130,6 +130,7 @@ const Dashboard = (props) => {
   const [modalDeleteMember, setModalDeleteMember] = useState(null);
   const [eventData, setEventData] = useState([]);
   const [paymentUpdate, setPaymentUpdate] = useState(null);
+  const [eventDetail, setEventDetail] = useState(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -140,6 +141,13 @@ const Dashboard = (props) => {
     setEventData(data);
     setTeamData(data.allTeamDetails);
     setCurrentTeam(data.allTeamDetails[0]);
+  }, []);
+
+  useEffect(async () => {
+    const eventName = getEventName();
+    const data = await eventServices.getEventDetails(eventName);
+    console.log("The eventDetails are in Header: ", data);
+    setEventDetail(data);
   }, []);
 
   useEffect(() => {
@@ -263,6 +271,7 @@ const Dashboard = (props) => {
                 setCurrentTeam={setCurrentTeam}
                 addTeamUpdate={addTeamUpdate}
                 deleteTeampopup={deleteTeampopup}
+                isVoting={eventDetail?.isVoting}
               />
             </Card>
           </Col>

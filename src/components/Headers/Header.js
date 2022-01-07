@@ -69,7 +69,7 @@ const Header = ({ eventData }) => {
     const eventName = getEventName();
     const data = await eventServices.getEventDetails(eventName);
     console.log("The eventDetails are in Header: ", data);
-    setShowVote(!data?.isVoting);
+    setShowVote(data?.isVoting);
     setVote(data?.isVotingLive);
   }, [vote]);
 

@@ -85,6 +85,7 @@ const BigTableRow = ({
   allTeamData,
   setModalComponent,
   deleteTeampopup,
+  isVoting,
 }) => {
   const {
     TeamCode: teamCode,
@@ -145,7 +146,7 @@ const BigTableRow = ({
             </Badge>
           )}
         </td>
-        <td>{voteCount}</td>
+        {isVoting ? <td>{voteCount}</td> : null}
         <td>
           <DeleteIcon onClick={handleDelete} />
         </td>
@@ -162,9 +163,10 @@ const BigTable = ({
   setCurrentTeam,
   addTeamUpdate,
   deleteTeampopup,
+  isVoting,
 }) => {
   const [team, setTeam] = useState(teamData);
-  console.log("team from big table: ", teamData);
+  console.log("team from big table: ", teamData, isVoting);
 
   function filterByPending() {
     console.log(team);
@@ -225,7 +227,7 @@ const BigTable = ({
                 </DropdownMenu>
               </UncontrolledDropdown>
             </th>
-            <th scope="col">Vote Count</th>
+            {isVoting ? <th scope="col">Vote Count</th> : null}
             <th scope="col">Count: {team.length}</th>
           </tr>
         </thead>
@@ -238,6 +240,7 @@ const BigTable = ({
               allTeamData={teamData}
               setModalComponent={setModalComponent}
               deleteTeampopup={deleteTeampopup}
+              isVoting={isVoting}
             />
           ))}
         </tbody>
