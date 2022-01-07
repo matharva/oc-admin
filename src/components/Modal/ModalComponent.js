@@ -669,31 +669,37 @@ const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
         <CardHeader className="bg-white border-0">
           <Row className="align-items-center">
             <Col xs="12">
-              <h3 className="mb-0">Delete Confirmation</h3>
+              <h3 className="">Delete Confirmation</h3>
             </Col>
           </Row>
         </CardHeader>
         <CardBody>
           <Form>
-            <h6 className="heading-small text-muted mb-4">
-              Are you sure you want to remove member: {data.email}
-            </h6>
+            <div
+              className="font-weight-500 translate-y-6"
+              // style={{ transform: "translateY(10px)" }}
+            >
+              Are you sure you want to remove member:
+            </div>
+            <div className="font-weight-700 text-md pb-3">{data.email}</div>
             {/* <div className="pl-lg-4"> */}
             <Row className="align-items-left">
-              <Col
-                lg="6"
-                className="text-center"
-                // style={{ alignItems: "center" }}
-              >
-                <Button color="primary" size="sm" onClick={handleSubmit}>
+              <Col lg="3" className="text-center border-red-500 border-2">
+                <Button
+                  color="primary"
+                  size="sm"
+                  onClick={handleSubmit}
+                  className="px-3 py-2"
+                >
                   Yes
                 </Button>
               </Col>
 
-              <Col lg="6" className="text-left">
+              <Col lg="3" className="text-left">
                 <Button
                   color="secondary"
                   size="sm"
+                  className="px-3 py-2"
                   onClick={() => {
                     setIsOpen(false);
                   }}
