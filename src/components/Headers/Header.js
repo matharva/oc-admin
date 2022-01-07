@@ -17,7 +17,21 @@
 */
 
 // reactstrap components
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  Container,
+  Row,
+  Col,
+  FormGroup,
+  Input,
+} from "reactstrap";
+import ToggleButton from "react-toggle-button";
+import { eventServices } from "services/eventServices";
+import { getEventName } from "services/helpers";
+
+import { useEffect, useState } from "react";
 
 const HeaderItem = ({ item }) => {
   const { title, count, color } = item;
@@ -48,20 +62,31 @@ const HeaderItem = ({ item }) => {
 };
 
 const Header = ({ eventData }) => {
+  const [vote, setVote] = useState(false);
+  const [showVote, setShowVote] = useState(false);
+
+  useEffect(async () => {
+    const eventName = getEventName();
+    const data = await eventServices.getEventDetails(eventName);
+    console.log("The eventDetails are in Header: ", data);
+    setShowVote(data?.isVoting);
+    setVote(data?.isVotingLive);
+  }, [vote]);
+
   const dummyHeaderdata = [
     {
       title: "Teams Registered",
-      count: eventData?.teamCount || 1000,
+      count: eventData?.teamCount || 0,
       color: "bg-red",
     },
     {
       title: "Registrations",
-      count: eventData?.playerCount || 1000,
+      count: eventData?.playerCount || 0,
       color: "bg-cyan",
     },
     {
       title: "Amount Collected",
-      count: eventData?.totalAmount || 1000,
+      count: eventData?.totalAmount || 0,
       color: "bg-green",
     },
   ];
@@ -81,6 +106,57 @@ const Header = ({ eventData }) => {
             </Row>
           </div>
         </Container>
+        {showVote ? (
+          <Container fluid>
+            <Row>
+              <Col>
+                <div
+                  className="voting-div"
+                  color="white"
+                  style={{
+                    paddingTop: "3%",
+                  }}
+                >
+                  <FormGroup>
+                    <label
+                      className="form-control-label"
+                      htmlFor="input-username"
+                      style={{
+                        color: "white",
+                      }}
+                    >
+                      VOTING
+                    </label>
+                    {/* <Input
+                    className="form-control-alternative"
+                    defaultValue=""
+                    id="input-username"
+                    placeholder="Team Name"
+                    type="checkbox"
+                    value={false}
+                    // onChange={(e) => setName(e.target.value)}
+                  /> */}
+                    <ToggleButton
+                      value={vote || false}
+                      onToggle={async (value) => {
+                        // setState({
+                        //   value: !value,
+                        // });
+                        // console.log(value);
+                        const data = await eventServices.updateVote(
+                          getEventName(),
+                          !vote
+                        );
+                        console.log("Teh event data in toggle is: ", data);
+                        setVote(!vote);
+                      }}
+                    />
+                  </FormGroup>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        ) : null}
       </div>
     </>
   );

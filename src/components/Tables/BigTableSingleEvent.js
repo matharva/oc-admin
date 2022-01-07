@@ -31,9 +31,12 @@ const BigTableHeader = ({
     const text = e.target.value;
     setSearchText(text);
 
-    const filteredText = teamData.filter(
-      (x) => x?.TeamName?.toLowerCase().includes(text) === true
-    );
+    const filteredText = teamData.filter((x) => {
+      console.log("The members are: ", x.member[0].email);
+      if (x?.member[0]?.email?.toLowerCase().includes(text.toLowerCase())) {
+        return x;
+      }
+    });
     console.log(text, filteredText);
     setTeam(filteredText);
   }
@@ -46,12 +49,12 @@ const BigTableHeader = ({
         <Row className="align-items-center">
           <Col xl={3}>
             <div className="col">
-              <h3 className="mb-0">Teams</h3>
+              <h3 className="mb-0">Registrations</h3>
             </div>
           </Col>
           <Col xl={5}>
             <Input
-              placeholder="Search by team name"
+              placeholder="Search by Email"
               type="text"
               value={searchText}
               onChange={(e) => filterBySearchText(e)}
@@ -69,7 +72,7 @@ const BigTableHeader = ({
                 }}
                 size="sm"
               >
-                Add Teams
+                Add Users
               </Button>
             </div>
           </Col>
@@ -86,17 +89,19 @@ const BigTableRow = ({
   setModalComponent,
   deleteTeampopup,
   isVoting,
+  setPaymentUpdate,
 }) => {
   const {
     TeamCode: teamCode,
     maxMembers: memberCount,
     TeamName: TeamName,
     amount,
-    member: members,
+    member,
     isComplete,
     voteCount,
+    paymentStatus,
   } = teamData;
-  console.log("team data in big table: ", teamData, isComplete);
+  console.log("team data in big table: ", teamData, isComplete, member);
 
   function handleCurrentTeam() {
     const currTeam = allTeamData.filter((x) => x.TeamCode === teamCode);
@@ -118,9 +123,9 @@ const BigTableRow = ({
   return (
     <>
       <tr onClick={handleCurrentTeam} key={teamCode}>
-        <th>{TeamName}</th>
-        <th scope="row">{teamCode}</th>
-        <td>{memberCount}</td>
+        <th>{member[0]?.email}</th>
+        <th>{member[0]?.name}</th>
+        <th scope="row">{member[0]?.phoneNumber}</th>
         <td>{amount}</td>
         <td>
           {/* {isComplete ? (
@@ -148,6 +153,27 @@ const BigTableRow = ({
         </td>
         {isVoting ? <td>{voteCount}</td> : null}
         <td>
+          <Button
+            color="secondary"
+            href="#pablo"
+            onClick={async (e) => {
+              e.preventDefault();
+              setPaymentUpdate(teamCode, paymentStatus);
+            }}
+            size="sm"
+            style={{
+              backgroundColor: paymentStatus ? "lightgreen" : "red",
+              color: "white",
+            }}
+            // backgroundColor="green"
+            // type="toggle"
+            // width="100px"
+          >
+            Payment
+          </Button>
+        </td>
+
+        <td>
           <DeleteIcon onClick={handleDelete} />
         </td>
       </tr>
@@ -155,7 +181,7 @@ const BigTableRow = ({
   );
 };
 
-const BigTable = ({
+const BigTableSingle = ({
   setModalComponent,
   setIsOpen,
   teamData,
@@ -164,6 +190,7 @@ const BigTable = ({
   addTeamUpdate,
   deleteTeampopup,
   isVoting,
+  setPaymentUpdate,
 }) => {
   const [team, setTeam] = useState(teamData);
   console.log("team from big table: ", teamData, isVoting);
@@ -201,9 +228,9 @@ const BigTable = ({
       >
         <thead className="thead-light">
           <tr>
-            <th scope="col">Team Name</th>
-            <th scope="col">Team Code</th>
-            <th scope="col">Member Count</th>
+            <th scope="col">Email</th>
+            <th scope="col">Name</th>
+            <th scope="col">PhoneNumber</th>
             <th scope="col">Amount paid</th>
             <th scope="col">
               Status
@@ -228,6 +255,8 @@ const BigTable = ({
               </UncontrolledDropdown>
             </th>
             {isVoting ? <th scope="col">Vote Count</th> : null}
+            <th scope="col">Payment</th>
+
             <th scope="col">Count: {team.length}</th>
           </tr>
         </thead>
@@ -241,6 +270,7 @@ const BigTable = ({
               setModalComponent={setModalComponent}
               deleteTeampopup={deleteTeampopup}
               isVoting={isVoting}
+              setPaymentUpdate={setPaymentUpdate}
             />
           ))}
         </tbody>
@@ -249,4 +279,4 @@ const BigTable = ({
   );
 };
 
-export default BigTable;
+export default BigTableSingle;

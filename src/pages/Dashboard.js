@@ -34,6 +34,7 @@ import { eventServices } from "services/eventServices";
 import { getEventName } from "services/helpers";
 import { useAuth } from "context/AuthContext";
 import { Redirect } from "react-router";
+import BigTableSingle from "components/Tables/BigTableSingleEvent";
 
 const TEAMDATA = [
   {
@@ -130,6 +131,7 @@ const Dashboard = (props) => {
   const [modalDeleteMember, setModalDeleteMember] = useState(null);
   const [eventData, setEventData] = useState([]);
   const [paymentUpdate, setPaymentUpdate] = useState(null);
+  const [eventDetail, setEventDetail] = useState(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -140,6 +142,13 @@ const Dashboard = (props) => {
     setEventData(data);
     setTeamData(data.allTeamDetails);
     setCurrentTeam(data.allTeamDetails[0]);
+  }, []);
+
+  useEffect(async () => {
+    const eventName = getEventName();
+    const data = await eventServices.getEventDetails(eventName);
+    console.log("The eventDetails are in Header: ", data);
+    setEventDetail(data);
   }, []);
 
   useEffect(() => {
@@ -252,32 +261,58 @@ const Dashboard = (props) => {
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row className="mt-5">
-          <Col className="mb-5 mb-xl-0" xl="7">
-            <Card className="shadow">
-              <BigTable
-                setIsOpen={setIsOpen}
-                setModalComponent={setModalComponent}
-                teamData={teamData}
-                setTeamData={setTeamData}
-                currentTeam={currentTeam}
-                setCurrentTeam={setCurrentTeam}
-                addTeamUpdate={addTeamUpdate}
-                deleteTeampopup={deleteTeampopup}
-              />
-            </Card>
-          </Col>
-          <Col xl="5">
-            <Card className="shadow">
-              <SmallTable
-                setIsOpen={setIsOpen}
-                setModalComponent={setModalComponent}
-                currentTeam={currentTeam}
-                setSelected={setSelected}
-                setPaymentUpdate={updatePayment}
-                deleteMemberpopup={deleteMemberpopup}
-              />
-            </Card>
-          </Col>
+          {eventDetail ? (
+            eventDetail.isSingle ? (
+              <>
+                <Col className="mb-5 mb-xl-0" xl="12">
+                  <Card className="shadow">
+                    <BigTableSingle
+                      setIsOpen={setIsOpen}
+                      setModalComponent={setModalComponent}
+                      teamData={teamData}
+                      setTeamData={setTeamData}
+                      currentTeam={currentTeam}
+                      setCurrentTeam={setCurrentTeam}
+                      addTeamUpdate={addTeamUpdate}
+                      deleteTeampopup={deleteTeampopup}
+                      isVoting={eventDetail?.isVoting}
+                      setPaymentUpdate={updatePayment}
+                    />
+                  </Card>
+                </Col>
+              </>
+            ) : (
+              <>
+                <Col className="mb-5 mb-xl-0" xl="7">
+                  <Card className="shadow">
+                    <BigTable
+                      setIsOpen={setIsOpen}
+                      setModalComponent={setModalComponent}
+                      teamData={teamData}
+                      setTeamData={setTeamData}
+                      currentTeam={currentTeam}
+                      setCurrentTeam={setCurrentTeam}
+                      addTeamUpdate={addTeamUpdate}
+                      deleteTeampopup={deleteTeampopup}
+                      isVoting={eventDetail?.isVoting}
+                    />
+                  </Card>
+                </Col>
+                <Col xl="5">
+                  <Card className="shadow">
+                    <SmallTable
+                      setIsOpen={setIsOpen}
+                      setModalComponent={setModalComponent}
+                      currentTeam={currentTeam}
+                      setSelected={setSelected}
+                      setPaymentUpdate={updatePayment}
+                      deleteMemberpopup={deleteMemberpopup}
+                    />
+                  </Card>
+                </Col>
+              </>
+            )
+          ) : null}
         </Row>
       </Container>
     </>
