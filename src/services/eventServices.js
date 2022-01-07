@@ -7,8 +7,8 @@ const userRef = firebase.firestore().collection("Users");
 
 // const sponserRef = firebase.firestore().collection("Sponsers");
 const oculusAPI = axios.create({
-  baseURL: "https://oculus-2022.herokuapp.com",
-  // baseURL: "http://127.0.0.1:8000/",
+  // baseURL: "https://oculus-2022.herokuapp.com",
+  baseURL: "http://127.0.0.1:8000/",
 });
 //** Event APIs */
 async function getEvent(eventName) {
@@ -135,7 +135,7 @@ async function removeTeam(data) {
 
 async function updateTeamDetails(data) {
   try {
-    let updatedTeamDetail = await oculusAPI.patch("/updateTeamsDetails", data);
+    let updatedTeamDetail = await oculusAPI.patch("/updateTeamsDetails/", data);
     console.log("The updatedTeamDetail  is: ", updatedTeamDetail.data);
     return updatedTeamDetail.data;
   } catch (e) {

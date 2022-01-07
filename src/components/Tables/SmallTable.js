@@ -39,6 +39,18 @@ const SmallTableHeader = ({
                 href="#pablo"
                 onClick={(e) => {
                   e.preventDefault();
+                  setModalComponent("EditTeam");
+                  setIsOpen(true);
+                }}
+                size="sm"
+              >
+                Edit
+              </Button>
+              <Button
+                color="primary"
+                href="#pablo"
+                onClick={(e) => {
+                  e.preventDefault();
                   setModalComponent("AddTeamMember");
                   setIsOpen(true);
                 }}

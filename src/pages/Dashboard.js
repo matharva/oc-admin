@@ -144,6 +144,7 @@ const Dashboard = (props) => {
     setCurrentTeam(data.allTeamDetails[0]);
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const eventName = getEventName();
     const data = await eventServices.getEventDetails(eventName);

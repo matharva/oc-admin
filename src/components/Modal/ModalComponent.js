@@ -11,6 +11,10 @@ import {
   Input,
   Row,
   Label,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
 } from "reactstrap";
 import { eventServices } from "services/eventServices";
 import { validatePhoneNumber } from "services/helpers";
@@ -67,6 +71,7 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
 
   // console.log("The event data is: ", eventData);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
     const eventName = getEventName();
     const data = await eventServices.getEventDetails(eventName);
@@ -832,6 +837,236 @@ const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
   );
 };
 
+const EditTeamModal = ({ currentTeam, eventData }) => {
+  const [message, setMessage] = useState("");
+
+  // New States - teamName, maxMembers, slot,
+  const [teamName, setTeamName] = useState(currentTeam?.TeamName);
+  const [slot, setSlot] = useState(currentTeam?.slotTime);
+  const [mem, setMem] = useState(currentTeam?.maxMembers);
+  const [link, setLink] = useState(currentTeam?.link);
+  const [paymentStatus, setPaymentStatus] = useState(
+    currentTeam?.paymentStatus
+  );
+  const [availableSlots, setAvailableSlots] = useState("");
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    console.log("agnfjokad;l", paymentStatus, eventData);
+    const eventName = getEventName();
+    console.log("eventName: ", eventName);
+    const data = await eventServices.getEventDetails(eventName);
+    console.log("Event Details: ", data);
+    setAvailableSlots(data.availableSlots);
+  }, []);
+
+  async function handleSubmit() {
+    const eventName = getEventName();
+
+    const data = {
+      slotTime: slot,
+      maxMembers: mem,
+      link: link,
+      // phone: contact,
+      paymentStatus: paymentStatus,
+      eventName: eventName,
+      TeamCode: currentTeam.TeamCode,
+    };
+
+    console.log("Current Team in modal: ", data);
+    let addedMember = await eventServices.updateTeamDetails(data);
+    // let addedMember;
+
+    if (addedMember && addedMember.registeredTeam) {
+      setMessage("Team is updated");
+
+      setTeamName("");
+      setSlot("");
+      setMem("");
+      // addMemberUpdate(addedMember.registeredTeam.TeamCode);
+    } else {
+      setMessage(addedMember.Message);
+    }
+  }
+
+  return (
+    <>
+      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+        <CardHeader className="bg-white border-0">
+          <Row className="align-items-center">
+            <Col xs="8">
+              <h3 className="mb-0">Edit Team Details</h3>
+            </Col>
+            <Col className="text-right" xs="4">
+              <Button color="primary" size="sm" onClick={handleSubmit}>
+                Save
+              </Button>
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Form>
+            <h6 className="heading-small text-muted mb-4">User information</h6>
+            {/* <div className="pl-lg-4"> */}
+
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Team Name
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-username"
+                    placeholder="Team Name"
+                    type="text"
+                    // style={
+                    //   !isValidPhoneNumber ? { border: "red 2px solid" } : {}
+                    // }
+                    value={teamName}
+                    onChange={(e) => {
+                      setTeamName(e.target.value);
+                    }}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Max Members
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-username"
+                    placeholder="Team Name"
+                    type="number"
+                    // style={
+                    //   !isValidPhoneNumber ? { border: "red 2px solid" } : {}
+                    // }
+                    value={mem}
+                    onChange={(e) => {
+                      setMem(e.target.value);
+                    }}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Link
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-username"
+                    placeholder="Meet Link"
+                    type="text"
+                    // style={
+                    //   !isValidPhoneNumber ? { border: "red 2px solid" } : {}
+                    // }
+                    value={link}
+                    onChange={(e) => {
+                      setLink(e.target.value);
+                    }}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Payment Status
+                  </label>
+                  <div className="custom-control custom-control-alternative custom-checkbox mb-3">
+                    <input
+                      className="custom-control-input"
+                      id="customCheck5"
+                      type="checkbox"
+                      checked={paymentStatus}
+                      // value={}
+                      onChange={() => setPaymentStatus(!paymentStatus)}
+                    />
+                    <label
+                      className="custom-control-label"
+                      htmlFor="customCheck5"
+                    >
+                      Select if already paid
+                    </label>
+                  </div>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Slot
+                  </label>
+                  {availableSlots?.length > 0
+                    ? availableSlots.map((item) => {
+                        return (
+                          <div
+                            className="custom-control custom-radio mb-3"
+                            id={item.id}
+                            onClick={(e) => {
+                              console.log("item updated", item);
+                              setSlot(item);
+                            }}
+                          >
+                            <input
+                              className="custom-control-input"
+                              id={item.id}
+                              name="custom-radio-2"
+                              type="radio"
+                              checked={item.id === slot.id}
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="customRadio5"
+                            >
+                              {item.text}
+                            </label>
+                          </div>
+                        );
+                      })
+                    : null}
+                </FormGroup>
+              </Col>
+            </Row>
+            <div
+              style={{
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              {message}
+            </div>
+          </Form>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
 const ModalComponent = ({
   isOpen,
   setIsOpen,
@@ -885,6 +1120,10 @@ const ModalComponent = ({
           teamDeleteUpdate={teamDeleteUpdate}
         />
       );
+    }
+
+    if (item === "EditTeam") {
+      return <EditTeamModal currentTeam={currentTeam} eventData={eventData} />;
     }
   }
 
