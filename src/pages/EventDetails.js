@@ -242,6 +242,48 @@ const RulesItem = ({ item, setRules }) => {
   );
 };
 
+const SlotsItem = ({ item, setAvailableSlots }) => {
+  console.log("The slot item is: ", item);
+  const { id, text = "" } = item;
+  function handleDelete() {
+    setAvailableSlots((prev) => {
+      return prev
+        .map((element) => (element.id === id ? null : element))
+        .filter((x) => x !== null);
+    });
+  }
+
+  function updateRules(e) {
+    setAvailableSlots((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, text: e.target.value } : element
+      );
+    });
+  }
+  return (
+    <>
+      <Row id={id}>
+        <Col md="11">
+          <FormGroup>
+            <Input
+              className="form-control-alternative"
+              defaultValue=""
+              value={text}
+              onChange={updateRules}
+              id="input-address"
+              placeholder="Add a slot..."
+              type="text"
+            />
+          </FormGroup>
+        </Col>
+        <Col md="1" className="pt-2">
+          <DeleteIcon onClick={handleDelete} />
+        </Col>
+      </Row>
+    </>
+  );
+};
+
 const RegistrationItem = ({ item, setRegistrationCost, registrationCost }) => {
   // console.log("props", setRegistrationCost);
   const { Type, Fee, maxMembers, id } = item;
@@ -489,6 +531,8 @@ const EventInformation = (props) => {
 const Details = () => {
   const [faq, setFaq] = useState([{ question: "", answer: "", id: uuid() }]);
   const [rules, setRules] = useState([{ text: "" }]);
+  const [availableSlots, setAvailableSlots] = useState([{ text: "" }]);
+
   const [registrationCost, setRegistrationCost] = useState([
     { type: "", cost: "", id: uuid() },
   ]);
@@ -514,6 +558,13 @@ const Details = () => {
     });
   }
 
+  function addSlots() {
+    const defaultData = { text: "", id: uuid() };
+    setAvailableSlots((slot) => {
+      return [...slot, defaultData];
+    });
+  }
+
   function addRegistration() {
     const defaultData = { Type: "", Fee: "", maxMembers: 0, id: uuid() };
     setRegistrationCost((prev) => {
@@ -533,6 +584,7 @@ const Details = () => {
       Date: startDate,
       // endDate,
       Description: description,
+      availableSlots: availableSlots,
     };
     console.log("Data to be updated: ", data);
 
@@ -578,8 +630,29 @@ const Details = () => {
       data.id = uuid();
       return data;
     });
+
+    console.log("The slots are: ", data.availableSlots);
     console.log("rulesUpdated: ", rules);
     setRules(rulesUpdated);
+
+    // Slots
+
+    const availableSlots = data.availableSlots;
+    const availableSlotsUpdated = availableSlots.map((item) => {
+      if (item.id && item.text) return item;
+      const data = {};
+      data.text = item;
+
+      if (item.id) {
+        data.id = item.id;
+        return data;
+      }
+      data.id = uuid();
+      return data;
+    });
+
+    console.log("The updates slots are: ", availableSlotsUpdated);
+    setAvailableSlots(availableSlotsUpdated);
 
     // Faq
     const faqData = data.faq;
@@ -702,6 +775,28 @@ const Details = () => {
             <div className="pl-lg-4">
               {rules.map((item) => (
                 <RulesItem item={item} setRules={setRules} />
+              ))}
+            </div>
+
+            {/* Available slots */}
+            <hr className="my-4" />
+            {/* Address */}
+            <Row className="align-items-center">
+              <Col xs="8">
+                {/* <h3 className="mb-0">My account</h3> */}
+                <h6 className="heading-small text-muted mb-4">
+                  Available slots (Format: Day, Date, Time)
+                </h6>
+              </Col>
+              <Col className="text-right" xs="4">
+                <Button color="primary" onClick={addSlots} size="sm">
+                  Add Slots
+                </Button>
+              </Col>
+            </Row>
+            <div className="pl-lg-4">
+              {availableSlots.map((item) => (
+                <SlotsItem item={item} setAvailableSlots={setAvailableSlots} />
               ))}
             </div>
           </Form>

@@ -93,6 +93,7 @@ const BigTableRow = ({
     amount,
     member: members,
     isComplete,
+    voteCount,
   } = teamData;
   console.log("team data in big table: ", teamData, isComplete);
 
@@ -144,6 +145,7 @@ const BigTableRow = ({
             </Badge>
           )}
         </td>
+        <td>{voteCount}</td>
         <td>
           <DeleteIcon onClick={handleDelete} />
         </td>
@@ -223,6 +225,7 @@ const BigTable = ({
                 </DropdownMenu>
               </UncontrolledDropdown>
             </th>
+            <th scope="col">Vote Count</th>
             <th scope="col">Count: {team.length}</th>
           </tr>
         </thead>
