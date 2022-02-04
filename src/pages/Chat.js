@@ -22,7 +22,7 @@ import { useAuth } from "context/AuthContext";
 import { getEventName } from "services/helpers";
 import { getDate } from "services/helpers";
 
-const ChatItem = ({ item, setChats, chats }) => {
+const ChatItem = ({ item, setChats, setChatsCopy }) => {
   const { question = "Some random question", answer, id, docId, date } = item;
 
   function updateChatItem(e) {
@@ -31,10 +31,11 @@ const ChatItem = ({ item, setChats, chats }) => {
         element.id === id ? { ...element, answer: e.target.value } : element
       );
     });
-  }
-
-  function deleteChatItem() {
-    // await eventServices.kuchTOhFunction(docId);
+    setChatsCopy((prev) => {
+      return prev.map((element) =>
+        element.id === id ? { ...element, answer: e.target.value } : element
+      );
+    });
   }
 
   async function handleSubmit() {
@@ -53,8 +54,25 @@ const ChatItem = ({ item, setChats, chats }) => {
         <FormGroup>
           <Row className="mb-2">
             <Col lg="8">
-              <label className="heading-small text-muted mb-1">
-                <span style={{fontWeight:"bold"}}> {question} </span><br/>{"Date: "+ new Date(date).getDate()+ "/"+ new Date(date).getMonth()+" Time: "+ new Date(date).getHours() + ":" + new Date(date).getMinutes()}
+              <label
+                className="text-muted mb-1"
+                style={{
+                  fontSize: "1rem",
+                  textTransform: "none",
+                  fontWeight: "500",
+                  marginLeft: "0.5rem",
+                }}
+              >
+                <span style={{ fontWeight: "bold" }}> {question} </span>
+                <br />
+                {"Date: " +
+                  new Date(date).getDate() +
+                  "/" +
+                  new Date(date).getMonth() +
+                  " Time: " +
+                  new Date(date).getHours() +
+                  ":" +
+                  new Date(date).getMinutes()}
               </label>
             </Col>
             <Col className="text-right" lg="4">
@@ -80,48 +98,53 @@ const ChatItem = ({ item, setChats, chats }) => {
 };
 
 const ChatContainer = () => {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(3);
   const [chats, setChats] = useState([
     {
       question: "Question?",
       answer: "",
       id: uuid(),
-      date:"2021-12-08 21:52:42.648925"
+      date: "2021-12-08 21:52:42.648925",
+    },
+  ]);
+  const [chatsCopy, setChatsCopy] = useState([
+    {
+      question: "Question?",
+      answer: "",
+      id: uuid(),
+      date: "2021-12-08 21:52:42.648925",
     },
   ]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    // const eventName = getEventName();
-    // const data = await eventServices.getChats(eventName);
-    // console.log("Chats: ", data);
-
-    // const chatsUpdated = data.map((item) => {
-    //   if (item.id) return item;
-    //   item.id = uuid();
-    //   return item;
-    // });
-    // console.log("updated chats: ", chatsUpdated);
-    // setChats(data);
     fetchNewChats();
   }, []);
 
   function filterByUnanswered() {
     setActive(0);
+    const updatedChats = chats.filter((chat) => chat.answer === "");
+    setChatsCopy(updatedChats);
   }
   function filterByAnswered() {
+    const updatedChats = chats.filter((chat) => chat.answer !== "");
+    setChatsCopy(updatedChats);
     setActive(1);
   }
   function filterByVisibleToAll() {
     setActive(2);
   }
+  function showAll() {
+    setActive(3);
+    setChatsCopy(chats);
+  }
 
-  const fetchNewChats = async()=>{
+  const fetchNewChats = async () => {
     const eventName = getEventName();
     const data = await eventServices.getChats(eventName);
     console.log("Chats: ", data);
 
-    data.sort((a,b) => Date.parse(b.date) - Date.parse(a.date))
+    data.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 
     const chatsUpdated = data.map((item) => {
       if (item.id) return item;
@@ -129,63 +152,71 @@ const ChatContainer = () => {
       return item;
     });
     console.log("updated chats: ", chatsUpdated);
-    setChats(data);
-  }
+    setChats(chatsUpdated);
+    setChatsCopy(chatsUpdated);
+  };
 
   return (
-  <>
-    <Col className="order-xl-1" xl="8">
-      <Card className="bg-secondary shadow">
-        <CardHeader className="bg-white border-0">
-          <Row className="align-items-center">
-            <Col xs="8" md={3}>
-              <h3 className="mb-0">Chats</h3>
-            </Col>
-            <Col className="text-right" xs="4" md={9}>
-              <Button
-                color={active === 0 ? "primary" : "secondary"}
-                onClick={filterByUnanswered}
-                size="sm"
-              >
-                Unanswered
-              </Button>
-              <Button
-                color={active === 1 ? "primary" : "secondary"}
-                onClick={filterByAnswered}
-                size="sm"
-              >
-                Answered
-              </Button>
-              <Button
-                color={active === 2 ? "primary" : "secondary"}
-                onClick={filterByVisibleToAll}
-                size="sm"
-              >
-                Visible to all
-              </Button>
-            </Col>
-          </Row>
-        </CardHeader>
-        <CardBody>
-          <Form>
-            {chats.map((item) => (
-              <ChatItem
-                key={item.id}
-                item={item}
-                setChats={setChats}
-                chats={chats}
-              />
-            ))}
-          </Form>
-        </CardBody>
-      </Card>
-    </Col>
-    <AddChats fetchNewChats = {fetchNewChats}/>
-  </>
+    <>
+      <Col className="order-xl-1" xl="8">
+        <Card className="bg-secondary shadow">
+          <CardHeader className="bg-white border-0">
+            <Row className="align-items-center">
+              <Col xs="8" md={3}>
+                <h3 className="mb-0">Chats</h3>
+              </Col>
+              <Col className="text-right" xs="4" md={9}>
+                <Button
+                  color={active === 0 ? "primary" : "secondary"}
+                  onClick={filterByUnanswered}
+                  size="sm"
+                >
+                  Unanswered
+                </Button>
+                <Button
+                  color={active === 1 ? "primary" : "secondary"}
+                  onClick={filterByAnswered}
+                  size="sm"
+                >
+                  Answered
+                </Button>
+                {/* <Button
+                  color={active === 2 ? "primary" : "secondary"}
+                  onClick={filterByVisibleToAll}
+                  size="sm"
+                >
+                  Visible to all
+                </Button> */}
+                <Button
+                  color={active === 3 ? "primary" : "secondary"}
+                  onClick={showAll}
+                  size="sm"
+                >
+                  All
+                </Button>
+              </Col>
+            </Row>
+          </CardHeader>
+          <CardBody>
+            <Form>
+              {chatsCopy.map((item) => (
+                <ChatItem
+                  key={item.id}
+                  item={item}
+                  setChats={setChats}
+                  setChatsCopy={setChatsCopy}
+                />
+              ))}
+            </Form>
+          </CardBody>
+        </Card>
+      </Col>
+      <AddChats fetchNewChats={fetchNewChats} />
+    </>
   );
 };
 
-const AddChats = ({fetchNewChats}) => {
+const AddChats = ({ fetchNewChats }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
@@ -200,7 +231,7 @@ const AddChats = ({fetchNewChats}) => {
     console.log("Data submitted for addChat: ", data);
 
     const newQuestion = await eventServices.addChat(data);
-    if(newQuestion?.Message == "Successful"){
+    if (newQuestion?.Message == "Successful") {
       setQuestion("");
       setAnswer("");
       fetchNewChats();
