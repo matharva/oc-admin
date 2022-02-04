@@ -54,7 +54,7 @@ const ChatItem = ({ item, setChats, chats }) => {
           <Row className="mb-2">
             <Col lg="8">
               <label className="heading-small text-muted mb-1">
-                {question}<br/>{"Date: "+ new Date(date).getDate()+ "/"+ new Date(date).getMonth()+" Time: "+ new Date(date).getHours() + ":" + new Date(date).getMinutes()}
+                <span style={{fontWeight:"bold"}}> {question} </span><br/>{"Date: "+ new Date(date).getDate()+ "/"+ new Date(date).getMonth()+" Time: "+ new Date(date).getHours() + ":" + new Date(date).getMinutes()}
               </label>
             </Col>
             <Col className="text-right" lg="4">
@@ -86,6 +86,7 @@ const ChatContainer = () => {
       question: "Question?",
       answer: "",
       id: uuid(),
+      date:"2021-12-08 21:52:42.648925"
     },
   ]);
 
