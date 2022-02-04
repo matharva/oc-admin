@@ -61,7 +61,7 @@ const Login = () => {
     // const userData = await signup("mun_oc@gmail.com", "mun_oc@1234");
     // return;
     // console.log("hdhdhd");
-    const userData = await signup("ipl_oc@spit.ac.in", "ipl_oc@1234");
+    const userData = await signup("advertEinstein_oc@spit.ac.in", "OC969705");
     const { uid, email } = userData.user;
     console.log(uid);
 
@@ -96,10 +96,11 @@ const Login = () => {
       });
 
       console.log("EventD3: ", item[0]);
-      const event = EVENT_MAP[item[0].email];
-      console.log("The event is: ", EVENT_MAP[item[0].email]);
+      const userData = item[0] || item;
+      const event = EVENT_MAP[userData.email];
+      console.log("The event is: ", EVENT_MAP[userData.email], userData);
       const userToken = {
-        ...item[0],
+        ...userData,
         event: event || "Not an event, login kar lavde",
       };
       setToken("user", userToken);
@@ -181,7 +182,7 @@ const Login = () => {
                   Sign in
                 </Button>
               </div>
-              <div className="text-center">
+              {/* <div className="text-center">
                 <Button
                   className="my-4"
                   color="primary"
@@ -192,7 +193,7 @@ const Login = () => {
                 >
                   Secret Sign up
                 </Button>
-              </div>
+              </div> */}
             </Form>
           </CardBody>
         </Card>

@@ -15,52 +15,52 @@ export const EVENT_MAP = {
 
   //   CULTURAL
   // Aelan-e-Jung
-  "aej_oc@gmail.com": "Aelan-e-Jung", // pass: aej_oc@1234
+  "aej_oc@spit.ac.in": "Aelan-e-Jung", // pass: OC820335
   // Sargam
-  "sargam_oc@gmail.com": "Sargam", // pass: sargam_oc@1234
+  "sargam_oc@spit.ac.in": "Sargam", // pass: OC295678
   // MUN
-  "mun_oc@gmail.com": "Model United Nations", // pass: mun_oc@1234
+  "mun_oc@spit.ac.in": "Model United Nations", // pass: OC977158
 
   // Yeh events thodi hai
   // WOB (hardcode)
 
   // Open Mic
-  "openmic_oc@gmail.com": "Open Mic", // pass: openmic_oc@1234
+  "openmic_oc@spit.ac.in": "Open Mic", // pass: OC468841
   // Carnival
-  "carnival_oc@gmail.com": "Carnival", // pass: carnival_oc@1234
+  "carnival_oc@spit.ac.in": "Carnival", // pass: OC694358
   // Abhinaya
-  "abhinaya_oc@gmail.com": "Abhinaya", // pass: abhinaya_oc@1234
+  "abhinaya_oc@spit.ac.in": "Abhinaya", // pass: OC263396
 
   // TECHNICAL
   // Oculus Coding League
-  "techroyale_oc@gmail.com": "Tech Royale", //pass:techroyale_oc@1234
-  "lockknock_oc@gmail.com": "Lockout and Knockout", //pass:lockknock_oc@1234
-  "stackedsquad_oc@gmail.com": "Stacked Squad", //pass:stackedsquad_oc@1234
-  "febootcamp_oc@gmail.com": "FE Bootcamp", //pass:febootcamp_oc@1234
+  "techroyale_oc@spit.ac.in": "Tech Royale", //pass: OC964373
+  "lockknock_oc@spit.ac.in": "Lockout and Knockout", //pass: OC117167
+  "stackedsquad_oc@spit.ac.in": "Stacked Squad", //pass: OC346096
+  "febootcamp_oc@spit.ac.in": "FE Bootcamp", //pass: OC896435
 
   // Short Circuit / Hardware
-  "shortcircuit_oc@gmail.com": "Short Circuit", // pass: shortcircuit_oc@1234
+  "shortcircuit_oc@spit.ac.in": "Short Circuit", // pass: OC526626
   // VSM
-  "vsm_oc@gmail.com": "Virtual Stock Market", // pass: vsm_oc@1234
+  "vsm_oc@spit.ac.in": "Virtual Stock Market", // pass: OC547174
 
   // FUN
   // IPL
-  "ipl_oc@spit.ac.in": "IPL Auction", // pass: ipl_oc@1234
+  "iplauction_oc@spit.ac.in": "IPL Auction", // pass: OC584768
   // E-sports
-  "esports_oc@gmail.com": "E-Sports", // pass: esports_oc@1234
+  "esports_oc@spit.ac.in": "E-Sports", // pass: OC793913
   // Paintball
-  "paintball_oc@gmail.com": "Paint Ball", // pass: paintball_oc@1234
+  "paintball_oc@spit.ac.in": "Paint Ball", // pass: OC747438 baaki
   // Footpool
-  "footpool_oc@gmail.com": "Footpool", // pass: footpool_oc@1234
+  "footpool_oc@spit.ac.in": "Footpool", // pass: OC141940
   // Human Foosball
-  "foosball_oc@gmail.com": "Human Foosball", // pass: foosball_oc@1234
+  "foosball_oc@spit.ac.in": "Human Foosball", // pass: OC784842
 
-  // PRE-EVENTSadverteinstein_oc@gmail.com
+  // PRE-EVENTSadverteinstein_oc@spit.ac.in
   // SPIT Hackathon (hardcode)
   // Advert Einstein
-  "advertEinstein_oc@gmail.com": "Advert Einstein", // pass: advertEinstein_oc@1234
+  "adverteinstein_oc@spit.ac.in": "Advert Einstein", // pass: OC969705
   // Tech Race
-  "techrace_oc@gmail.com": "Tech Race", // pass: techrace_oc@1234
+  "techrace_oc@spit.ac.in": "Tech Race", // pass: OC555702
 };
 
 export function getToken(id) {
