@@ -61,7 +61,7 @@ const Login = () => {
     // const userData = await signup("mun_oc@gmail.com", "mun_oc@1234");
     // return;
     // console.log("hdhdhd");
-    const userData = await signup("advertEinstein_oc@spit.ac.in", "OC969705");
+    const userData = await signup("paintball_oc@spit.ac.in", "OC747438");
     const { uid, email } = userData.user;
     console.log(uid);
 
@@ -182,7 +182,7 @@ const Login = () => {
                   Sign in
                 </Button>
               </div>
-              {/* <div className="text-center">
+              <div className="text-center">
                 <Button
                   className="my-4"
                   color="primary"
@@ -193,7 +193,7 @@ const Login = () => {
                 >
                   Secret Sign up
                 </Button>
-              </div> */}
+              </div>
             </Form>
           </CardBody>
         </Card>
