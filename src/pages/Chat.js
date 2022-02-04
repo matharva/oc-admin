@@ -23,7 +23,7 @@ import { getEventName } from "services/helpers";
 import { getDate } from "services/helpers";
 
 const ChatItem = ({ item, setChats, chats }) => {
-  const { question = "Some random question", answer, id } = item;
+  const { question = "Some random question", answer, id, docId, date } = item;
 
   function updateChatItem(e) {
     setChats((prev) => {
@@ -34,13 +34,13 @@ const ChatItem = ({ item, setChats, chats }) => {
   }
 
   function deleteChatItem() {
-    // await eventServices.kuchTOhFunction(id);
+    // await eventServices.kuchTOhFunction(docId);
   }
 
   async function handleSubmit() {
     const data = {
       answer,
-      id,
+      docId,
       eventName: getEventName(),
     };
     console.log("Data to answer chat: ", data);
@@ -54,7 +54,7 @@ const ChatItem = ({ item, setChats, chats }) => {
           <Row className="mb-2">
             <Col lg="8">
               <label className="heading-small text-muted mb-1">
-                {question}
+                <span style={{fontWeight:"bold"}}> {question} </span><br/>{"Date: "+ new Date(date).getDate()+ "/"+ new Date(date).getMonth()+" Time: "+ new Date(date).getHours() + ":" + new Date(date).getMinutes()}
               </label>
             </Col>
             <Col className="text-right" lg="4">
@@ -62,7 +62,7 @@ const ChatItem = ({ item, setChats, chats }) => {
                 Save
               </Button>
 
-              <DeleteIcon onClick={deleteChatItem} />
+              {/* <DeleteIcon onClick={deleteChatItem} /> */}
             </Col>
           </Row>
           <Input
@@ -86,22 +86,24 @@ const ChatContainer = () => {
       question: "Question?",
       answer: "",
       id: uuid(),
+      date:"2021-12-08 21:52:42.648925"
     },
   ]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const eventName = getEventName();
-    const data = await eventServices.getChats(eventName);
-    console.log("Chats: ", data);
+    // const eventName = getEventName();
+    // const data = await eventServices.getChats(eventName);
+    // console.log("Chats: ", data);
 
-    const chatsUpdated = data.map((item) => {
-      if (item.id) return item;
-      item.id = uuid();
-      return item;
-    });
-    console.log("updated chats: ", chatsUpdated);
-    setChats(data);
+    // const chatsUpdated = data.map((item) => {
+    //   if (item.id) return item;
+    //   item.id = uuid();
+    //   return item;
+    // });
+    // console.log("updated chats: ", chatsUpdated);
+    // setChats(data);
+    fetchNewChats();
   }, []);
 
   function filterByUnanswered() {
@@ -114,7 +116,24 @@ const ChatContainer = () => {
     setActive(2);
   }
 
+  const fetchNewChats = async()=>{
+    const eventName = getEventName();
+    const data = await eventServices.getChats(eventName);
+    console.log("Chats: ", data);
+
+    data.sort((a,b) => Date.parse(b.date) - Date.parse(a.date))
+
+    const chatsUpdated = data.map((item) => {
+      if (item.id) return item;
+      item.id = uuid();
+      return item;
+    });
+    console.log("updated chats: ", chatsUpdated);
+    setChats(data);
+  }
+
   return (
+  <>
     <Col className="order-xl-1" xl="8">
       <Card className="bg-secondary shadow">
         <CardHeader className="bg-white border-0">
@@ -161,10 +180,12 @@ const ChatContainer = () => {
         </CardBody>
       </Card>
     </Col>
+    <AddChats fetchNewChats = {fetchNewChats}/>
+  </>
   );
 };
 
-const AddChats = () => {
+const AddChats = ({fetchNewChats}) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
@@ -178,7 +199,12 @@ const AddChats = () => {
     };
     console.log("Data submitted for addChat: ", data);
 
-    await eventServices.addChat(data);
+    const newQuestion = await eventServices.addChat(data);
+    if(newQuestion?.Message == "Successful"){
+      setQuestion("");
+      setAnswer("");
+      fetchNewChats();
+    }
   }
   return (
     <>
@@ -239,7 +265,6 @@ const Chat = () => {
       <Container className="mt--7" fluid>
         <Row>
           <ChatContainer />
-          <AddChats />
           {/* <ExtraDetails /> */}
         </Row>
       </Container>

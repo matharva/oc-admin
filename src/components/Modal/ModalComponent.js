@@ -69,6 +69,7 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [message, setMessage] = useState("");
+  const [disable,setDisable] = useState(false);
 
   // console.log("The event data is: ", eventData);
 
@@ -84,6 +85,7 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
   }, []);
 
   async function handleSubmit() {
+    setDisable(true);
     const checkUser = await eventServices.validateUser(
       email,
       phoneNumber,
@@ -91,6 +93,7 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
     );
     if (!checkUser) {
       setMessage("User does not exist");
+      setDisable(false);
       return;
     }
 
@@ -133,6 +136,8 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
     } else {
       setMessage(newTeam.Message);
     }
+
+    setDisable(false);
   }
 
   useEffect(() => {
@@ -186,9 +191,15 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
                   <h3 className="mb-0">Add team</h3>
                 </Col>
                 <Col className="text-right" xs="4">
-                  <Button color="primary" onClick={handleSubmit} size="sm">
+                  {
+                    disable?
+                  <Button color="primary" onClick={handleSubmit} size="sm" style={{opacity:0.5}} disabled>
+                    Save
+                  </Button>:
+                  <Button color="primary" onClick={handleSubmit} size="sm" >
                     Save
                   </Button>
+                  }
                 </Col>
               </Row>
             </CardHeader>
@@ -413,7 +424,7 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
                         className="form-control-alternative"
                         defaultValue=""
                         id="input-username"
-                        placeholder="Team Name"
+                        placeholder="Link(Meet or WhatsApp)"
                         type="text"
                         value={link}
                         onChange={(e) => setLink(e.target.value)}
@@ -562,12 +573,15 @@ const AddTeamMember = ({ currentTeam, addMemberUpdate }) => {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [message, setMessage] = useState("");
+  const [disable,setDisable] = useState(false);
+
 
   async function handleSubmit() {
     const eventName = getEventName();
     if (!isValidEmail || !currentTeam) {
       return;
     }
+    setDisable(true);
 
     const data = {
       email: email,
@@ -587,6 +601,8 @@ const AddTeamMember = ({ currentTeam, addMemberUpdate }) => {
     } else {
       setMessage(addedMember.Message);
     }
+
+    setDisable(false);
   }
 
   return (
@@ -598,9 +614,15 @@ const AddTeamMember = ({ currentTeam, addMemberUpdate }) => {
               <h3 className="mb-0">Add team member</h3>
             </Col>
             <Col className="text-right" xs="4">
-              <Button color="primary" size="sm" onClick={handleSubmit}>
-                Save
-              </Button>
+              {
+                disable?
+                <Button color="primary" size="sm" onClick={handleSubmit} style={{opacity:0.5}} disabled>
+                  Save
+                </Button>:
+                <Button color="primary" size="sm" onClick={handleSubmit}>
+                  Save
+                </Button>
+              }
             </Col>
           </Row>
         </CardHeader>
@@ -850,7 +872,7 @@ const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
   );
 };
 
-const EditTeamModal = ({ currentTeam, eventData }) => {
+const EditTeamModal = ({ currentTeam, eventData, addMemberUpdate }) => {
   const [message, setMessage] = useState("");
 
   // New States - teamName, maxMembers, slot,
@@ -862,6 +884,7 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
     currentTeam?.paymentStatus
   );
   const [availableSlots, setAvailableSlots] = useState("");
+  const [disable,setDisable] = useState(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -878,8 +901,9 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
 
     const data = {
       slotTime: slot,
-      maxMembers: mem,
+      maxMembers: parseInt(mem),
       link: link,
+      teamName:teamName,
       // phone: contact,
       paymentStatus: paymentStatus,
       eventName: eventName,
@@ -887,19 +911,28 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
     };
 
     console.log("Current Team in modal: ", data);
+    if(data.maxMembers < currentTeam?.member?.length){ 
+      setMessage('Max Member count in team is less than current members');
+      return ;
+    }
+    setDisable(true);
     let addedMember = await eventServices.updateTeamDetails(data);
     // let addedMember;
+    console.log('The updated team is: ',addedMember);
 
-    if (addedMember && addedMember.registeredTeam) {
+    if (addedMember && addedMember.updatedTeam) {
       setMessage("Team is updated");
 
-      setTeamName("");
-      setSlot("");
-      setMem("");
-      // addMemberUpdate(addedMember.registeredTeam.TeamCode);
+      setTeamName(addedMember.updatedTeam.TeamName);
+      // setSlot("");
+      setMem(addedMember.updatedTeam.maxMembers);
+      setLink(addedMember.updatedTeam.link);
+      setPaymentStatus(addedMember.updatedTeam.paymentStatus);
+      addMemberUpdate(addedMember.updatedTeam.TeamCode);
     } else {
-      setMessage(addedMember.Message);
+      setMessage("Sorry Cannot Update the team");
     }
+    setDisable(false);
   }
 
   return (
@@ -911,9 +944,15 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
               <h3 className="mb-0">Edit Team Details</h3>
             </Col>
             <Col className="text-right" xs="4">
-              <Button color="primary" size="sm" onClick={handleSubmit}>
-                Save
-              </Button>
+              {
+                disable?
+                <Button color="primary" size="sm" onClick={handleSubmit} style={{opacity:0.5}} disabled>
+                  Save
+                </Button>:
+                <Button color="primary" size="sm" onClick={handleSubmit}>
+                  Save
+                </Button>
+              }
             </Col>
           </Row>
         </CardHeader>
@@ -1042,7 +1081,7 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
                             id={item.id}
                             onClick={(e) => {
                               console.log("item updated", item);
-                              setSlot(item);
+                              setSlot(item.text);
                             }}
                           >
                             <input
@@ -1050,7 +1089,7 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
                               id={item.id}
                               name="custom-radio-2"
                               type="radio"
-                              checked={item.id === slot.id}
+                              checked={item.text === slot}
                             />
                             <label
                               className="custom-control-label"
@@ -1136,7 +1175,7 @@ const ModalComponent = ({
     }
 
     if (item === "EditTeam") {
-      return <EditTeamModal currentTeam={currentTeam} eventData={eventData} />;
+      return <EditTeamModal currentTeam={currentTeam} eventData={eventData} addMemberUpdate={addMemberUpdate}/>;
     }
   }
 

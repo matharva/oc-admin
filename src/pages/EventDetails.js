@@ -542,6 +542,7 @@ const Details = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [description, setDescription] = useState("");
+  const [disable,setDisable] = useState(false);
   const [message, setMessage] = useState("");
 
   function addFaqQuestion() {
@@ -574,6 +575,7 @@ const Details = () => {
 
   async function updateEventData(e) {
     e.preventDefault();
+    setDisable(true);
     const data = {
       faq,
       rules,
@@ -589,6 +591,7 @@ const Details = () => {
     console.log("Data to be updated: ", data);
 
     let updateData = await eventServices.updateEvent(data);
+    setDisable(false);
     setMessage(updateData.Message);
   }
 
@@ -687,9 +690,15 @@ const Details = () => {
               </h3>
             </Col>
             <Col className="text-right" xs="4">
-              <Button color="primary" onClick={updateEventData} size="sm">
-                Update
-              </Button>
+              {
+                disable?
+                <Button color="primary" size="sm" onClick={updateEventData} style={{opacity:0.5}} disabled>
+                  Save
+                </Button>:
+                <Button color="primary" size="sm" onClick={updateEventData}>
+                  Save
+                </Button>
+              }
             </Col>
           </Row>
         </CardHeader>
