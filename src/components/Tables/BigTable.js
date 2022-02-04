@@ -171,7 +171,8 @@ const BigTable = ({
   function filterByPending() {
     console.log(team);
     const pending = teamData.filter(
-      (x) => x.paymentStatus == (false || undefined)
+      (x) => x.paymentStatus == false
+      // (x) => x.paymentStatus == (false || undefined)
     );
     console.log(pending);
     setTeam(pending);
