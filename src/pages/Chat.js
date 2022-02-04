@@ -23,7 +23,7 @@ import { getEventName } from "services/helpers";
 import { getDate } from "services/helpers";
 
 const ChatItem = ({ item, setChats, chats }) => {
-  const { question = "Some random question", answer, id, docId } = item;
+  const { question = "Some random question", answer, id, docId, date } = item;
 
   function updateChatItem(e) {
     setChats((prev) => {
@@ -54,7 +54,7 @@ const ChatItem = ({ item, setChats, chats }) => {
           <Row className="mb-2">
             <Col lg="8">
               <label className="heading-small text-muted mb-1">
-                {question}
+                {question}<br/>{"Date: "+ new Date(date).getDate()+ "/"+ new Date(date).getMonth()+" Time: "+ new Date(date).getHours() + ":" + new Date(date).getMinutes()}
               </label>
             </Col>
             <Col className="text-right" lg="4">
@@ -62,7 +62,7 @@ const ChatItem = ({ item, setChats, chats }) => {
                 Save
               </Button>
 
-              <DeleteIcon onClick={deleteChatItem} />
+              {/* <DeleteIcon onClick={deleteChatItem} /> */}
             </Col>
           </Row>
           <Input
