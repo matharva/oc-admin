@@ -412,7 +412,7 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
                         className="form-control-alternative"
                         defaultValue=""
                         id="input-username"
-                        placeholder="Team Name"
+                        placeholder="Link(Meet or WhatsApp)"
                         type="text"
                         value={link}
                         onChange={(e) => setLink(e.target.value)}
@@ -865,8 +865,9 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
 
     const data = {
       slotTime: slot,
-      maxMembers: mem,
+      maxMembers: parseInt(mem),
       link: link,
+      teamName:teamName,
       // phone: contact,
       paymentStatus: paymentStatus,
       eventName: eventName,
@@ -874,18 +875,25 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
     };
 
     console.log("Current Team in modal: ", data);
+    if(data.maxMembers < currentTeam?.member?.length){ 
+      setMessage('Max Member count in team is less than current members');
+      return ;
+    }
     let addedMember = await eventServices.updateTeamDetails(data);
     // let addedMember;
+    console.log('The updated team is: ',addedMember);
 
-    if (addedMember && addedMember.registeredTeam) {
+    if (addedMember && addedMember.updatedTeam) {
       setMessage("Team is updated");
 
-      setTeamName("");
-      setSlot("");
-      setMem("");
+      setTeamName(addedMember.updatedTeam.TeamName);
+      // setSlot("");
+      setMem(addedMember.updatedTeam.maxMembers);
+      setLink(addedMember.updatedTeam.link);
+      setPaymentStatus(addedMember.updatedTeam.paymentStatus);
       // addMemberUpdate(addedMember.registeredTeam.TeamCode);
     } else {
-      setMessage(addedMember.Message);
+      setMessage("Sorry Cannot Update the team");
     }
   }
 
@@ -1029,7 +1037,7 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
                             id={item.id}
                             onClick={(e) => {
                               console.log("item updated", item);
-                              setSlot(item);
+                              setSlot(item.text);
                             }}
                           >
                             <input
@@ -1037,7 +1045,7 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
                               id={item.id}
                               name="custom-radio-2"
                               type="radio"
-                              checked={item.id === slot.id}
+                              checked={item.text === slot}
                             />
                             <label
                               className="custom-control-label"

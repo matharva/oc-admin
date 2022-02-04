@@ -23,7 +23,7 @@ import { getEventName } from "services/helpers";
 import { getDate } from "services/helpers";
 
 const ChatItem = ({ item, setChats, chats }) => {
-  const { question = "Some random question", answer, id } = item;
+  const { question = "Some random question", answer, id, docId } = item;
 
   function updateChatItem(e) {
     setChats((prev) => {
@@ -34,13 +34,13 @@ const ChatItem = ({ item, setChats, chats }) => {
   }
 
   function deleteChatItem() {
-    // await eventServices.kuchTOhFunction(id);
+    // await eventServices.kuchTOhFunction(docId);
   }
 
   async function handleSubmit() {
     const data = {
       answer,
-      id,
+      docId,
       eventName: getEventName(),
     };
     console.log("Data to answer chat: ", data);
@@ -91,17 +91,18 @@ const ChatContainer = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const eventName = getEventName();
-    const data = await eventServices.getChats(eventName);
-    console.log("Chats: ", data);
+    // const eventName = getEventName();
+    // const data = await eventServices.getChats(eventName);
+    // console.log("Chats: ", data);
 
-    const chatsUpdated = data.map((item) => {
-      if (item.id) return item;
-      item.id = uuid();
-      return item;
-    });
-    console.log("updated chats: ", chatsUpdated);
-    setChats(data);
+    // const chatsUpdated = data.map((item) => {
+    //   if (item.id) return item;
+    //   item.id = uuid();
+    //   return item;
+    // });
+    // console.log("updated chats: ", chatsUpdated);
+    // setChats(data);
+    fetchNewChats();
   }, []);
 
   function filterByUnanswered() {
@@ -114,7 +115,24 @@ const ChatContainer = () => {
     setActive(2);
   }
 
+  const fetchNewChats = async()=>{
+    const eventName = getEventName();
+    const data = await eventServices.getChats(eventName);
+    console.log("Chats: ", data);
+
+    data.sort((a,b) => Date.parse(b.date) - Date.parse(a.date))
+
+    const chatsUpdated = data.map((item) => {
+      if (item.id) return item;
+      item.id = uuid();
+      return item;
+    });
+    console.log("updated chats: ", chatsUpdated);
+    setChats(data);
+  }
+
   return (
+  <>
     <Col className="order-xl-1" xl="8">
       <Card className="bg-secondary shadow">
         <CardHeader className="bg-white border-0">
@@ -161,10 +179,12 @@ const ChatContainer = () => {
         </CardBody>
       </Card>
     </Col>
+    <AddChats fetchNewChats = {fetchNewChats}/>
+  </>
   );
 };
 
-const AddChats = () => {
+const AddChats = ({fetchNewChats}) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
@@ -178,7 +198,12 @@ const AddChats = () => {
     };
     console.log("Data submitted for addChat: ", data);
 
-    await eventServices.addChat(data);
+    const newQuestion = await eventServices.addChat(data);
+    if(newQuestion?.Message == "Successful"){
+      setQuestion("");
+      setAnswer("");
+      fetchNewChats();
+    }
   }
   return (
     <>
@@ -239,7 +264,6 @@ const Chat = () => {
       <Container className="mt--7" fluid>
         <Row>
           <ChatContainer />
-          <AddChats />
           {/* <ExtraDetails /> */}
         </Row>
       </Container>
