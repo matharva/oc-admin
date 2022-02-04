@@ -30,7 +30,8 @@ const customStylesAdd = {
     bottom: "auto",
     padding: 0,
     transform: "translate(-50%, -50%)",
-    height: "90vh",
+    // Yeh kyu diya tha?
+    // height: "90vh",
     // width: "70vw",
     // overflowY: "auto",
   },
@@ -422,9 +423,9 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
                 </Row>
 
                 {/* gdgdgdgdgdq */}
-                {message}
+                {/* {message} */}
                 {/* </div> */}
-                <hr className="my-4" />
+                {/* <hr className="my-4" /> */}
               </Form>
             </CardBody>
           </Card>
