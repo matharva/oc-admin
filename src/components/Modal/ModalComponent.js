@@ -672,10 +672,6 @@ const AddTeamMember = ({ currentTeam, addMemberUpdate }) => {
 };
 
 const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
-  const [email, setEmail] = useState("");
-  const [contact, setContact] = useState("");
-  const [isValidEmail, setIsValidEmail] = useState(false);
-  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [message, setMessage] = useState("");
 
   async function handleSubmit() {
@@ -691,7 +687,7 @@ const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
       setMessage("Team has been deleted");
       teamDeleteUpdate();
     } else {
-      // setMessage(deleteData.Message);
+      setMessage(deleteData.Message);
     }
   }
 
@@ -714,11 +710,10 @@ const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
               Are you sure you want to delete team:
             </div>
             <div className="font-weight-700 text-md pb-3">{teamCode}</div>
-            {/* <div className="pl-lg-4"> */}
+
             <Row
               className="align-items-left"
               style={{
-                // border: "2px solid red",
                 marginTop: "1rem",
                 display: "flex",
                 alignItems: "center",
@@ -752,7 +747,6 @@ const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
 
             <div
               style={{
-                width: "80%",
                 textAlign: "center",
                 paddingTop: "20px",
               }}
@@ -767,28 +761,24 @@ const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
 };
 
 const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
-  // const [email, setEmail] = useState("");
-  const [contact, setContact] = useState("");
-  const [isValidEmail, setIsValidEmail] = useState(false);
-  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(false);
   const [message, setMessage] = useState("");
 
   async function handleSubmit() {
-    console.log("Kuchh hooja abhai life mai");
+    // console.log("Kuchh hooja abhai life mai");
     console.log("Delete data: ", data);
 
     //** Please uncomment the below code in production */
 
-    // const deleteMember = await eventServices.removeMemberFromTeam(data);
-    // if (deleteMember && deleteMember.registeredTeam) {
-    //   setMessage("Member has been removed");
-    //   teamDeleteUpdate();
-    // } else if (deleteMember && deleteMember.Message == "Entire team deleted") {
-    //   setMessage(deleteMember.Message);
-    //   teamDeleteUpdate();
-    // } else {
-    //   setMessage(deleteMember.Message);
-    // }
+    const deleteMember = await eventServices.removeMemberFromTeam(data);
+    if (deleteMember && deleteMember.registeredTeam) {
+      setMessage("Member has been removed");
+      teamDeleteUpdate();
+    } else if (deleteMember && deleteMember.Message === "Entire team deleted") {
+      setMessage(deleteMember.Message);
+      teamDeleteUpdate();
+    } else {
+      setMessage(deleteMember.Message);
+    }
   }
 
   return (
@@ -810,11 +800,10 @@ const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
               Are you sure you want to remove
             </div>
             <div className="font-weight-700 text-md pb-3">{data.email}</div>
-            {/* <div className="pl-lg-4"> */}
+
             <Row
               className="align-items-left"
               style={{
-                // border: "2px solid red",
                 marginTop: "1rem",
                 display: "flex",
                 alignItems: "center",
@@ -848,9 +837,8 @@ const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
 
             <div
               style={{
-                width: "80%",
                 textAlign: "center",
-                paddingTop: "20px",
+                marginTop: "20px",
               }}
             >
               {message}

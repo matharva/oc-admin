@@ -126,7 +126,7 @@ const SmallTableRow = ({
       <td>{email}</td>
       <td>{phoneNumber}</td>
       <td>
-        <DeleteIcon onClick={handleDelete} />
+        <DeleteIcon onClick={handleDelete} style={{ cursor: "pointer" }} />
       </td>
     </tr>
   );

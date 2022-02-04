@@ -148,7 +148,7 @@ const BigTableRow = ({
         </td>
         {isVoting ? <td>{voteCount}</td> : null}
         <td>
-          <DeleteIcon onClick={handleDelete} />
+          <DeleteIcon onClick={handleDelete} style={{ cursor: "pointer" }} />
         </td>
       </tr>
     </>
@@ -166,7 +166,7 @@ const BigTable = ({
   isVoting,
 }) => {
   const [team, setTeam] = useState(teamData);
-  console.log("team from big table: ", teamData, isVoting);
+  // console.log("team from big table: ", teamData, isVoting);
 
   function filterByPending() {
     console.log(team);
