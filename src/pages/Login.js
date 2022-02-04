@@ -57,33 +57,30 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const userRef = firebase.firestore().collection("Users");
 
-  // async function handleRegisterUser() {
-  //   const userData = await signup("mun_oc@gmail.com", "mun_oc@1234");
-  //   return;
-  //   console.log("hdhdhd");
-  //   const userData = await signup(
-  //     "febootcamp_oc@gmail.com",
-  //     "febootcamp_oc@1234"
-  //   );
-  //   const { uid, email } = userData.user;
-  //   console.log(uid);
+  async function handleRegisterUser() {
+    // const userData = await signup("mun_oc@gmail.com", "mun_oc@1234");
+    // return;
+    // console.log("hdhdhd");
+    const userData = await signup("ipl_oc@spit.ac.in", "ipl_oc@1234");
+    const { uid, email } = userData.user;
+    console.log(uid);
 
-  //   let newUserRef = userRef.doc(uid);
+    let newUserRef = userRef.doc(uid);
 
-  //   let data = {
-  //     college: "",
-  //     email: email,
-  //     name: "",
-  //     phoneNumber: "",
-  //     uid: newUserRef.id,
-  //   };
+    let data = {
+      college: "",
+      email: email,
+      name: "",
+      phoneNumber: "",
+      uid: newUserRef.id,
+    };
 
-  //   await newUserRef.set(data);
-  //   console.log("The new user creat createer: ", newUserRef.get());
-  //   let currUser = await (await newUserRef.get()).data();
-  //   console.log("Dard: ", currUser);
-  //   // return currUser;
-  // }
+    await newUserRef.set(data);
+    console.log("The new user creat createer: ", newUserRef.get());
+    let currUser = await (await newUserRef.get()).data();
+    console.log("Dard: ", currUser);
+    // return currUser;
+  }
 
   async function handleLogin() {
     if (email !== "" && password !== "") {
@@ -140,7 +137,8 @@ const Login = () => {
                   <Input
                     placeholder="Email"
                     type="email"
-                    autoComplete="new-email"
+                    // autoComplete="new-email"
+                    autoComplete="on"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -156,7 +154,7 @@ const Login = () => {
                   <Input
                     placeholder="Password"
                     type="password"
-                    autoComplete="new-password"
+                    autoComplete="on"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -183,7 +181,7 @@ const Login = () => {
                   Sign in
                 </Button>
               </div>
-              {/* <div className="text-center">
+              <div className="text-center">
                 <Button
                   className="my-4"
                   color="primary"
@@ -194,7 +192,7 @@ const Login = () => {
                 >
                   Secret Sign up
                 </Button>
-              </div> */}
+              </div>
             </Form>
           </CardBody>
         </Card>

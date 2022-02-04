@@ -45,7 +45,7 @@ export const EVENT_MAP = {
 
   // FUN
   // IPL
-  "ipl_oc@gmail.com": "IPL Auction", // pass: ipl_oc@1234
+  "ipl_oc@spit.ac.in": "IPL Auction", // pass: ipl_oc@1234
   // E-sports
   "esports_oc@gmail.com": "E-Sports", // pass: esports_oc@1234
   // Paintball
