@@ -778,33 +778,42 @@ const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
 
   return (
     <>
-      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+      <Card
+        className="bg-secondary shadow "
+        style={{ width: "400px", textAlign: "center" }}
+      >
         <CardHeader className="bg-white border-0">
           <Row className="align-items-center">
             <Col xs="12">
-              <h3 className="">Delete Confirmation</h3>
+              <h3 className="">Delete Member Confirmation</h3>
             </Col>
           </Row>
         </CardHeader>
         <CardBody>
           <Form>
-            <div
-              className="font-weight-500 translate-y-6"
-              // style={{ transform: "translateY(10px)" }}
-            >
-              Are you sure you want to remove member:
+            <div className="font-weight-500 translate-y-6" style={{}}>
+              Are you sure you want to remove
             </div>
             <div className="font-weight-700 text-md pb-3">{data.email}</div>
             {/* <div className="pl-lg-4"> */}
-            <Row className="align-items-left">
+            <Row
+              className="align-items-left"
+              style={{
+                // border: "2px solid red",
+                marginTop: "1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+              }}
+            >
               <Col lg="3" className="text-center border-red-500 border-2">
                 <Button
-                  color="primary"
+                  color="danger"
                   size="sm"
                   onClick={handleSubmit}
                   className="px-3 py-2"
                 >
-                  Yes
+                  Delete
                 </Button>
               </Col>
 
@@ -817,7 +826,7 @@ const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
                     setIsOpen(false);
                   }}
                 >
-                  Close
+                  Cancel
                 </Button>
               </Col>
             </Row>
@@ -985,7 +994,7 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
                 </FormGroup>
               </Col>
             </Row>
-            <Row>
+            {/* <Row>
               <Col lg="12">
                 <FormGroup>
                   <label
@@ -1012,7 +1021,7 @@ const EditTeamModal = ({ currentTeam, eventData }) => {
                   </div>
                 </FormGroup>
               </Col>
-            </Row>
+            </Row> */}
             <Row>
               <Col lg="12">
                 <FormGroup>
