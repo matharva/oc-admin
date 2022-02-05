@@ -211,7 +211,7 @@ const ChatContainer = () => {
           </CardBody>
         </Card>
       </Col>
-      <AddChats fetchNewChats={fetchNewChats} />
+      {/* <AddChats fetchNewChats={fetchNewChats} /> */}
     </>
   );
 };

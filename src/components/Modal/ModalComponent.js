@@ -190,17 +190,9 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
                 <Col xs="8">
                   <h3 className="mb-0">Add {eventDetails?.isSingle?"User":"Team"}</h3>
                 </Col>
-                <Col className="text-right" xs="4">
-                  {
-                    disable?
-                  <Button color="primary" onClick={handleSubmit} size="sm" style={{opacity:0.5}} disabled>
-                    Save
-                  </Button>:
-                  <Button color="primary" onClick={handleSubmit} size="sm" >
-                    Save
-                  </Button>
-                  }
-                </Col>
+                {/* <Col className="text-right" xs="4">
+                 
+                </Col> */}
               </Row>
             </CardHeader>
             <CardBody>
@@ -438,6 +430,15 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
                 {/* </div> */}
                 {/* <hr className="my-4" /> */}
               </Form>
+               {
+                    disable?
+                  <Button color="primary" onClick={handleSubmit} size="sm" style={{opacity:0.5}} disabled>
+                    Save
+                  </Button>:
+                  <Button color="primary" onClick={handleSubmit} size="sm" >
+                    Save
+                  </Button>
+                  }
             </CardBody>
           </Card>
         </>
@@ -708,6 +709,7 @@ const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate, isSingle }) => {
     if (deleteData && deleteData.Message) {
       setMessage("Team has been deleted");
       teamDeleteUpdate();
+      setIsOpen(false);
     } else {
       setMessage(deleteData.Message);
     }
@@ -814,6 +816,8 @@ const DeleteMember = ({ data, setIsOpen, teamDeleteUpdate }) => {
     } else {
       setMessage(deleteMember.Message);
     }
+    setIsOpen(false);
+
   }
 
   return (
