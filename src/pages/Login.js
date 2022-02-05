@@ -183,7 +183,7 @@ const Login = () => {
                 </Button>
               </div>
               <div className="text-center">
-                <Button
+                {/* <Button
                   className="my-4"
                   color="primary"
                   type="button"
@@ -192,7 +192,7 @@ const Login = () => {
                   }}
                 >
                   Secret Sign up
-                </Button>
+                </Button> */}
               </div>
             </Form>
           </CardBody>

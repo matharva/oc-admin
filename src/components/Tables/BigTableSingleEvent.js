@@ -17,6 +17,7 @@ import {
   UncontrolledDropdown,
 } from "reactstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { eventServices } from "services/eventServices";
 
 const BigTableHeader = ({
@@ -90,6 +91,7 @@ const BigTableRow = ({
   deleteTeampopup,
   isVoting,
   setPaymentUpdate,
+  singleModalEditPopup
 }) => {
   const {
     TeamCode: teamCode,
@@ -100,6 +102,7 @@ const BigTableRow = ({
     isComplete,
     voteCount,
     paymentStatus,
+    slotTime
   } = teamData;
   console.log("team data in big table: ", teamData, isComplete, member);
 
@@ -112,11 +115,24 @@ const BigTableRow = ({
   async function handleDelete() {
     const data = {
       teamCode,
+      member:member[0]?.email
     };
     console.log("Data for delete team: ", data);
 
     // setModalComponent("Deletepopup");
-    deleteTeampopup(data.teamCode);
+    deleteTeampopup(data);
+    // await eventServices.removeTeam(data);
+  }
+
+  async function handleEdit() {
+    const data = {
+      teamCode,
+      member:member[0]?.email
+    };
+    console.log("Data for delete team: ", data);
+
+    // setModalComponent("Deletepopup");
+    singleModalEditPopup(teamData);
     // await eventServices.removeTeam(data);
   }
 
@@ -172,7 +188,12 @@ const BigTableRow = ({
             Payment
           </Button>
         </td>
-
+        <td>
+          {slotTime.length?slotTime:"- - "}
+        </td>
+        <td>
+          <EditIcon onClick={handleEdit} />
+        </td>
         <td>
           <DeleteIcon onClick={handleDelete} />
         </td>
@@ -191,6 +212,7 @@ const BigTableSingle = ({
   deleteTeampopup,
   isVoting,
   setPaymentUpdate,
+  singleModalEditPopup
 }) => {
   const [team, setTeam] = useState(teamData);
   console.log("team from big table: ", teamData, isVoting);
@@ -256,7 +278,8 @@ const BigTableSingle = ({
             </th>
             {isVoting ? <th scope="col">Vote Count</th> : null}
             <th scope="col">Payment</th>
-
+            <th scope="col">Slot</th>
+            <th scope="col">Edit</th>
             <th scope="col">Count: {team.length}</th>
           </tr>
         </thead>
@@ -271,6 +294,7 @@ const BigTableSingle = ({
               deleteTeampopup={deleteTeampopup}
               isVoting={isVoting}
               setPaymentUpdate={setPaymentUpdate}
+              singleModalEditPopup={singleModalEditPopup}
             />
           ))}
         </tbody>

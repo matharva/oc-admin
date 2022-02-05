@@ -30,7 +30,7 @@ const SmallTableHeader = ({
       <CardHeader className="border-0">
         <Row className="align-items-center">
           <Col lg={4}>
-            <h5 className="mb-0">{teamName+": "}<br/>{teamCode}</h5>
+            {teamName && <h5 className="mb-0">{teamName+": "}<br/>{teamCode}</h5>}
           </Col>
           <Col lg={8}>
             <div className="col d-flex justify-content-end">

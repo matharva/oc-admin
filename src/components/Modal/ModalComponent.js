@@ -188,7 +188,7 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
             <CardHeader className="bg-white border-0">
               <Row className="align-items-center">
                 <Col xs="8">
-                  <h3 className="mb-0">Add team</h3>
+                  <h3 className="mb-0">Add {eventDetails?.isSingle?"User":"Team"}</h3>
                 </Col>
                 <Col className="text-right" xs="4">
                   {
@@ -434,7 +434,7 @@ const AddTeamModal = ({ eventData, addTeamUpdate }) => {
                 </Row>
 
                 {/* gdgdgdgdgdq */}
-                {/* {message} */}
+                {message}
                 {/* </div> */}
                 {/* <hr className="my-4" /> */}
               </Form>
@@ -693,13 +693,13 @@ const AddTeamMember = ({ currentTeam, addMemberUpdate }) => {
   );
 };
 
-const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
+const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate, isSingle }) => {
   const [message, setMessage] = useState("");
-
+  console.log('The team deleting is: ',teamDeleteUpdate);
   async function handleSubmit() {
     console.log("Kuchh hooja abhai life mai");
     const data = {
-      teamCode,
+      teamCode:isSingle?teamCode.teamCode:teamCode
     };
 
     //** Please uncomment the below code in production */
@@ -722,17 +722,30 @@ const DeleteTeam = ({ teamCode, setIsOpen, teamDeleteUpdate }) => {
         <CardHeader className="bg-white border-0">
           <Row className="align-items-center">
             <Col xs="12">
-              <h3 className="mb-0">Delete Team Confirmation</h3>
+              <h3 className="mb-0">Delete {isSingle?"User":"Team"} Confirmation</h3>
             </Col>
           </Row>
         </CardHeader>
         <CardBody>
           <Form>
-            <div className="font-weight-500 translate-y-6" style={{}}>
+          {
+            isSingle?(
+              <>
+              <div className="font-weight-500 translate-y-6" style={{}}>
+              Are you sure you want to delete player:
+            </div>
+            <div className="font-weight-700 text-md pb-3">{teamCode?.member}</div>
+            </>
+            ):(
+              <>
+              <div className="font-weight-500 translate-y-6" style={{}}>
               Are you sure you want to delete team:
             </div>
             <div className="font-weight-700 text-md pb-3">{teamCode}</div>
-
+            </>
+            )
+          }
+            
             <Row
               className="align-items-left"
               style={{
@@ -1119,6 +1132,255 @@ const EditTeamModal = ({ currentTeam, eventData, addMemberUpdate }) => {
   );
 };
 
+const SingleEditTeamModal = ({ currentTeam, eventData, addMemberUpdate }) => {
+  const [message, setMessage] = useState("");
+
+  // New States - teamName, maxMembers, slot,
+  const [teamName, setTeamName] = useState(currentTeam?.TeamName);
+  const [slot, setSlot] = useState(currentTeam?.slotTime);
+  const [mem, setMem] = useState(currentTeam?.maxMembers);
+  const [link, setLink] = useState(currentTeam?.link);
+  const [paymentStatus, setPaymentStatus] = useState(
+    currentTeam?.paymentStatus
+  );
+  const [availableSlots, setAvailableSlots] = useState("");
+  const [disable,setDisable] = useState(false);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async () => {
+    console.log("agnfjokad;l", paymentStatus, eventData);
+    const eventName = getEventName();
+    console.log("eventName: ", eventName);
+    const data = await eventServices.getEventDetails(eventName);
+    console.log("Event Details: ", data);
+    setAvailableSlots(data.availableSlots);
+  }, []);
+
+  async function handleSubmit() {
+    const eventName = getEventName();
+
+    const data = {
+      slotTime: slot,
+      // maxMembers: parseInt(mem),
+      link: link,
+      // teamName:teamName,
+      // phone: contact,
+      paymentStatus: paymentStatus,
+      eventName: eventName,
+      TeamCode: currentTeam.TeamCode,
+    };
+
+    console.log("Current Team in modal: ", data);
+    if(data.maxMembers < currentTeam?.member?.length){ 
+      setMessage('Max Member count in team is less than current members');
+      return ;
+    }
+    setDisable(true);
+    let addedMember = await eventServices.updateTeamDetails(data);
+    // let addedMember;
+    console.log('The updated team is: ',addedMember);
+
+    if (addedMember && addedMember.updatedTeam) {
+      setMessage("Team is updated");
+
+      // setTeamName(addedMember.updatedTeam.TeamName);
+      setSlot(addedMember.updatedTeam.slotTime);
+      // setMem(addedMember.updatedTeam.maxMembers);
+      setLink(addedMember.updatedTeam.link);
+      setPaymentStatus(addedMember.updatedTeam.paymentStatus);
+      addMemberUpdate(addedMember.updatedTeam.TeamCode);
+    } else {
+      setMessage("Sorry Cannot Update the team");
+    }
+    setDisable(false);
+  }
+
+  return (
+    <>
+      <Card className="bg-secondary shadow " style={{ width: "500px" }}>
+        <CardHeader className="bg-white border-0">
+          <Row className="align-items-center">
+            <Col xs="8">
+              <h3 className="mb-0">Edit User Details</h3>
+            </Col>
+            <Col className="text-right" xs="4">
+              {
+                disable?
+                <Button color="primary" size="sm" onClick={handleSubmit} style={{opacity:0.5}} disabled>
+                  Save
+                </Button>:
+                <Button color="primary" size="sm" onClick={handleSubmit}>
+                  Save
+                </Button>
+              }
+            </Col>
+          </Row>
+        </CardHeader>
+        <CardBody>
+          <Form>
+            <h6 className="heading-small text-muted mb-4">User information</h6>
+            {/* <div className="pl-lg-4"> */}
+
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Email Id
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-username"
+                    placeholder="Team Name"
+                    type="text"
+                    // style={
+                    //   !isValidPhoneNumber ? { border: "red 2px solid" } : {}
+                    // }
+                    value={currentTeam?.member[0].email}
+                    onChange={(e) => {
+                      // setTeamName(e.target.value);
+                    }}
+                    disabled
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            {/* <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Max Members
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-username"
+                    placeholder="Team Name"
+                    type="number"
+                    // style={
+                    //   !isValidPhoneNumber ? { border: "red 2px solid" } : {}
+                    // }
+                    value={mem}
+                    onChange={(e) => {
+                      setMem(e.target.value);
+                    }}
+                  />
+                </FormGroup>
+              </Col>
+            </Row> */}
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Link
+                  </label>
+                  <Input
+                    className="form-control-alternative"
+                    id="input-username"
+                    placeholder="Meet Link"
+                    type="text"
+                    // style={
+                    //   !isValidPhoneNumber ? { border: "red 2px solid" } : {}
+                    // }
+                    value={link}
+                    onChange={(e) => {
+                      setLink(e.target.value);
+                    }}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            {/* <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Payment Status
+                  </label>
+                  <div className="custom-control custom-control-alternative custom-checkbox mb-3">
+                    <input
+                      className="custom-control-input"
+                      id="customCheck5"
+                      type="checkbox"
+                      checked={paymentStatus}
+                      // value={}
+                      onChange={() => setPaymentStatus(!paymentStatus)}
+                    />
+                    <label
+                      className="custom-control-label"
+                      htmlFor="customCheck5"
+                    >
+                      Select if already paid
+                    </label>
+                  </div>
+                </FormGroup>
+              </Col>
+            </Row> */}
+            <Row>
+              <Col lg="12">
+                <FormGroup>
+                  <label
+                    className="form-control-label"
+                    htmlFor="input-username"
+                  >
+                    Slot
+                  </label>
+                  {availableSlots?.length > 0
+                    ? availableSlots.map((item) => {
+                        return (
+                          <div
+                            className="custom-control custom-radio mb-3"
+                            id={item.id}
+                            onClick={(e) => {
+                              console.log("item updated", item);
+                              setSlot(item.text);
+                            }}
+                          >
+                            <input
+                              className="custom-control-input"
+                              id={item.id}
+                              name="custom-radio-2"
+                              type="radio"
+                              checked={item.text === slot}
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="customRadio5"
+                            >
+                              {item.text}
+                            </label>
+                          </div>
+                        );
+                      })
+                    : null}
+                </FormGroup>
+              </Col>
+            </Row>
+            <div
+              style={{
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              {message}
+            </div>
+          </Form>
+        </CardBody>
+      </Card>
+    </>
+  );
+};
+
+
 const ModalComponent = ({
   isOpen,
   setIsOpen,
@@ -1131,6 +1393,8 @@ const ModalComponent = ({
   modalDeleteCode,
   teamDeleteUpdate,
   modalDeleteMember,
+  isSingle,
+  singleModalEdit
 }) => {
   console.log(modalDeleteCode, modalDeleteMember, "check");
 
@@ -1160,6 +1424,7 @@ const ModalComponent = ({
           teamCode={modalDeleteCode}
           setIsOpen={setIsOpen}
           teamDeleteUpdate={teamDeleteUpdate}
+          isSingle={isSingle}
         />
       );
     }
@@ -1176,6 +1441,10 @@ const ModalComponent = ({
 
     if (item === "EditTeam") {
       return <EditTeamModal currentTeam={currentTeam} eventData={eventData} addMemberUpdate={addMemberUpdate}/>;
+    }
+
+    if(item == "SingleEditModal"){
+      return <SingleEditTeamModal currentTeam={singleModalEdit} eventData={eventData} addMemberUpdate={addMemberUpdate}/>
     }
   }
 

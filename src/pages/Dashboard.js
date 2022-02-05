@@ -132,6 +132,7 @@ const Dashboard = (props) => {
   const [eventData, setEventData] = useState([]);
   const [paymentUpdate, setPaymentUpdate] = useState(null);
   const [eventDetail, setEventDetail] = useState(null);
+  const [singleModalEdit, setSingleModalEdit] = useState(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
@@ -232,7 +233,14 @@ const Dashboard = (props) => {
   const deleteTeampopup = (teamCode) => {
     setModalComponent("Deletepopup");
     setModalDeleteCode(teamCode);
-    console.log("The popup for team is: ", teamCode);
+    console.log("The popup for team is: ", teamCode, eventDetail);
+    setIsOpen(true);
+  };
+
+  const singleModalEditPopup = (team) => {
+    setModalComponent("SingleEditModal");
+    setSingleModalEdit(team);
+    console.log("The popup for team is: ", team, eventDetail);
     setIsOpen(true);
   };
 
@@ -246,6 +254,7 @@ const Dashboard = (props) => {
   return (
     <>
       <Header eventData={eventData} />
+      {eventDetail && 
       <ModalComponent
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -258,7 +267,10 @@ const Dashboard = (props) => {
         modalDeleteCode={modalDeleteCode}
         teamDeleteUpdate={teamDeleteUpdate}
         modalDeleteMember={modalDeleteMember}
+        isSingle={eventDetail.isSingle}
+        singleModalEdit={singleModalEdit}
       />
+      }
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row className="mt-5">
@@ -278,6 +290,8 @@ const Dashboard = (props) => {
                       deleteTeampopup={deleteTeampopup}
                       isVoting={eventDetail?.isVoting}
                       setPaymentUpdate={updatePayment}
+                      singleModalEditPopup={singleModalEditPopup}
+                      // isSingle={eventDetail?.isSingle}
                     />
                   </Card>
                 </Col>
