@@ -39,7 +39,7 @@ export const EVENT_MAP = {
   "febootcamp_oc@spit.ac.in": "FE Bootcamp", //pass: OC896435
 
   // Short Circuit / Hardware
-  "shortcircuit_oc@spit.ac.in": "Short Circuit", // pass: OC526626
+  "shortcircuit_oc@spit.ac.in": "Short Circuit Designathon", // pass: OC526626
   // VSM
   "vsm_oc@spit.ac.in": "Virtual Stock Market", // pass: OC547174
 
@@ -49,7 +49,7 @@ export const EVENT_MAP = {
   // E-sports
   "esports_oc@spit.ac.in": "E-Sports", // pass: OC793913
   // Paintball
-  "paintball_oc@spit.ac.in": "Paint Ball", // pass: OC747438 baaki
+  "paintball_oc@spit.ac.in": "Paintball", // pass: OC747438 
   // Footpool
   "footpool_oc@spit.ac.in": "Footpool", // pass: OC141940
   // Human Foosball

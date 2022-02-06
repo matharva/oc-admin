@@ -393,6 +393,8 @@ const EventInformation = (props) => {
     setEndDate,
     description,
     setDescription,
+    whatsappLink,
+    setWhatsappLink
   } = props;
   return (
     <>
@@ -523,6 +525,23 @@ const EventInformation = (props) => {
             </FormGroup>
           </Col>
         </Row>
+        <Row>
+          <Col lg="10">
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-first-name">
+                WhatsApp Link
+              </label>
+              <Input
+                className="form-control-alternative"
+                value={whatsappLink}
+                onChange={(e) => setWhatsappLink(e.target.value)}
+                id="input-first-name"
+                placeholder="Link"
+                type="text"
+              />
+            </FormGroup>
+          </Col>
+        </Row>
       </div>
     </>
   );
@@ -544,6 +563,7 @@ const Details = () => {
   const [description, setDescription] = useState("");
   const [disable,setDisable] = useState(false);
   const [message, setMessage] = useState("");
+  const [whatsappLink, setWhatsappLink] = useState("");
 
   function addFaqQuestion() {
     const defaultData = { question: "", answer: "", id: uuid() };
@@ -587,6 +607,7 @@ const Details = () => {
       // endDate,
       Description: description,
       availableSlots: availableSlots,
+      whatsappLink:whatsappLink
     };
     console.log("Data to be updated: ", data);
 
@@ -608,6 +629,7 @@ const Details = () => {
     // setFaq(data.faq);
     setPrize(data.Prizes);
     setTitle(data.Title);
+    setWhatsappLink(data.whatsappLink);
     // setRules(data.rules);
 
     // Fees
@@ -717,6 +739,8 @@ const Details = () => {
               setEndDate={setEndDate}
               description={description}
               setDescription={setDescription}
+              whatsappLink={whatsappLink}
+              setWhatsappLink={setWhatsappLink}
             />
             {/* Registration Cost Starts */}
             <hr className="my-4" />
@@ -798,10 +822,24 @@ const Details = () => {
                 </h6>
               </Col>
               <Col className="text-right" xs="4">
-                <Button color="primary" onClick={addSlots} size="sm">
+                {/* <Button color="primary" onClick={addSlots} size="sm">
                   Add Slots
-                </Button>
-              </Col>
+                </Button> */}
+                <button  style={{
+                  backgroundColor:"#5E72E4",
+                   color:"white",
+                   borderRadius:"10px",
+                   border:"0px",
+                   padding:"8px",
+                   fontSize:"0.8rem"
+                   
+                }} onClick={(e)=>{
+                  e.preventDefault()
+                  addSlots()
+                  }} >
+                  Add Slots
+                </button>
+                </Col>
             </Row>
             <div className="pl-lg-4">
               {availableSlots.map((item) => (

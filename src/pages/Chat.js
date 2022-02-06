@@ -100,20 +100,20 @@ const ChatItem = ({ item, setChats, setChatsCopy }) => {
 const ChatContainer = () => {
   const [active, setActive] = useState(3);
   const [chats, setChats] = useState([
-    {
-      question: "Question?",
-      answer: "",
-      id: uuid(),
-      date: "2021-12-08 21:52:42.648925",
-    },
+    // {
+    //   question: "Question?",
+    //   answer: "",
+    //   id: uuid(),
+    //   date: "2021-12-08 21:52:42.648925",
+    // },
   ]);
   const [chatsCopy, setChatsCopy] = useState([
-    {
-      question: "Question?",
-      answer: "",
-      id: uuid(),
-      date: "2021-12-08 21:52:42.648925",
-    },
+    // {
+    //   question: "Question?",
+    //   answer: "",
+    //   id: uuid(),
+    //   date: "2021-12-08 21:52:42.648925",
+    // },
   ]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
